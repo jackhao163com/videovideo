@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/two"
+    android:background="@android:color/white"
+    tools:context=".MainSearchActivity">
+
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="#333333">
+
+            <TextView
+                android:id="@+id/et_bg"
+                android:layout_width="@dimen/dp_200"
+                android:layout_height="40dp"
+                android:layout_gravity="top"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/ele_search_bg"
+                android:textColor="@android:color/white"
+                android:transitionName="shareTransition"
+                android:visibility="visible" />
+
+            <EditText
+                android:id="@+id/search_content"
+                android:layout_width="@dimen/dp_150"
+                android:layout_height="45dp"
+                android:layout_gravity="top"
+                android:gravity="center"
+                android:background="@null"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:layout_marginLeft="55dp"
+                android:hint="输入关键词查找片源"
+                android:textColor="#999999"
+                android:transitionName="shareTransition"
+                android:textColorHint="#999999"
+                android:textSize="15sp"/>
+            <ImageView
+                android:id="@+id/search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|left"
+                android:layout_marginLeft="30dp"
+                android:gravity="center"
+                android:layout_marginTop="13dp"
+                android:src="@mipmap/search" />
+
+            <TextView
+                android:id="@+id/search_cancle"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_gravity="top|right"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="20dp"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="#CC9966"
+                android:textSize="15sp"
+                />
+
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:gravity="center">
+        </FrameLayout>
+    </LinearLayout>
+    <TextView
+        android:layout_marginTop="@dimen/dp_20"
+      android:layout_width="match_parent"
+        android:layout_marginStart="7dp"
+      android:layout_height="wrap_content"
+      android:text="热门搜索"
+        android:textSize="15sp" />
+
+        <RelativeLayout
+            android:id="@+id/container"
+            android:layout_marginTop="@dimen/dp_15"
+             android:layout_width="match_parent"
+        android:layout_height="150dp">
+
+            <com.cucumber.video.welcomeactivity.XCFlowLayout
+     android:id="@+id/flowlayout"
+   android:layout_width="match_parent"
+   android:layout_height="150dp">
+
+
+            </com.cucumber.video.welcomeactivity.XCFlowLayout>
+
+    </RelativeLayout>
+
+
+    <TextView
+     android:id="@+id/tv"
+     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="历史记录"
+     android:textSize="20sp" />
+
+
+     <ListView
+      android:id="@+id/lv"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content" />
+
+
+    <Button
+     android:id="@+id/bt"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:text="清空历史记录"/>
+
+
+    </LinearLayout>
