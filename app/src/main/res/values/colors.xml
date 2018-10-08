@@ -6,6 +6,7 @@
     <!-- 描边颜色 -->
     <color name="border_clo">#ccc</color>
     <color name="text_clo">#333</color>
-    <color name="white">#fff</color>
+    <color name="white">#ffffff</color>
     <color name="blue">#419DE4</color>
+    <color name="common_yellow">#cbac7f</color>
 </resources>

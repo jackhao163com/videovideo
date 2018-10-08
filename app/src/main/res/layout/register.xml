@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:clipChildren="false"
     android:background="@mipmap/login_bg">
 
     <LinearLayout
@@ -33,15 +34,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:text="@string/strWelcomeJoin"
-            android:textColor="@android:color/white"
+            android:textColor="@color/common_yellow"
             android:textSize="20sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:layout_marginStart="30dp"
             android:text="Welcome join"
-            android:textColor="@android:color/white"
+            android:textColor="@color/common_yellow"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -52,6 +54,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/layout_register_welco"
         android:background="#00000000"
+        android:clipChildren="false"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -73,8 +76,8 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:background="@mipmap/denglutouxiang"
                 android:gravity="center" />
@@ -216,9 +219,9 @@
 
                 <ImageView
                     android:id="@+id/register_get_code"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_20"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="@dimen/dp_34"
                     android:layout_marginStart="@dimen/dp_5"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
@@ -307,8 +310,8 @@
 
                 <ImageView
                     android:id="@+id/register_see"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="16dp"
                     android:layout_marginEnd="@dimen/dp_50"
                     android:layout_marginTop="5dp"
                     android:background="@mipmap/see" />
@@ -337,6 +340,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginBottom="-15dp"
                 android:layout_marginTop="30dp"
                 android:background="@mipmap/register" />
         </LinearLayout>
@@ -358,23 +362,24 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_30"
         android:orientation="horizontal">
+
         <CheckBox
+            android:id="@+id/register_protocal"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:text="我已阅读并同意"
-            android:id="@+id/register_protocal"
-            android:checked="false"
-            android:textColor="#ffffff"
             android:layout_marginStart="60dp"
-            android:textSize="15sp"/>
+            android:checked="false"
+            android:text="我已阅读并同意"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/user_protocal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:text="@string/user_protocal"
             android:layout_marginStart="10dp"
+            android:text="@string/user_protocal"
+            android:textColor="@color/common_yellow"
             android:textSize="15sp" />
     </LinearLayout>
 

@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.cucumber.video.welcomeactivity.GuideActivity"></activity>
+        <activity android:name="com.cucumber.video.welcomeactivity.UserActivity"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.MainActivity"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.LoginActivity"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.PasswordRecoveryActivity"></activity>

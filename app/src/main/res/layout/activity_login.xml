@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:clipChildren="false"
     android:background="@mipmap/login_bg">
 
     <LinearLayout
@@ -27,6 +28,7 @@
         android:layout_height="45dp"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/layout_back"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical">
 
         <TextView
@@ -35,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:text="@string/strWelcome"
-            android:textColor="@android:color/white"
+            android:textColor="@color/common_yellow"
             android:textSize="15sp" />
 
         <TextView
@@ -43,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:text="@string/strWelcomeEn"
-            android:textColor="@android:color/white"
+            android:textColor="@color/common_yellow"
             android:textSize="15sp" />
     </LinearLayout>
     <RelativeLayout
@@ -51,6 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#00000000"
+        android:clipChildren="false"
         android:layout_below="@id/layout_welcome"
         android:orientation="horizontal">
 
@@ -74,9 +77,10 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
                 android:background="@mipmap/denglutouxiang"
                 android:gravity="center" />
 
@@ -122,6 +126,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -147,12 +152,13 @@
                     android:layout_marginStart="10dp"
                     android:background="@null"
                     android:hint="@string/password"
+                    android:inputType="textPassword"
                     android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/login_see"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="16dp"
                     android:layout_marginTop="5dp"
                     android:background="@mipmap/see" />
 
@@ -167,6 +173,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <CheckBox
@@ -194,8 +201,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginBottom="-15dp"
                 android:layout_marginTop="30dp"
-                android:background="@mipmap/login_btn" />
+                android:background="@mipmap/login_btn"
+                android:tag="2"
+                android:translationZ="2dp" />
         </LinearLayout>
 
         <LinearLayout

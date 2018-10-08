@@ -52,7 +52,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Comp
         setupEvents();
         initData();
         myHandler = new MyHandler();
-        defaultSee = true;
+        defaultSee = false;
     }
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count,int after)
@@ -343,11 +343,12 @@ public class LoginActivity extends Activity implements View.OnClickListener,Comp
 
         URL url;
         try {
-            url = new URL(urlPath);
             /*封装子对象*/
             JSONObject ClientKey = new JSONObject();
             ClientKey.put("username", getAccount());
             ClientKey.put("password", getPassword());
+            String urlpath = urlPath + "?username="+getAccount()+"&password="+getPassword();
+            url = new URL(urlpath);
          //   ClientKey.put("rand_code", appendCheckNum());
          //   ClientKey.put("apptype", "android");
 
@@ -359,14 +360,16 @@ public class LoginActivity extends Activity implements View.OnClickListener,Comp
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(5000);
-            conn.setDoOutput(true);//设置允许输出
-            conn.setRequestMethod("POST");
+//            conn.setDoOutput(true);//设置允许输出
+            conn.setDoInput(true);//设置允许输出
+//            conn.setRequestMethod("POST");
             conn.setRequestProperty("User-Agent", "Fiddler");
             conn.setRequestProperty("Content-Type", "application/json");
+            conn.connect();
             // conn.setRequestProperty("Charset", encoding);
-            OutputStream os = conn.getOutputStream();
-            os.write(content.getBytes());
-            os.close();
+//            OutputStream os = conn.getOutputStream();
+//            os.write(content.getBytes());
+//            os.close();
             /*服务器返回的响应码*/
          //return conn.getResponseCode();
          /*   if (code == 200) {

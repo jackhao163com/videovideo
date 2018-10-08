@@ -1,16 +1,19 @@
 package com.cucumber.video.welcomeactivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.IdRes;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,10 +24,13 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabSelectListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 	private TextView item_shouye, item_pindao, item_faxian, item_me;
 	private ImageView firstImage, secondeImage, thirdImage, fourthImage;
 	private ViewPager vp;
@@ -42,7 +48,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getWindow().setFormat(PixelFormat.RGBA_8888);  //或者PixelFormat.TRANSLUCENT
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
@@ -75,34 +81,34 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 		};
 		th.start();
 
-		mFragmentAdapter = new FragmentAdapter(this.getSupportFragmentManager(), mFragmentList);
-		vp.setOffscreenPageLimit(4);//ViewPager的缓存为4帧
-		vp.setAdapter(mFragmentAdapter);
-		vp.setCurrentItem(0);//初始设置ViewPager选中第一帧
-		mPos = 0;
-		item_shouye.setTextColor(Color.parseColor("#66CDAA"));
-
-		//ViewPager的监听事件
-		vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+		BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+		bottomBar.selectTabAtPosition(0);
+		bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
 			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-			}
-
-			@Override
-			public void onPageSelected(int position) {
-				/*此方法在页面被选中时调用*/
-				//title.setText(titles[position]);
-				changeTextColor(position);
-				mPos = position;
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int state) {
-                /*此方法是在状态改变的时候调用，其中arg0这个参数有三种状态（0，1，2）。
-                arg0 ==1的时辰默示正在滑动，
-                arg0==2的时辰默示滑动完毕了，
-                arg0==0的时辰默示什么都没做。*/
+			public void onTabSelected(@IdRes int tabId) {
+//                if (tabId == R.id.tab_home) {
+//                    // The tab with id R.id.tab_favorites was selected,
+//                    // change your content accordingly.
+//                    Intent i = new Intent(HomeActivity.this,MainActivity.class);
+//                    startActivity(i);
+//                } else
+				if (tabId == R.id.tab_channel) {
+					// The tab with id R.id.tab_favorites was selected,
+					// change your content accordingly.
+					Intent i;
+					i = new Intent(MainActivity.this,UserActivity.class);
+					startActivity(i);
+				} else if (tabId == R.id.tab_find) {
+					// The tab with id R.id.tab_favorites was selected,
+					// change your content accordingly.
+					Intent i = new Intent(MainActivity.this,UserActivity.class);
+					startActivity(i);
+				} else if (tabId == R.id.tab_user) {
+					// The tab with id R.id.tab_favorites was selected,
+					// change your content accordingly.
+					Intent i = new Intent(MainActivity.this,UserActivity.class);
+					startActivity(i);
+				}
 			}
 		});
 	}
@@ -142,35 +148,25 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 	 * 初始化布局View
 	 */
 	private void initViews() {
-		//title = (TextView) findViewById(R.id.title);
-		item_shouye = (TextView) findViewById(R.id.item_shouye);
-		item_pindao = (TextView) findViewById(R.id.item_pindao);
-		item_faxian = (TextView) findViewById(R.id.item_faxian);
-		item_me = (TextView) findViewById(R.id.item_me);
-		firstImage = findViewById(R.id.firstImageView);
-		secondeImage = findViewById(R.id.secondImageView);
-		thirdImage = findViewById(R.id.thirdImageView);
-		fourthImage = findViewById(R.id.fourthImageView);
+//		title = (TextView) findViewById(R.id.title);
+//		item_shouye = (TextView) findViewById(R.id.item_shouye);
+//		item_pindao = (TextView) findViewById(R.id.item_pindao);
+//		item_faxian = (TextView) findViewById(R.id.item_faxian);
+//		item_me = (TextView) findViewById(R.id.item_me);
+//		firstImage = findViewById(R.id.firstImageView);
+//		secondeImage = findViewById(R.id.secondImageView);
+//		thirdImage = findViewById(R.id.thirdImageView);
+//		fourthImage = findViewById(R.id.fourthImageView);
 
-		item_shouye.setOnClickListener(this);
-		item_pindao.setOnClickListener(this);
-		item_faxian.setOnClickListener(this);
-		item_me.setOnClickListener(this);
-		firstImage.setOnClickListener(this);
-		secondeImage.setOnClickListener(this);
-		thirdImage.setOnClickListener(this);
-		fourthImage.setOnClickListener(this);
+//		item_shouye.setOnClickListener(this);
+//		item_pindao.setOnClickListener(this);
+//		item_faxian.setOnClickListener(this);
+//		item_me.setOnClickListener(this);
+//		firstImage.setOnClickListener(this);
+//		secondeImage.setOnClickListener(this);
+//		thirdImage.setOnClickListener(this);
+//		fourthImage.setOnClickListener(this);
 
-		vp = (ViewPager) findViewById(R.id.mainViewPager);
-		oneFragment = new OneFragment();
-		twoFragment = new TwoFragment();
-		threeFragment = new ThreeFragment();
-		fouthFragmen = new FouthFragment();
-		//给FragmentList添加数据
-		mFragmentList.add(oneFragment);
-		mFragmentList.add(twoFragment);
-		mFragmentList.add(threeFragment);
-		mFragmentList.add(fouthFragmen);
 	}
 
 	@Override
@@ -193,27 +189,27 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 	 */
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()) {
-			case R.id.item_shouye:
-			case R.id.firstImageView:
-				vp.setCurrentItem(0, true);
-				break;
-			case R.id.secondImageView:
-			case R.id.item_pindao:
-				vp.setCurrentItem(1, true);
-				break;
-			case R.id.item_faxian:
-			case R.id.thirdImageView:
-				vp.setCurrentItem(2, true);
-				break;
-			case R.id.item_me:
-			case R.id.fourthImageView:
-				vp.setCurrentItem(3, true);
-				break;
-			case R.id.popwindow:
-				mPopwindow_w.dismiss();
-				break;
-		}
+//		switch (v.getId()) {
+//			case R.id.item_shouye:
+//			case R.id.firstImageView:
+//				vp.setCurrentItem(0, true);
+//				break;
+//			case R.id.secondImageView:
+//			case R.id.item_pindao:
+//				vp.setCurrentItem(1, true);
+//				break;
+//			case R.id.item_faxian:
+//			case R.id.thirdImageView:
+//				vp.setCurrentItem(2, true);
+//				break;
+//			case R.id.item_me:
+//			case R.id.fourthImageView:
+//				vp.setCurrentItem(3, true);
+//				break;
+//			case R.id.popwindow:
+//				mPopwindow_w.dismiss();
+//				break;
+//		}
 	}
 
 

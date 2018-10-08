@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_home"
+        icon="@drawable/my_tab1_icon"
+        title="首页"
+        barColorWhenSelected="transparent" />
+    <tab
+        id="@+id/tab_channel"
+        icon="@drawable/my_tab2_icon"
+        title="频道"
+        barColorWhenSelected="#4f5555" />
+    <tab
+        id="@+id/tab_find"
+        icon="@drawable/my_tab3_icon"
+        title="发现"
+        barColorWhenSelected="#4f5555" />
+    <tab
+        id="@+id/tab_user"
+        icon="@drawable/my_tab4_icon"
+        title="我的"
+        barColorWhenSelected="#4f5555" />
+</tabs>

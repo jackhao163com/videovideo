@@ -26,9 +26,11 @@ public class WelcomeActivity extends FragmentActivity implements Runnable,ViewPa
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.welcome);
-		// 启动一个延迟线程
-		new Thread(this).start();
-		initView();
+		if(isFirst()){
+			// 启动一个延迟线程
+			new Thread(this).start();
+			initView();
+		}
 	}
 	private void initView() {
 		// 实例化ViewPager
@@ -44,13 +46,30 @@ public class WelcomeActivity extends FragmentActivity implements Runnable,ViewPa
 		int[] imageResId = new int[] { R.mipmap.start1,R.mipmap.start2,R.mipmap.start3 ,R.mipmap.start1,R.mipmap.start2};
 		for (int i = 0; i < imageResId.length; i++) {
 			ImageView imageView = new ImageView(this);
-        /*    imageView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {// 设置图片点击事件
-                    Toast.makeText(getActivity(),
-                            "点击了:" + mViewPager.getCurIndex(), Toast.LENGTH_SHORT)
-                            .show();
-                }
-            });*/
+			if (i == imageResId.length - 1) {
+			   imageView.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {// 设置图片点击事件
+						// 读取SharedPreferences中需要的数据
+						sp = getSharedPreferences("Y_Setting", Context.MODE_PRIVATE);
+						SharedPreferences.Editor editor = sp.edit();
+						editor.putInt("VERSION", VERSION);
+						editor.commit();
+						/**
+						 * 如果用户不是第一次使用则直接调转到显示界面,否则调转到引导界面
+						 */
+							if(sp.getBoolean("hasLoged",false) != hasLoged){
+								startActivity(new Intent(WelcomeActivity.this,
+										UserActivity.class));
+							}
+							else {
+								startActivity(new Intent(WelcomeActivity.this,
+										MainActivity.class));
+							}
+
+						finish();
+					}
+				});
+			}
 			imageView.setImageResource(imageResId[i]);
 			imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 			mList.add(imageView);
@@ -64,6 +83,30 @@ public class WelcomeActivity extends FragmentActivity implements Runnable,ViewPa
 
 	}
 
+	public  boolean isFirst(){
+		sp = getSharedPreferences("Y_Setting", Context.MODE_PRIVATE);
+		/**
+		 * 如果用户不是第一次使用则直接调转到显示界面,否则调转到引导界面
+		 */
+		if (sp.getInt("VERSION", 0) != VERSION) {
+			SharedPreferences.Editor editor = sp.edit();
+			editor.putInt("VERSION", VERSION);
+			editor.commit();
+			return true;
+//			startActivity(new Intent(WelcomeActivity.this,
+//					GuideActivity.class));
+		} else {
+			if(sp.getBoolean("hasLoged",false) != hasLoged){
+				startActivity(new Intent(WelcomeActivity.this,
+						UserActivity.class));
+			}
+			else {
+				startActivity(new Intent(WelcomeActivity.this,
+						MainActivity.class));
+			}
+		}
+		return false;
+	}
 	/**
 	 * 当前页面滑动时调用
 	 */
@@ -110,12 +153,15 @@ public class WelcomeActivity extends FragmentActivity implements Runnable,ViewPa
 			 * 如果用户不是第一次使用则直接调转到显示界面,否则调转到引导界面
 			 */
 			if (sp.getInt("VERSION", 0) != VERSION) {
-				startActivity(new Intent(WelcomeActivity.this,
-						GuideActivity.class));
+				SharedPreferences.Editor editor = sp.edit();
+				editor.putInt("VERSION", VERSION);
+				editor.commit();
+//				startActivity(new Intent(WelcomeActivity.this,
+//						GuideActivity.class));
 			} else {
 				if(sp.getBoolean("hasLoged",false) != hasLoged){
 					startActivity(new Intent(WelcomeActivity.this,
-							LoginActivity.class));
+							UserActivity.class));
 				}
 				else {
 					startActivity(new Intent(WelcomeActivity.this,
