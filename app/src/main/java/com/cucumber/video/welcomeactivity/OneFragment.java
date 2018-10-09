@@ -73,7 +73,7 @@ public class OneFragment extends Fragment{
                 getBanner();
                 Message m = new Message();
                 m.what = 0;
-                MainActivity.myHandler.sendMessage(m);
+                //MainActivity.myHandler.sendMessage(m);
             }
         };
         hotmovieThread = new Thread();

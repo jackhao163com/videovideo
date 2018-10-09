@@ -1,5 +1,6 @@
 package com.cucumber.video.welcomeactivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -14,6 +15,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -24,62 +27,31 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.itheima.loopviewpager.LoopViewPager;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+
+import org.itheima.recycler.widget.ItheimaRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-	private TextView item_shouye, item_pindao, item_faxian, item_me;
-	private ImageView firstImage, secondeImage, thirdImage, fourthImage;
-	private ViewPager vp;
-	private OneFragment oneFragment;
-	private TwoFragment twoFragment;
-	private ThreeFragment threeFragment;
-	private FouthFragment fouthFragmen;
-	private List<Fragment> mFragmentList = new ArrayList<Fragment>();
-	private FragmentAdapter mFragmentAdapter;
-	private int mPos;
-	private boolean isStart;
-	public static MyHandler myHandler;
-	private ImageView mPopwindow;
-	private PopupWindow mPopwindow_w;
 
+	private LoopViewPager loopViewPager;
+	private  List<Integer> mItems;
+	private Context mContext;
+	private ItheimaRecyclerView myrecyclerView;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		getWindow().setFormat(PixelFormat.RGBA_8888);  //或者PixelFormat.TRANSLUCENT
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
-		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-		setContentView(R.layout.activity_main);
-		initViews();
-
-
-		WelcomeActivity.sp.edit()
-				.putBoolean("hasLoged", false).commit();
-		myHandler = new MyHandler();
-		Thread th = new Thread() {
-
-			@Override
-			public void run() {
-				super.run();
-				while (!isStart) {
-				}
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				Message msg = new Message();
-				msg.what = 1;
-
-				MainActivity.this.myHandler.sendMessage(msg);
-			}
-		};
-		th.start();
+		loopViewPager = (LoopViewPager) findViewById(R.id.lvp_pager);
+		loopViewPager.setImgData(imgListString());
+		loopViewPager.setTitleData(titleListString());
+		loopViewPager.start();
 
 		BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
 		bottomBar.selectTabAtPosition(0);
@@ -112,200 +84,80 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			}
 		});
 	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		//checkifpopwindow();
+	private List<String> imgListString() {
+		List<String> imageData = new ArrayList<>();
+		imageData.add("http://d.hiphotos.baidu.com/image/h%3D200/sign=72b32dc4b719ebc4df787199b227cf79/58ee3d6d55fbb2fb48944ab34b4a20a44723dcd7.jpg");
+		imageData.add("http://pic.4j4j.cn/upload/pic/20130815/31e652fe2d.jpg");
+		imageData.add("http://pic.4j4j.cn/upload/pic/20130815/5e604404fe.jpg");
+		imageData.add("http://pic.4j4j.cn/upload/pic/20130909/681ebf9d64.jpg");
+		imageData.add("http://d.hiphotos.baidu.com/image/pic/item/54fbb2fb43166d22dc28839a442309f79052d265.jpg");
+		return imageData;
 	}
 
-	private void checkifpopwindow() {
-		// 用于PopupWindow的View
-		View contentView = LayoutInflater.from(this).inflate(R.layout.popwindow, null, false);
-		// 创建PopupWindow对象，其中：
-		// 第一个参数是用于PopupWindow中的View，第二个参数是PopupWindow的宽度，
-		// 第三个参数是PopupWindow的高度，第四个参数指定PopupWindow能否获得焦点
-		mPopwindow = contentView.findViewById(R.id.popwindow);
-		mPopwindow.setOnClickListener(this);
-		mPopwindow_w = new PopupWindow(contentView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-		// 设置PopupWindow的背景
-		//     window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-		// 设置PopupWindow是否能响应外部点击事件
-		mPopwindow_w.setOutsideTouchable(true);
-		// 设置PopupWindow是否能响应点击事件
-		mPopwindow_w.setTouchable(true);
-		mPopwindow_w.showAtLocation(this.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
-
-		// 显示PopupWindow，其中：
-		// 第一个参数是PopupWindow的锚点，第二和第三个参数分别是PopupWindow相对锚点的x、y偏移
-		//window.showAsDropDown(anchor, xoff, yoff);
-		// 或者也可以调用此方法显示PopupWindow，其中：// 第一个参数是PopupWindow的父View，第二个参数是PopupWindow相对父View的位置，
-		// 第三和第四个参数分别是PopupWindow相对父View的x、y偏移
-		//  window.showAtLocation(parent, gravity, x, y);
+	private List<String> titleListString() {
+		List<String> titleData = new ArrayList<>();
+		titleData.add("1、在这里等着你");
+		titleData.add("2、在你身边");
+		titleData.add("3、打电话给你就是想说声“嗨”");
+		titleData.add("4、不介意你对我大喊大叫");
+		titleData.add("5、期待你总是尽全力");
+		return titleData;
 	}
+    @Override
+    public void onClick(View v) {
 
-	/**
-	 * 初始化布局View
-	 */
-	private void initViews() {
-//		title = (TextView) findViewById(R.id.title);
-//		item_shouye = (TextView) findViewById(R.id.item_shouye);
-//		item_pindao = (TextView) findViewById(R.id.item_pindao);
-//		item_faxian = (TextView) findViewById(R.id.item_faxian);
-//		item_me = (TextView) findViewById(R.id.item_me);
-//		firstImage = findViewById(R.id.firstImageView);
-//		secondeImage = findViewById(R.id.secondImageView);
-//		thirdImage = findViewById(R.id.thirdImageView);
-//		fourthImage = findViewById(R.id.fourthImageView);
+    }
 
-//		item_shouye.setOnClickListener(this);
-//		item_pindao.setOnClickListener(this);
-//		item_faxian.setOnClickListener(this);
-//		item_me.setOnClickListener(this);
-//		firstImage.setOnClickListener(this);
-//		secondeImage.setOnClickListener(this);
-//		thirdImage.setOnClickListener(this);
-//		fourthImage.setOnClickListener(this);
+	public class TwowayRecycleAdapter extends RecyclerView.Adapter<myrecyclerView.viewholder> {
 
-	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (vp.getCurrentItem()){
-			case 0:
-				oneFragment.getActivity().finish();
-			case 1:
-				twoFragment.onKeyDown(keyCode,event);
-			case 2:
-				threeFragment.onKeyDown(keyCode,event);
-			case 3:
-				thirdImage.onKeyDown(keyCode,event);
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
-	/**
-	 * 点击底部Text 动态修改ViewPager的内容
-	 */
-	@Override
-	public void onClick(View v) {
-//		switch (v.getId()) {
-//			case R.id.item_shouye:
-//			case R.id.firstImageView:
-//				vp.setCurrentItem(0, true);
-//				break;
-//			case R.id.secondImageView:
-//			case R.id.item_pindao:
-//				vp.setCurrentItem(1, true);
-//				break;
-//			case R.id.item_faxian:
-//			case R.id.thirdImageView:
-//				vp.setCurrentItem(2, true);
-//				break;
-//			case R.id.item_me:
-//			case R.id.fourthImageView:
-//				vp.setCurrentItem(3, true);
-//				break;
-//			case R.id.popwindow:
-//				mPopwindow_w.dismiss();
-//				break;
-//		}
-	}
-
-
-	public class FragmentAdapter extends FragmentPagerAdapter {
-
-		List<Fragment> fragmentList = new ArrayList<Fragment>();
-
-		public FragmentAdapter(FragmentManager fm, List<Fragment> fragmentList) {
-			super(fm);
-			this.fragmentList = fragmentList;
+		@Override
+		public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+			final View view = LayoutInflater.from(mContext).inflate(R.layout.item, parent, false);
+			return new SimpleViewHolder(view);
 		}
 
 		@Override
-		public Fragment getItem(int position) {
-			return fragmentList.get(position);
-		}
-
-		@Override
-		public int getCount() {
-			return fragmentList.size();
-		}
-
-	}
-
-	/*
-	 *由ViewPager的滑动修改底部导航Text的颜色
-	 */
-	private void changeTextColor(int position) {
-		switch (mPos) {
-			case 0:
-				firstImage.setImageResource(R.mipmap.tab1_2);
-				break;
-			case 1:
-				secondeImage.setImageResource(R.mipmap.tab2_2);
-				break;
-			case 2:
-				thirdImage.setImageResource(R.mipmap.tab3_2);
-				break;
-			case 3:
-				fourthImage.setImageResource(R.mipmap.tab4_2);
-				break;
-		}
-		if (position == 0) {
-			item_shouye.setTextColor(Color.parseColor("#66CDAA"));
-			item_pindao.setTextColor(Color.parseColor("#CCCCCC"));
-			item_faxian.setTextColor(Color.parseColor("#CCCCCC"));
-			item_me.setTextColor(Color.parseColor("#CCCCCC"));
-			firstImage.setImageResource(R.mipmap.tab1_1);
-		} else if (position == 1) {
-			item_pindao.setTextColor(Color.parseColor("#66CDAA"));
-			item_shouye.setTextColor(Color.parseColor("#CCCCCC"));
-			item_faxian.setTextColor(Color.parseColor("#CCCCCC"));
-			item_me.setTextColor(Color.parseColor("#CCCCCC"));
-			secondeImage.setImageResource(R.mipmap.tab2_1);
-		} else if (position == 2) {
-			item_faxian.setTextColor(Color.parseColor("#66CDAA"));
-			item_shouye.setTextColor(Color.parseColor("#ffffff"));
-			item_pindao.setTextColor(Color.parseColor("#ffffff"));
-			item_me.setTextColor(Color.parseColor("#ffffff"));
-			thirdImage.setImageResource(R.mipmap.tab3_1);
-		} else if (position == 3) {
-			item_me.setTextColor(Color.parseColor("#66CDAA"));
-			item_shouye.setTextColor(Color.parseColor("#ffffff"));
-			item_pindao.setTextColor(Color.parseColor("#ffffff"));
-			item_faxian.setTextColor(Color.parseColor("#ffffff"));
-			fourthImage.setImageResource(R.mipmap.tab4_1);
-		}
-	}
-
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
-		isStart = true;
-	}
-
-	class MyHandler extends Handler {
-		public MyHandler() {
-		}
-
-		public MyHandler(Looper L) {
-			super(L);
-		}
-
-		// 子类必须重写此方法,接受数据
-		@Override
-		public void handleMessage(Message msg) {
-			// TODO Auto-generated method stub
-			super.handleMessage(msg);
-			switch (msg.what) {
+		public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+			View itemView = holder.itemView;
+			final GridLayoutManager.LayoutParams lp = (GridLayoutManager.LayoutParams) itemView.getLayoutParams();
+			switch (getItemViewType(position)) {
 				case 1:
-					MainActivity.this.checkifpopwindow();
+//					lp.span = 3;
+					if (position % 3 == 0) {
+						lp.height = 200;
+					} else if (position % 5 == 0) {
+						lp.height = 300;
+					} else if (position % 7 == 0) {
+						lp.height = 500;
+					} else {
+						lp.height = 400;
+					}
 					break;
-				case 0:
-					oneFragment.freshBanner();
+			}
+			itemView.setLayoutParams(lp);
+		}
 
+		@Override
+		public int getItemCount() {
+			return mItems.size();
+		}
 
+		@Override
+		public int getItemViewType(int position) {
+			if (position == 0){
+				return 1;
+			}else if (position == 1){
+				return 1;
+			}else if (2<=position && position <= 7){
+				return 1;
+			}else if (position == 8){
+				return 1;
+			}else if (9<=position && position <= 14){
+				return 1;
+			}else if (15<=position && position <= 18){
+				return 1;
+			}else {
+				return 1;
 			}
 		}
 	}
