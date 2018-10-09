@@ -2,6 +2,7 @@ package com.cucumber.video.welcomeactivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,22 +11,43 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itheima.retrofitutils.ItheimaHttp;
+import com.itheima.retrofitutils.Request;
+import com.itheima.retrofitutils.listener.HttpResponseListener;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import okhttp3.Headers;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 
 public class RegisterActivity extends Activity implements View.OnClickListener,CompoundButton.OnCheckedChangeListener,TextWatcher {
@@ -143,7 +165,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener,C
                 super.run();
                 setLoginBtnClickable(false);//点击登录后，设置登录按钮不可点击状态
 
-
+                registerToServer();
                 //睡眠3秒
              //   try {
            //         Thread.sleep(3000);
@@ -151,36 +173,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener,C
            //         e.printStackTrace();
            //     }
 
-                //判断账号和密码
-                switch (registerToServer()){
-                    case 1:
-                    {
-                        showToast("注册成功");
 
-                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                        finish();//关闭页面
-                    }
-                    break;
-                    case -3:
-                    {
-                        showToast("该手机号码已被注册，请登录");
-                    }
-                    break;
-                    case -4:
-                    {
-                        showToast("验证码错误，请重新输入");
-                    }
-                    break;
-                    case 9:
-                    {
-                        showToast("网络错误");
-                    }
-                    break;
-
-                }
-
-                setLoginBtnClickable(true);  //这里解放登录按钮，设置为可以点击
-                hideLoading();//隐藏加载框
             }
         };
         loginRunnable.start();
@@ -222,64 +215,86 @@ public class RegisterActivity extends Activity implements View.OnClickListener,C
                          Log.e(Constants.TAG, "Exception:"+e.toString());
                      }*/
 
-        URL url;
-        try {
-            url = new URL(urlPath);
-            /*封装子对象*/
-            JSONObject ClientKey = new JSONObject();
-            ClientKey.put("mobile", getAccount());
-            ClientKey.put("password", getPassword());
-            ClientKey.put("rand_code", appendCheckNum());
-            ClientKey.put("apptype", "android");
+        //开始请求
+        Request request = ItheimaHttp.newPostRequest("register");//apiUrl格式："xxx/xxxxx"
+        Map<String,Object> map = new HashMap<>();
+        map.put("mobile", getAccount());
+        map.put("password", getPassword());
+        map.put("rand_code", appendCheckNum());
+        map.put("apptype", "android");
+        request.putParamsMap(map);
+        Call call = ItheimaHttp.send(request, new HttpResponseListener<RegisterBean>() {
 
-            /*封装Person数组*/
-         //   JSONObject params = new JSONObject();
-         //   params.put("Person", ClientKey);
-            /*把JSON数据转换成String类型使用输出流向服务器写*/
-            String content = String.valueOf(ClientKey);
+            @Override
+            public void onResponse(RegisterBean bean, Headers headers) {
+                System.out.println("print data");
+                System.out.println("print data -- " +bean);
+                int status = bean.getStatus();
+                //判断账号和密码
+                switch (status){
+                    case 1:
+                    {
+                        showToast("注册成功");
 
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(5000);
-            conn.setDoOutput(true);//设置允许输出
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("User-Agent", "Fiddler");
-            conn.setRequestProperty("Content-Type", "application/json");
-           // conn.setRequestProperty("Charset", encoding);
-            OutputStream os = conn.getOutputStream();
-            os.write(content.getBytes());
-            os.close();
-            /*服务器返回的响应码*/
+                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                        finish();//关闭页面
+                    }
+                    break;
+                    case -1:
+                    {
+                        showToast("手机号码不能为空!");
+                    }
+                    case -3:
+                    {
+                        showToast("该手机号码已被注册，请登录");
+                    }
+                    break;
+                    case -4:
+                    {
+                        showToast("验证码错误，请重新输入");
+                    }
+                    break;
+                    case 9:
+                    {
+                        showToast("网络错误");
+                    }
+                    break;
 
-            if (conn.getResponseCode() == 200) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String retData = null;
-                String responseData = "";
-                while ((retData = in.readLine()) != null) {
-                    responseData += retData;
                 }
-                JSONObject jsonObject = new JSONObject(responseData);
-                int status = jsonObject.getInt("status");
-                if(status == 1)
-                mToken = jsonObject.getString("token");
-//System.out.println(result);
-             //   String success = succObject.getString("id");
 
-                in.close();
-                return status;
-//System.out.println(success);
-              //  Toast.makeText(RegisterActivity.this, success, Toast.LENGTH_SHORT).show();
-             //   Intent intentToLogin = new Intent();
-             //   intentToLogin.setClass(Register.this, Login.class);
-             //   startActivity(intentToLogin);
-            //    finish();
-            } else {
-                Toast.makeText(getApplicationContext(), "服务器未响应", Toast.LENGTH_SHORT).show();
+                setLoginBtnClickable(true);  //这里解放登录按钮，设置为可以点击
+                hideLoading();//隐藏加载框
             }
-        } catch (Exception e) {
 
-        }
+
+            /**
+             * 可以不重写失败回调
+             * @param call
+             * @param e
+             */
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable e) {
+                System.out.println("print data fail");
+            }
+        });
+
+
         return 9;
     }
+
+    private static String getParams(JSONObject paramsMap) throws JSONException, UnsupportedEncodingException {
+        String result = "";
+        Iterator<?> it = paramsMap.keys();
+        String value = "";
+        String name = null;
+        while(it.hasNext()){//遍历JSONObject
+            name = (String) it.next().toString();
+            value = (String) paramsMap.getString(name);
+            result += "&" + URLEncoder.encode((String)name, "UTF-8") + "=" + URLEncoder.encode((String)value, "UTF-8");
+        }
+        return result.substring(1);
+    }
+
     /**
      * 获取账号
      */

@@ -59,7 +59,7 @@ public class WelcomeActivity extends FragmentActivity implements Runnable,ViewPa
 						 */
 							if(sp.getBoolean("hasLoged",false) != hasLoged){
 								startActivity(new Intent(WelcomeActivity.this,
-										MainActivity.class));
+										LoginActivity.class));
 							}
 							else {
 								startActivity(new Intent(WelcomeActivity.this,
@@ -98,7 +98,7 @@ public class WelcomeActivity extends FragmentActivity implements Runnable,ViewPa
 		} else {
 			if(sp.getBoolean("hasLoged",false) != hasLoged){
 				startActivity(new Intent(WelcomeActivity.this,
-						MainActivity.class));
+						LoginActivity.class));
 			}
 			else {
 				startActivity(new Intent(WelcomeActivity.this,
@@ -161,7 +161,7 @@ public class WelcomeActivity extends FragmentActivity implements Runnable,ViewPa
 			} else {
 				if(sp.getBoolean("hasLoged",false) != hasLoged){
 					startActivity(new Intent(WelcomeActivity.this,
-							MainActivity.class));
+							LoginActivity.class));
 				}
 				else {
 					startActivity(new Intent(WelcomeActivity.this,

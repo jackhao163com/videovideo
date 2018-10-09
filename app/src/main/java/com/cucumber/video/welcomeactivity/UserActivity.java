@@ -27,12 +27,12 @@ public class UserActivity extends AppCompatActivity {
     private WebView webView;
     private ProgressBar progressBar;
     private ImageView mSettings;
-
+    private  String token ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-
+        getToken();
         progressBar= (ProgressBar)findViewById(R.id.progressbar);//进度条
         mSettings = (ImageView)findViewById(R.id.setting);
         mSettings.setOnClickListener(new View.OnClickListener() {
@@ -43,7 +43,7 @@ public class UserActivity extends AppCompatActivity {
         });
         webView = (WebView) findViewById(R.id.webview);
 //        webView.loadUrl("file:///android_asset/test.html");//加载asset文件夹下html
-        webView.loadUrl("http://hgweb.joysw.win:82/#/user?token=xxx");//加载url
+        webView.loadUrl("http://hgweb.joysw.win:82/#/user?token="+token);//加载url
 
         //使用webview显示html代码
 //        webView.loadDataWithBaseURL(null,"<html><head><title> 欢迎您 </title></head>" +
@@ -84,12 +84,12 @@ public class UserActivity extends AppCompatActivity {
                     // The tab with id R.id.tab_favorites was selected,
                     // change your content accordingly.
                     Intent i;
-                    i = new Intent(UserActivity.this,UserActivity.class);
+                    i = new Intent(UserActivity.this,ChannelActivity.class);
                     startActivity(i);
                 } else if (tabId == R.id.tab_find) {
                     // The tab with id R.id.tab_favorites was selected,
                     // change your content accordingly.
-                    Intent i = new Intent(UserActivity.this,UserActivity.class);
+                    Intent i = new Intent(UserActivity.this,FindActivity.class);
                     startActivity(i);
                 } else if (tabId == R.id.tab_home) {
                     // The tab with id R.id.tab_favorites was selected,
@@ -100,7 +100,10 @@ public class UserActivity extends AppCompatActivity {
             }
         });
     }
-
+    private  void getToken(){
+        SharedPreferencesUtils helper = new SharedPreferencesUtils(this, "setting");
+        token = helper.getString("token");
+    }
     //WebViewClient主要帮助WebView处理各种通知、请求事件
     private WebViewClient webViewClient=new WebViewClient(){
         @Override

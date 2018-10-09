@@ -14,8 +14,8 @@ public class SettingActivity extends Activity {
         findViewById(R.id.setting_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SettingActivity.this, MainActivity.class));
-                finish();//关闭页面
+//                startActivity(new Intent(SettingActivity.this, MainActivity.class));
+                SettingActivity.this.finish();
             }
         });
     }

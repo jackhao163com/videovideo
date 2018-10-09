@@ -430,6 +430,11 @@ private  void saveToken(){
     SharedPreferencesUtils helper = new SharedPreferencesUtils(this, "setting");
     helper.putValues(new SharedPreferencesUtils.ContentValue("token", mToken));
 }
+
+    private  void getToken(){
+        SharedPreferencesUtils helper = new SharedPreferencesUtils(this, "setting");
+        helper.getString("token");
+    }
     /**
      * 保存用户账号
      */
