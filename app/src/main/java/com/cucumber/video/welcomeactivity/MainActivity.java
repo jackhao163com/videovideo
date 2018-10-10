@@ -103,10 +103,7 @@ public class MainActivity extends AppCompatActivity implements MyItemClickListen
 	private Thread hotmovieThread;
 	private Thread hotsingerThread;
 	private ListView mListView;
-	private List<String> actor_numberList;
-	private List<String> actor_nameList;
-	private List<String> actor_introductionList;
-
+    private String[] CatIdList;
 	private  String token ;
 
 	@Override
@@ -132,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements MyItemClickListen
 
 		initView();
 		initData();
-		initListView();
 		initevent();
 		final String[] from={"img","text"};
 		final String[] moreFrom = {"moreImg","moreText"};
@@ -197,11 +193,11 @@ public class MainActivity extends AppCompatActivity implements MyItemClickListen
 
 				gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					@Override
-					public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 											long arg3) {
-				/*AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
-				builder.setTitle("提示").setMessage(dataList.get(arg2).get("text").toString()).create().show();*/
+						String categoryId = (String) CatIdList[position];
 						Intent i = new Intent(MainActivity.this,MovieListActivity.class);
+						i.putExtra("catgoryId", categoryId);
 						startActivity(i);
 					}
 				});
@@ -320,6 +316,15 @@ public class MainActivity extends AppCompatActivity implements MyItemClickListen
 				MainActivity.this.finish();//关闭页面
 			}
 		});
+
+		LinearLayout toactorlist = findViewById(R.id.toactorlist);
+		toactorlist.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				startActivity(new Intent(MainActivity.this, ActorListActivity.class));
+				MainActivity.this.finish();//关闭页面
+			}
+		});
 	}
 	public String getAccount() {
 		return mEdit.getText().toString().trim();//去掉空格
@@ -333,24 +338,12 @@ public class MainActivity extends AppCompatActivity implements MyItemClickListen
 		moreGrideView = findViewById(R.id.moregridview);
 		mListView = findViewById(R.id.listview_actor);
 	}
-	private void initListView(){
-		actor_numberList = new ArrayList<>();
-		actor_nameList = new ArrayList<>();
-		actor_introductionList = new ArrayList<>();
-		actor_numberList.add("3部电影");
-		actor_numberList.add("1部电影");
-		actor_nameList.add("李三");
-		actor_nameList.add("王四");
-		actor_introductionList.add("打发阿发发生大发沙发沙发");
-		actor_introductionList.add("affasfasfasfsasfasf");
-		//mListView.setAdapter(new MyBaseAdapter());
-
-	}
 	void initData() {
 		//图标
 		int icno[] = { R.mipmap.jiemu_icon, R.mipmap.jiemu_icon,R.mipmap.jiemu_icon,R.mipmap.jiemu_icon,R.mipmap.jiemu_icon,R.mipmap.jiemu_icon,R.mipmap.jiemu_icon,R.mipmap.all};
 		//图标下的文字
 		String name[]={"娱乐","网络电影","电视剧","综艺","魔幻","游戏","片花","全部"};
+		CatIdList= new String[]{"1", "2", "3", "4", "5", "6", "7", "8"};
 		dataList = new ArrayList<Map<String, Object>>();
 		for (int i = 0; i <icno.length; i++) {
 			Map<String, Object> map=new HashMap<String, Object>();

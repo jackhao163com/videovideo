@@ -9,4 +9,10 @@
     <color name="white">#ffffff</color>
     <color name="blue">#419DE4</color>
     <color name="common_yellow">#cbac7f</color>
+
+    <color name="random1">#fff0f0</color>
+    <color name="random2">#dfdeff</color>
+    <color name="random3">#fff5ea</color>
+    <color name="random4">#e5fffd</color>
+    <color name="random5">#fce3ff</color>
 </resources>

@@ -1,31 +1,90 @@
 package com.cucumber.video.welcomeactivity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.JavascriptInterface;
-import android.webkit.JsResult;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.itheima.retrofitutils.L;
+import com.squareup.picasso.Picasso;
+
+import org.itheima.recycler.adapter.BaseLoadMoreRecyclerAdapter;
+import org.itheima.recycler.header.RecyclerViewHeader;
+import org.itheima.recycler.listener.ItemClickSupport;
+import org.itheima.recycler.viewholder.BaseRecyclerViewHolder;
+import org.itheima.recycler.widget.ItheimaRecyclerView;
+import org.itheima.recycler.widget.PullToLoadMoreRecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Headers;
 
 
-public class MovieListActivity  extends AppCompatActivity {
+public class MovieListActivity extends AppCompatActivity implements View.OnClickListener {
+    BaseLoadMoreRecyclerAdapter.LoadMoreViewHolder holder;
+    PullToLoadMoreRecyclerView pullToLoadMoreRecyclerView;
+    @BindView(R.id.recycler_view)
+    ItheimaRecyclerView recyclerView;
+    @BindView(R.id.togoback)
+    ImageView togoback;
+    @BindView(R.id.et_bg)
+    TextView etBg;
+    @BindView(R.id.order_morest)
+    TextView orderMorest;
+    @BindView(R.id.order_new)
+    TextView orderNew;
+    @BindView(R.id.order_like)
+    TextView orderLike;
+    @BindView(R.id.order_hh)
+    HorizontalScrollView orderHh;
+    @BindView(R.id.order_all)
+    TextView orderAll;
+    @BindView(R.id.order_renqi3)
+    TextView orderRenqi3;
+    @BindView(R.id.order_pianliang3)
+    TextView orderPianliang3;
+    @BindView(R.id.order_renqi4)
+    TextView orderRenqi4;
+    @BindView(R.id.order_pianliang4)
+    TextView orderPianliang4;
+    @BindView(R.id.order_renqi5)
+    TextView orderRenqi5;
+    @BindView(R.id.order_pianliang5)
+    TextView orderPianliang5;
+    @BindView(R.id.order_cat)
+    LinearLayout orderCat;
+    @BindView(R.id.recycler_header)
+    RecyclerViewHeader recyclerHeader;
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout myswipeRefreshLayout;
 
-    private WebView webView;
-    private ProgressBar progressBar;
-    private ImageView togoback;
-    private  String token ;
+
+    private String token;
+    private ItheimaRecyclerView myrecyclerView;
+    private TextView currentOrder;
+    private TextView currentCat;
+
+    Integer pageIndex = 0;
+    private int state = 0;
+    private static final int STATE_FRESH = 1;
+    private static final int STATE_MORE = 2;
+    ArrayList<MovieBean.DataBean.ItemsBean> itemsBeanList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,132 +92,210 @@ public class MovieListActivity  extends AppCompatActivity {
         setContentView(R.layout.activity_movielist);
         getToken();
 
-        togoback = (ImageView)findViewById(R.id.togoback);
-        togoback.setOnClickListener(new View.OnClickListener() {
+        //获取传参
+        Intent intent = getIntent();
+        String catgoryId = intent.getStringExtra("catgoryId");
+        String orderId = intent.getStringExtra("orderId");
+
+        ButterKnife.bind(this);
+
+        currentOrder = orderMorest;
+        currentCat = orderAll;
+        togoback = (ImageView) findViewById(R.id.togoback);
+        togoback.setOnClickListener(this);
+
+        RecyclerViewHeader header = (RecyclerViewHeader) findViewById(R.id.recycler_header);
+        myrecyclerView = (ItheimaRecyclerView) findViewById(R.id.recycler_view);
+        header.attachTo(myrecyclerView);
+
+        ItemClickSupport itemClickSupport = new ItemClickSupport(myrecyclerView);
+        //点击事件
+        itemClickSupport.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                MovieListActivity.this.finish();
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                String actorId = itemsBeanList.get(position).getId();
+
+                Intent intent = new Intent(MovieListActivity.this, UserActivity.class);
+                intent.putExtra("actorId", actorId);
+                startActivity(intent);
+
             }
         });
 
-        progressBar= (ProgressBar)findViewById(R.id.progressbar);//进度条
-        webView = (WebView) findViewById(R.id.webview);
-//        webView.loadUrl("file:///android_asset/test.html");//加载asset文件夹下html
-        webView.loadUrl("http://hgweb.joysw.win:82/#/movielist?token="+token);//加载url
+        orderMorest.setOnClickListener(this);
+        orderLike.setOnClickListener(this);
+        orderNew.setOnClickListener(this);
+        orderAll.setOnClickListener(this);
+        orderRenqi3.setOnClickListener(this);
 
-        //使用webview显示html代码
-//        webView.loadDataWithBaseURL(null,"<html><head><title> 欢迎您 </title></head>" +
-//                "<body><h2>使用webview显示 html代码</h2></body></html>", "text/html" , "utf-8", null);
+        getToken();
 
-        webView.addJavascriptInterface(this,"android");//添加js监听 这样html就能调用客户端
-        webView.setWebChromeClient(webChromeClient);
-        webView.setWebViewClient(webViewClient);
 
-        WebSettings webSettings=webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);//允许使用js
+        pullToLoadMoreRecyclerView = new PullToLoadMoreRecyclerView<ActorListBean>(myswipeRefreshLayout, myrecyclerView, ActorListActivity.MyRecyclerViewHolder.class) {
+            @Override
+            public int getItemResId() {
+                //recylerview item资源id
+                return R.layout.item_movie;
+            }
 
-        /**
-         * LOAD_CACHE_ONLY: 不使用网络，只读取本地缓存数据
-         * LOAD_DEFAULT: （默认）根据cache-control决定是否从网络上取数据。
-         * LOAD_NO_CACHE: 不使用缓存，只从网络获取数据.
-         * LOAD_CACHE_ELSE_NETWORK，只要本地有，无论是否过期，或者no-cache，都使用缓存中的数据。
-         */
-        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);//不使用缓存，只从网络获取数据.
+            @Override
+            public String getApi() {
+                switch (state) {
+                    case STATE_FRESH:
+                        pageIndex = 0;
+                        break;
+                    case STATE_MORE:
+                        pageIndex++;
+                        break;
+                }
+                //接口
+                return "getactorlist?pageIndex=" + pageIndex + "&token=" + token;
+            }
 
-        //支持屏幕缩放
-        //webSettings.setSupportZoom(true);
-        //webSettings.setBuiltInZoomControls(true);
+            //            //是否加载更多的数据，根据业务逻辑自行判断，true表示有更多的数据，false表示没有更多的数据，如果不需要监听可以不重写该方法
+            @Override
+            public boolean isMoreData(BaseLoadMoreRecyclerAdapter.LoadMoreViewHolder holder1) {
+                System.out.println("isMoreData---------------------" + holder1);
+                holder = holder1;
+                state = STATE_MORE;
+                return true;
+            }
+        };
 
-        //不显示webview缩放按钮
-        webSettings.setDisplayZoomControls(false);
+        pullToLoadMoreRecyclerView.setLoadingDataListener(new PullToLoadMoreRecyclerView.LoadingDataListener<MovieBean>() {
 
+            @Override
+            public void onRefresh() {
+                //监听下啦刷新，如果不需要监听可以不重新该方法
+                L.i("setLoadingDataListener onRefresh");
+                state = STATE_FRESH;
+            }
+
+            @Override
+            public void onStart() {
+                //监听http请求开始，如果不需要监听可以不重新该方法
+                L.i("setLoadingDataListener onStart");
+            }
+
+            @Override
+            public void onSuccess(MovieBean o, Headers headers) {
+                //监听http请求成功，如果不需要监听可以不重新该方法
+                L.i("setLoadingDataListener onSuccess: " + o);
+                List<MovieBean.DataBean.ItemsBean> itemDatas = o.getItemDatas();
+                if (itemDatas.size() == 0) {
+                    holder.loadingFinish((String) null);
+                    if (myswipeRefreshLayout != null) {
+                        myswipeRefreshLayout.setRefreshing(false);
+                    }
+                } else {
+                    for (MovieBean.DataBean.ItemsBean item : itemDatas) {
+                        itemsBeanList.add(item);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure() {
+                //监听http请求失败，如果不需要监听可以不重新该方法
+                L.i("setLoadingDataListener onFailure");
+            }
+        });
+
+        pullToLoadMoreRecyclerView.setPageSize(6);
+//        pullToLoadMoreRecyclerView.putParam("categoryId",catgoryId);
+//        pullToLoadMoreRecyclerView.putParam("orderId",orderId);
+        pullToLoadMoreRecyclerView.requestData();
     }
-    private  void getToken(){
+
+    private void getToken() {
         SharedPreferencesUtils helper = new SharedPreferencesUtils(this, "setting");
         token = helper.getString("token");
     }
-    //WebViewClient主要帮助WebView处理各种通知、请求事件
-    private WebViewClient webViewClient=new WebViewClient(){
-        @Override
-        public void onPageFinished(WebView view, String url) {//页面加载完成
-            progressBar.setVisibility(View.GONE);
+
+    @Override
+    public void onClick(View v) {
+        Log.i("", "点击了---" + v.getId());
+        switch (v.getId()) {
+            case R.id.order_like:
+            case R.id.order_morest:
+            case R.id.order_new:
+                refreshPage(v, 1);
+                break;
+            case R.id.order_all:
+            case R.id.order_renqi3:
+                refreshPage(v, 2);
+                break;
+            case R.id.togoback:
+                MovieListActivity.this.finish();
+                break;
+        }
+    }
+
+    private void refreshPage(View v, int group) {
+        TextView textview = (TextView) v;
+        textview.setBackground(getResources().getDrawable(R.drawable.bg_yuan));
+        textview.setTextColor(Color.parseColor("#d2b588"));
+        if (group == 1) {
+            currentOrder.setBackgroundColor(Color.parseColor("#ffffff"));
+            currentOrder.setTextColor(Color.parseColor("#808080"));
+            currentOrder = textview;
+        } else {
+            currentCat.setBackgroundColor(Color.parseColor("#ffffff"));
+            currentCat.setTextColor(Color.parseColor("#808080"));
+            currentCat = textview;
+        }
+        pullToLoadMoreRecyclerView.mLoadMoreRecyclerViewAdapter.addDatas(false, null);
+        pullToLoadMoreRecyclerView.onRefresh();
+    }
+
+    public static class MyRecyclerViewHolder extends BaseRecyclerViewHolder<ActorListBean.DataBean.ItemsBean> {
+
+        @BindView(R.id.actor_image)
+        CircleImageView actorImage;
+        @BindView(R.id.actor_name)
+        TextView actorName;
+        int position = 0;
+
+
+        //换成你布局文件中的id
+        public MyRecyclerViewHolder(ViewGroup parentView, int itemResId) {
+            super(parentView, itemResId);
         }
 
+        /**
+         * 绑定数据的方法，在mData获取数据（mData声明在基类中）
+         */
         @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {//页面开始加载
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            Log.i("ansen","拦截url:"+url);
-            if(url.equals("http://www.google.com/")){
-                Toast.makeText(MovieListActivity.this,"国内不能访问google,拦截该url",Toast.LENGTH_LONG).show();
-                return true;//表示我已经处理过了
+        public void onBindRealData() {
+            String actorname = mData.getName().equals("") ? "" : mData.getName();
+            String cover = mData.getCover().equals("") ? "" : mData.getCover();
+            actorName.setText(actorname);
+            RelativeLayout parentView = (RelativeLayout) actorName.getParent();
+            int randomInt = mPosition % 5;//getNum(4);
+            int[] colorList = {R.color.random1, R.color.random2, R.color.random3, R.color.random4, R.color.random5};
+            Log.i("j-----", "random:" + randomInt + " color:" + colorList[randomInt]);
+            parentView.setBackgroundColor(mContext.getResources().getColor(colorList[randomInt]));
+            if (!cover.isEmpty()) {
+                Picasso.with(mContext)
+                        .load(cover)
+                        .into(actorImage);
             }
-            return super.shouldOverrideUrlLoading(view, url);
+            position++;
         }
 
-    };
-
-    //WebChromeClient主要辅助WebView处理Javascript的对话框、网站图标、网站title、加载进度等
-    private WebChromeClient webChromeClient=new WebChromeClient(){
-        //不支持js的alert弹窗，需要自己监听然后通过dialog弹窗
-        @Override
-        public boolean onJsAlert(WebView webView, String url, String message, JsResult result) {
-            AlertDialog.Builder localBuilder = new AlertDialog.Builder(webView.getContext());
-            localBuilder.setMessage(message).setPositiveButton("确定",null);
-            localBuilder.setCancelable(false);
-            localBuilder.create().show();
-
-            //注意:
-            //必须要这一句代码:result.confirm()表示:
-            //处理结果为确定状态同时唤醒WebCore线程
-            //否则不能继续点击按钮
-            result.confirm();
-            return true;
+        public static int getNum(int endNum) {
+            if (endNum > 0) {
+                Random random = new Random();
+                return random.nextInt(endNum);
+            }
+            return 0;
         }
-
-        //获取网页标题
-        @Override
-        public void onReceivedTitle(WebView view, String title) {
-            super.onReceivedTitle(view, title);
-            Log.i("ansen","网页标题:"+title);
-        }
-
-        //加载进度回调
-        @Override
-        public void onProgressChanged(WebView view, int newProgress) {
-            progressBar.setProgress(newProgress);
-        }
-    };
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.i("ansen","是否有上一个页面:"+webView.canGoBack());
-        if (webView.canGoBack() && keyCode == KeyEvent.KEYCODE_BACK){//点击返回按钮的时候判断有没有上一页
-            webView.goBack(); // goBack()表示返回webView的上一页面
-            return true;
-        }
-        return super.onKeyDown(keyCode,event);
-    }
-
-    /**
-     * JS调用android的方法
-     * @param str
-     * @return
-     */
-    @JavascriptInterface //仍然必不可少
-    public void  getClient(String str){
-        Log.i("ansen","html调用客户端:"+str);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        //释放资源
-        webView.destroy();
-        webView=null;
+        /**
+         * 给按钮添加点击事件（button改成你要添加点击事件的id）
+         * @param v
+         */
+//        @OnClick(R.id.button)
+//        public void click(View v) {
+//        }
     }
 }
