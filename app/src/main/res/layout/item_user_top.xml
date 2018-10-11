@@ -71,7 +71,74 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical|center"
             android:paddingBottom="10dp"
+            android:drawableBottom="@drawable/line_shape_gray"
             android:text="看广告、推广，可以增加观看次数哦" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView3"
+            android:showDividers="middle"
+            android:divider="@drawable/line_shape_gray"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center">
+
+                <TextView
+                    android:id="@+id/remain_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="0/0"
+                    android:textColor="@color/common_yellow"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/remain_num"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="今日剩余观影次数"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center_vertical|center">
+
+                <ImageView
+                    android:id="@+id/levelimg"
+                    android:layout_width="20dp"
+                    android:layout_height="25dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@mipmap/dengji1"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/levelimg"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="下一等级还差几人哦"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </LinearLayout>
 
 
     </RelativeLayout>

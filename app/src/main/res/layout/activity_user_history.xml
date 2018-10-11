@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/line_shape_gray"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/levelimg"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@mipmap/lishijilu"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignLeft="@+id/levelimg"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="历史记录"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/viewnums"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignLeft="@+id/levelimg"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="目前历史观看过3部"
+            android:textColor="@color/fontgray"
+            android:textSize="12sp" />
+
+        <GridView
+            android:id="@+id/historyGridView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_below="@id/viewnums"
+            android:columnWidth="80dp"
+            android:numColumns="3"
+            android:stretchMode="spacingWidthUniform" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/line_shape_gray"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/huancunimg"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@mipmap/wodehuancun"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignLeft="@+id/huancunimg"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="我的缓存"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/huancunNums"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignLeft="@+id/huancunimg"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="目前本地大片有0部"
+            android:textColor="@color/fontgray"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/likes"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@mipmap/wodexihuan"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignLeft="@+id/likes"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="历史记录"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/likenums"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignLeft="@+id/likes"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="目前已有喜欢3部"
+            android:textColor="@color/fontgray"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+</LinearLayout>
