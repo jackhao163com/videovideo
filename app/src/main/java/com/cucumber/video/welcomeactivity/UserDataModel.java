@@ -104,7 +104,8 @@ public class UserDataModel {
             private String uid;
             private String username;
             private String password;
-            private Object level;
+            private String level;
+            private String levelname;
             private Object nextlevel;
             private String rand_code;
             private String apptype;
@@ -148,12 +149,20 @@ public class UserDataModel {
                 this.password = password;
             }
 
-            public Object getLevel() {
+            public String getLevel() {
                 return level;
             }
 
-            public void setLevel(Object level) {
+            public void setLevel(String level) {
                 this.level = level;
+            }
+
+            public String getLevelName() {
+                return levelname;
+            }
+
+            public void setLevelName(String levelname) {
+                this.levelname = levelname;
             }
 
             public Object getNextlevel() {
@@ -330,11 +339,11 @@ public class UserDataModel {
                 this.movieid = movieid;
             }
 
-            public String getMoviename() {
+            public String getMovieName() {
                 return moviename;
             }
 
-            public void setMoviename(String moviename) {
+            public void setMovieName(String moviename) {
                 this.moviename = moviename;
             }
 

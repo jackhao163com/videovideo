@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#f4f4f4"
     android:clipChildren="false">
 
@@ -14,25 +14,37 @@
         android:background="@mipmap/me_log"
         android:scaleType="fitXY" />
 
+    <ImageView
+        android:id="@+id/setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@mipmap/shezhi"
+        android:scaleType="fitXY" />
+
     <RelativeLayout
         android:id="@+id/user_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imgbg"
-        android:layout_margin="10dp"
-        android:layout_marginTop="-10dp"
+        android:layout_below="@+id/setting"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="100dp"
         android:background="@drawable/co_border_white">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/actor_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_alignParentStart="false"
             android:layout_alignParentTop="false"
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="false"
             android:layout_centerVertical="false"
-            android:layout_marginTop="-30dp"
+            android:layout_marginTop="-50dp"
             android:background="@mipmap/denglutouxiang"
             android:scaleType="centerCrop" />
 
@@ -42,8 +54,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/actor_image"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="-20dp"
             android:background="@drawable/co_border"
             android:gravity="top|right"
             android:paddingBottom="5dp"
@@ -57,6 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView_level"
+            android:layout_marginTop="10dp"
             android:gravity="center_horizontal|center"
             android:text="TextView"
             android:textColor="@color/commonyellow"
@@ -69,18 +83,26 @@
             android:layout_below="@+id/textView_phone"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
+            android:drawableBottom="@drawable/line_shape_gray"
             android:gravity="center_vertical|center"
             android:paddingBottom="10dp"
-            android:drawableBottom="@drawable/line_shape_gray"
             android:text="看广告、推广，可以增加观看次数哦" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/textView3"
+            android:background="#ededed"></View>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView3"
-            android:showDividers="middle"
             android:divider="@drawable/line_shape_gray"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:showDividers="middle">
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -107,13 +129,22 @@
                     android:gravity="center"
                     android:text="今日剩余观影次数"
                     android:textSize="12sp" />
+
+
             </RelativeLayout>
+
+            <View
+                android:layout_width="1dip"
+                android:layout_height="70dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:background="#ededed" />
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:gravity="center_vertical|center">
 
                 <ImageView

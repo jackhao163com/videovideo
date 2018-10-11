@@ -21,4 +21,7 @@
     <string name="invite_message">填写邀请码可增加好友与自己的每日观影次数</string>
     <string name="password_hint">有6-20位字母或数字组成</string>
     <string name="user_protocal"><u>&lt;用户注册协议&gt;</u></string>
+    <string name="channel_title_tuijian">推荐</string>
+    <string name="channel_title_hot">热门标签</string>
+    <string name="channel_title_like">猜你喜欢</string>
 </resources>

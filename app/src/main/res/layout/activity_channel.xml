@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#4f5555">
@@ -36,25 +37,25 @@
 
     </RelativeLayout>
 
-    <WebView
-        android:id="@+id/webview"
+    <RelativeLayout
+        android:id="@+id/mainLayout"
+        android:layout_below="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"
-        android:layout_marginTop="50dp" />
+        android:layout_height="match_parent">
 
-    <ProgressBar
-        android:id="@+id/progressbar"
-        android:layout_width="match_parent"
-        android:layout_height="3dip"
-        android:max="100"
-        android:progress="0"
-        android:visibility="gone" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
 
     <com.roughike.bottombar.BottomBar
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_below="@+id/mainLayout"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         app:bb_activeTabColor="#f58a76"

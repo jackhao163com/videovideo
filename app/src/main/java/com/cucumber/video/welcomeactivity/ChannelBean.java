@@ -3,7 +3,10 @@ package com.cucumber.video.welcomeactivity;
 import java.util.List;
 
 public class ChannelBean {
-
+    public static  final int TYPE_TUIJIAN =1;
+    public static  final int TYPE_BANNER=2;
+    public static final int TYPE_HOT=3;
+    public static final int TYPE_LIKE=4;
     /**
      * status : 1
      * msg : 成功
@@ -38,6 +41,18 @@ public class ChannelBean {
         this.data = data;
     }
 
+    public List<DataBean.ClistBean> getCItemDatas() {
+        return data.clist;
+    }
+    public List<DataBean.TlistBean> getTItemDatas() {
+        return data.tlist;
+    }
+    public List<DataBean.LlistBean> getLItemDatas() {
+        return data.llist;
+    }
+    public List<DataBean.BlistBean> getBItemDatas() {
+        return data.blist;
+    }
     public static class DataBean {
         private List<ClistBean> clist;
         private List<TlistBean> tlist;
