@@ -80,7 +80,7 @@ public class FindActivity extends AppCompatActivity {
             }
         });
 
-        pullToLoadMoreRecyclerView = new PullToLoadMoreRecyclerView<ActorListBean>(myswipeRefreshLayout, myrecyclerView, ActorListActivity.MyRecyclerViewHolder.class) {
+        pullToLoadMoreRecyclerView = new PullToLoadMoreRecyclerView<FindBean>(myswipeRefreshLayout, myrecyclerView, MyRecyclerViewHolder.class) {
             @Override
             public int getItemResId() {
                 //recylerview item资源id
@@ -187,13 +187,13 @@ public class FindActivity extends AppCompatActivity {
         token = helper.getString("token");
     }
 
-    public static class MyRecyclerViewHolder extends BaseRecyclerViewHolder<ActorListBean.DataBean.ItemsBean> {
+    public static class MyRecyclerViewHolder extends BaseRecyclerViewHolder<FindBean.DataBean.ItemsBean> {
 
 
         @BindView(R.id.like)
         ImageView like;
         @BindView(R.id.download)
-        ImageView download;
+        ImageView downloads;
         @BindView(R.id.share)
         ImageView share;
         @BindView(R.id.img)

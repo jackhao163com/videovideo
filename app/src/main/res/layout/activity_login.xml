@@ -204,8 +204,7 @@
                 android:layout_marginBottom="-15dp"
                 android:layout_marginTop="30dp"
                 android:background="@mipmap/login_btn"
-                android:tag="2"
-                android:translationZ="2dp" />
+                android:tag="2"/>
         </LinearLayout>
 
         <LinearLayout

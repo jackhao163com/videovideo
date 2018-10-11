@@ -52,6 +52,8 @@ public class ActorListActivity extends AppCompatActivity implements View.OnClick
     TextView orderRenqi3;
     @BindView(R.id.order_cat)
     LinearLayout orderCat;
+    @BindView(R.id.togoback)
+    ImageView togoback;
     @BindView(R.id.recycler_header)
     RecyclerViewHeader recyclerHeader;
     @BindView(R.id.swipe_refresh_layout)
@@ -66,7 +68,6 @@ public class ActorListActivity extends AppCompatActivity implements View.OnClick
     private static final int STATE_MORE = 2;
     ArrayList<ActorListBean.DataBean.ItemsBean> itemsBeanList = new ArrayList<>();
     private String token;
-    private ImageView togoback;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,8 +82,6 @@ public class ActorListActivity extends AppCompatActivity implements View.OnClick
 
         currentOrder = orderRenqi;
         currentCat = orderAll;
-        togoback = (ImageView) findViewById(R.id.togoback);
-        togoback.setOnClickListener(this);
 
         RecyclerViewHeader header = (RecyclerViewHeader) findViewById(R.id.recycler_header);
         myrecyclerView = (ItheimaRecyclerView) findViewById(R.id.recycler_view);
@@ -102,6 +101,7 @@ public class ActorListActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
+        togoback.setOnClickListener(this);
         orderRenqi.setOnClickListener(this);
         orderPianliang.setOnClickListener(this);
         orderAll.setOnClickListener(this);
@@ -248,11 +248,13 @@ public class ActorListActivity extends AppCompatActivity implements View.OnClick
             String actorname = mData.getName().equals("") ? "" : mData.getName();
             String cover = mData.getCover().equals("") ? "" : mData.getCover();
             actorName.setText(actorname);
+
             RelativeLayout parentView = (RelativeLayout) actorName.getParent();
             int randomInt = mPosition%5;//getNum(4);
             int[] colorList = {R.color.random1,R.color.random2,R.color.random3,R.color.random4,R.color.random5};
-            Log.i("j-----","random:"+randomInt+" color:"+colorList[randomInt]);
             parentView.setBackgroundColor(mContext.getResources().getColor(colorList[randomInt]));
+
+
             if(!cover.isEmpty()){
                 Picasso.with(mContext)
                         .load(cover)

@@ -28,6 +28,7 @@
                 android:background="#ffffff">
 
                 <RelativeLayout
+                    android:id="@+id/header"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="#4f5555">
@@ -39,9 +40,10 @@
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
                         android:layout_gravity="top|end"
-                        android:layout_marginStart="10dp"
+                        android:background="@android:color/transparent"
                         android:contentDescription="演员列表"
                         android:gravity="center"
+                        android:padding="10dp"
                         android:src="@mipmap/back" />
 
                     <TextView
@@ -63,12 +65,13 @@
                     android:id="@+id/order_hh"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/header"
                     android:clickable="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="70dp"
+                        android:layout_marginTop="10dp"
                         android:background="@color/white"
                         android:paddingLeft="20dp">
 

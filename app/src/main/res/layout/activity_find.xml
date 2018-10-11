@@ -7,7 +7,8 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomBar">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -17,7 +18,8 @@
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#ffffff" />
+                android:background="#ffffff"
+                android:paddingBottom="20dp" />
 
             <org.itheima.recycler.header.RecyclerViewHeader
                 android:id="@+id/recycler_header"
@@ -61,4 +63,14 @@
             </org.itheima.recycler.header.RecyclerViewHeader>
         </FrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        app:bb_activeTabColor="#f58a76"
+        app:bb_inActiveTabColor="#767676"
+        app:bb_tabXmlResource="@xml/bottombar_tabs" />
 </RelativeLayout>

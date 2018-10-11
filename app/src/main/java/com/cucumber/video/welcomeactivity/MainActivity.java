@@ -322,7 +322,6 @@ public class MainActivity extends AppCompatActivity implements MyItemClickListen
 			@Override
 			public void onClick(View view) {
 				startActivity(new Intent(MainActivity.this, ActorListActivity.class));
-				MainActivity.this.finish();//关闭页面
 			}
 		});
 	}

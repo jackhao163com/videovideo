@@ -31,7 +31,6 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Headers;
 
 
@@ -131,7 +130,7 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
         getToken();
 
 
-        pullToLoadMoreRecyclerView = new PullToLoadMoreRecyclerView<ActorListBean>(myswipeRefreshLayout, myrecyclerView, ActorListActivity.MyRecyclerViewHolder.class) {
+        pullToLoadMoreRecyclerView = new PullToLoadMoreRecyclerView<MovieBean>(myswipeRefreshLayout, myrecyclerView, MyRecyclerViewHolder.class) {
             @Override
             public int getItemResId() {
                 //recylerview item资源id
@@ -248,13 +247,13 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
         pullToLoadMoreRecyclerView.onRefresh();
     }
 
-    public static class MyRecyclerViewHolder extends BaseRecyclerViewHolder<ActorListBean.DataBean.ItemsBean> {
+    public static class MyRecyclerViewHolder extends BaseRecyclerViewHolder<MovieBean.DataBean.ItemsBean> {
 
-        @BindView(R.id.actor_image)
-        CircleImageView actorImage;
-        @BindView(R.id.actor_name)
-        TextView actorName;
-        int position = 0;
+
+        @BindView(R.id.img)
+        ImageView img;
+        @BindView(R.id.text)
+        TextView text;
 
 
         //换成你布局文件中的id
@@ -267,29 +266,16 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
          */
         @Override
         public void onBindRealData() {
-            String actorname = mData.getName().equals("") ? "" : mData.getName();
+            String name = mData.getName().equals("") ? "" : mData.getName();
             String cover = mData.getCover().equals("") ? "" : mData.getCover();
-            actorName.setText(actorname);
-            RelativeLayout parentView = (RelativeLayout) actorName.getParent();
-            int randomInt = mPosition % 5;//getNum(4);
-            int[] colorList = {R.color.random1, R.color.random2, R.color.random3, R.color.random4, R.color.random5};
-            Log.i("j-----", "random:" + randomInt + " color:" + colorList[randomInt]);
-            parentView.setBackgroundColor(mContext.getResources().getColor(colorList[randomInt]));
+            text.setText(name);
             if (!cover.isEmpty()) {
                 Picasso.with(mContext)
                         .load(cover)
-                        .into(actorImage);
+                        .into(img);
             }
-            position++;
         }
 
-        public static int getNum(int endNum) {
-            if (endNum > 0) {
-                Random random = new Random();
-                return random.nextInt(endNum);
-            }
-            return 0;
-        }
         /**
          * 给按钮添加点击事件（button改成你要添加点击事件的id）
          * @param v
