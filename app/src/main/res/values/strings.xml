@@ -2,6 +2,7 @@
     <string name="app_name">黄瓜视频</string>
     <string name="hello_world">Hello world!</string>
     <string name="strPoint">小圆点</string>
+    <string name="agree">确定</string>
     <string name="strWelLogo">欢迎Logo</string>
     <string name="strWelcomeToMain">欢迎来到主页</string>
     <string name="strWelcome">欢迎回来</string>
@@ -24,4 +25,6 @@
     <string name="channel_title_tuijian">推荐</string>
     <string name="channel_title_hot">热门标签</string>
     <string name="channel_title_like">猜你喜欢</string>
+    <string name="setting_clearcache_title">清理缓存</string>
+    <string name="setting_clearcache_content">已经成功清理缓存</string>
 </resources>

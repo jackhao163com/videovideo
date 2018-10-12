@@ -9,8 +9,10 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="#333333">
+        android:layout_height="wrap_content"
+        android:background="#333333"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
 
         <TextView
             android:id="@+id/et_bg"
@@ -30,40 +32,43 @@
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_gravity="top"
-            android:gravity="center"
+            android:layout_marginLeft="70dp"
             android:background="@null"
             android:cursorVisible="false"
-        android:layout_marginLeft="70dp"
+            android:gravity="center"
             android:hint="输入关键词查找片源"
             android:textColor="#999999"
-            android:transitionName="shareTransition"
             android:textColorHint="#999999"
-            android:textSize="15sp"/>
+            android:textSize="15sp"
+            android:transitionName="shareTransition" />
+
         <ImageView
             android:id="@+id/search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|left"
             android:layout_marginLeft="30dp"
-            android:gravity="center"
             android:layout_marginTop="13dp"
+            android:gravity="center"
             android:src="@mipmap/search" />
+
         <ImageView
             android:id="@+id/download"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_gravity="top|right"
-            android:layout_marginRight="50dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginRight="50dp"
             android:gravity="center"
             android:src="@mipmap/download" />
+
         <ImageView
             android:id="@+id/history"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_gravity="top|right"
-            android:layout_marginRight="10dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
             android:gravity="center"
             android:src="@mipmap/zuijin" />
 

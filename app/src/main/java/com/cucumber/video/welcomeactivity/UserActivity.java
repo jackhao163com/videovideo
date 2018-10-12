@@ -52,14 +52,6 @@ public class UserActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getToken();
 
-        mSettings = (ImageView) findViewById(R.id.setting);
-        mSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(UserActivity.this, SettingActivity.class));
-            }
-        });
-
 
         //开始请求
         Request request = ItheimaHttp.newGetRequest("getuserindexdata?token=" + token);//apiUrl格式："xxx/xxxxx"
@@ -122,7 +114,7 @@ public class UserActivity extends AppCompatActivity {
     }
 
 
-    public class MyRecycleAdapter extends RecyclerView.Adapter<MyRecycleViewHolder> {
+    public class MyRecycleAdapter extends RecyclerView.Adapter<UserActivity.MyRecycleViewHolder> {
         private LayoutInflater mInflater;
         private Context context;
         private UserDataModel userdata;
@@ -199,7 +191,9 @@ public class UserActivity extends AppCompatActivity {
         TextView needPerson;
         @BindView(R.id.levelimg)
         ImageView levelimg;
-
+        @BindView(R.id.setting)
+        ImageView mSettings;
+//        R.layout.item_user_top
 
         public UserInfoHolder(View itemView) {
             super(itemView);
@@ -217,8 +211,15 @@ public class UserActivity extends AppCompatActivity {
                     .into(actorImage);
             textViewLevel.setText(userinfo.getLevelName());
             textViewPhone.setText(userinfo.getMobile());
-            remainNum.setText(userinfo.getViewmum()+"/"+userinfo.getViewmum());
-            needPerson.setText("下一等级还差"+userinfo.getViewmum()+"人");
+            remainNum.setText(userinfo.getViewmum() + "/" + userinfo.getViewmum());
+            needPerson.setText("下一等级还差" + userinfo.getViewmum() + "人");
+
+            mSettings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(UserActivity.this, SettingActivity.class));
+                }
+            });
 
             //levelimg.setImageDrawable(getResources().getDrawable((R.drawable.remind2)));
         }
@@ -324,16 +325,17 @@ public class UserActivity extends AppCompatActivity {
                         return false;
                 }
             });
-            setGridView(gridAdapter,mDataList.size());
+            setGridView(gridAdapter, mDataList.size());
             girlHolder.historyGridView.setAdapter(gridAdapter);
         }
-        private void setGridView(SimpleAdapter adapter,int count){
+
+        private void setGridView(SimpleAdapter adapter, int count) {
             DisplayMetrics dm = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(dm);
             float density = dm.density;
             int shownum = 3;
             int spcing = 30;
-            int itemWidth = (dm.widthPixels - (shownum - 1) * spcing)/shownum;
+            int itemWidth = (dm.widthPixels - (shownum - 1) * spcing) / shownum;
             int gridviewWidth = (count * (itemWidth)) + ((count - 1) * spcing);
 //            historyGridView.setAdapter(adapter);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(gridviewWidth,

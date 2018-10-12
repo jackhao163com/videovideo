@@ -35,6 +35,7 @@
         android:layout_marginTop="100dp"
         android:background="@drawable/co_border_white">
 
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/actor_image"
             android:layout_width="100dp"
@@ -65,22 +66,45 @@
             android:paddingTop="5dp"
             android:text="L0小白" />
 
-        <TextView
-            android:id="@+id/textView_phone"
+        <LinearLayout
+            android:id="@+id/infosss"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_below="@+id/textView_level"
-            android:layout_marginTop="10dp"
-            android:gravity="center_horizontal|center"
-            android:text="TextView"
-            android:textColor="@color/commonyellow"
-            android:textSize="18dp" />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textView_phone"
+                android:layout_below="@id/textView_level"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:background="@mipmap/male"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/textView_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_horizontal|center"
+                android:text="15866669999"
+                android:textColor="@color/commonyellow"
+                android:textSize="18dp" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textView_phone"
+            android:layout_below="@+id/infosss"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
             android:drawableBottom="@drawable/line_shape_gray"

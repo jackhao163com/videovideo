@@ -10,11 +10,30 @@
         android:layout_height="wrap_content"
         android:background="@color/white">
 
+        <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
+            android:id="@+id/player_list_video"
+            android:layout_width="match_parent"
+            android:layout_height="190dp" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/player_list_video"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal|center"
+            android:text="xxx"
+            android:textColor="#999999"
+            android:textSize="15sp" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/img"
+            android:layout_below="@+id/player_list_video"
             android:layout_marginTop="10dp"
             android:background="@color/white"
             android:orientation="horizontal">
@@ -60,29 +79,6 @@
                 android:gravity="center"
                 android:src="@mipmap/fenxiang" />
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/img"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="0dp"
-            android:background="@mipmap/zxpy1"
-            android:scaleType="fitXY" />
-
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/img"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center_horizontal|center"
-            android:text="xxx"
-            android:textColor="#999999"
-            android:textSize="15sp" />
 
 
     </RelativeLayout>

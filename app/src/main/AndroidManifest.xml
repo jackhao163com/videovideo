@@ -21,6 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.cucumber.video.welcomeactivity.GuideActivity"></activity>
+        <activity android:name="com.cucumber.video.welcomeactivity.AccountActivity"></activity>
+        <activity android:name="com.cucumber.video.welcomeactivity.XieYiActivity"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.ActorListActivity"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.UserActivity"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.FindActivity"></activity>

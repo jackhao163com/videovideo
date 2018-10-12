@@ -4,16 +4,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.itheima.loopviewpager.LoopViewPager;
 import com.itheima.retrofitutils.ItheimaHttp;
@@ -37,22 +41,32 @@ import retrofit2.Call;
 public class ChannelActivity extends AppCompatActivity {
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
+    @BindView(R.id.setting)
+    ImageView setting;
+    @BindView(R.id.header)
+    RelativeLayout header;
+    @BindView(R.id.et_bg)
+    TextView etBg;
+    @BindView(R.id.bottomBar)
+    BottomBar bottomBar;
+
     private ImageView mSettings;
     private String token;
     private MyRecycleAdapter mAdapter;
     private LoopViewPager loopViewPager;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channel);
+        ButterKnife.bind(this);
+        initActivity();
+    }
+
+    private void initActivity() {
+
         getToken();
-
-        loopViewPager = (LoopViewPager) findViewById(R.id.lvp_pager);
-        loopViewPager.setImgData(imgListString());
-        loopViewPager.setTitleData(titleListString());
-        loopViewPager.start();
-
 //        mSettings = (ImageView)findViewById(R.id.setting);
 //        mSettings.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -60,7 +74,6 @@ public class ChannelActivity extends AppCompatActivity {
 //                startActivity(new Intent(ChannelActivity.this, SettingActivity.class));
 //            }
 //        });
-
         //开始请求
         Request request = ItheimaHttp.newGetRequest("getChannelData?token=" + token);//apiUrl格式："xxx/xxxxx"
         Call call = ItheimaHttp.send(request, new HttpResponseListener<ChannelBean>() {
@@ -86,7 +99,6 @@ public class ChannelActivity extends AppCompatActivity {
             }
         });
 
-        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.selectTabAtPosition(1);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
@@ -157,16 +169,16 @@ public class ChannelActivity extends AppCompatActivity {
             MyRecycleViewHolder vh = null;
             switch (viewType) {
                 case ChannelBean.TYPE_HOT:
-                    vh = new ChannelActivity.HotHolder(mInflater.inflate(R.layout.activity_channel_hot, parent, false));
+                    vh = new HotHolder(mInflater.inflate(R.layout.activity_channel_hot, parent, false));
                     break;
                 case ChannelBean.TYPE_BANNER:
-                    vh = new ChannelActivity.BannerHolder(mInflater.inflate(R.layout.activity_channel_banner,parent, false));
+                    vh = new BannerHolder(mInflater.inflate(R.layout.activity_channel_banner, parent, false));
                     break;
                 case ChannelBean.TYPE_TUIJIAN:
-                    vh = new ChannelActivity.TuijianHolder(mInflater.inflate(R.layout.activity_channel_tuijian, parent, false));
+                    vh = new TuijianHolder(mInflater.inflate(R.layout.activity_channel_tuijian, parent, false));
                     break;
                 case ChannelBean.TYPE_LIKE:
-                    vh = new ChannelActivity.LikeHolder(mInflater.inflate(R.layout.activity_channel_like, parent, false));
+                    vh = new LikeHolder(mInflater.inflate(R.layout.activity_channel_like, parent, false));
                     break;
             }
             return vh;
@@ -186,7 +198,7 @@ public class ChannelActivity extends AppCompatActivity {
             } else if (position == 1) {//第一个是横向布局
                 return ChannelBean.TYPE_BANNER;
             } else if (position == 2) {//第2个位置是历史布局
-                return ChannelBean.TYPE_TUIJIAN;
+                return ChannelBean.TYPE_HOT;
             } else if (position == 3) {//第2个位置是历史布局
                 return ChannelBean.TYPE_LIKE;
             }
@@ -210,7 +222,9 @@ public class ChannelActivity extends AppCompatActivity {
     }
 
 
-    public class BannerHolder extends ChannelActivity.MyRecycleViewHolder {
+    public class BannerHolder extends MyRecycleViewHolder {
+        @BindView(R.id.lvp_pager)
+        LoopViewPager loopViewPager;
 
         public BannerHolder(View itemView) {
             super(itemView);
@@ -231,6 +245,16 @@ public class ChannelActivity extends AppCompatActivity {
                 map.put("name", item.getName());
                 map.put("hid", item.getId());
                 mDataList.add(map);
+            }
+
+            try {
+                loopViewPager.setImgData(imgListString());
+                //loopViewPager.setTitleData(titleListString());
+                loopViewPager.start();
+            } catch (Exception e1) {
+                Log.i("", "轮播图出错");
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
             }
 
         }
@@ -264,8 +288,23 @@ public class ChannelActivity extends AppCompatActivity {
             }
             final String[] from = {"cover", "name"};
             final int[] to = {R.id.img, R.id.text};
-            SimpleAdapter gridAdapter = new SimpleAdapter(ChannelActivity.this, mDataList, R.layout.gridviewitem, from, to);
+            SimpleAdapter gridAdapter = new SimpleAdapter(ChannelActivity.this, mDataList, R.layout.item_common, from, to);
             girlHolder.gridView.setAdapter(gridAdapter);
+            gridAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+                @Override
+                public boolean setViewValue(View view, Object data,
+                                            String textRepresentation) {
+                    if (view instanceof ImageView) {
+                        String url = (String) data;
+                        ImageView iv = (ImageView) view;
+                        Picasso.with(ChannelActivity.this)
+                                .load(url)
+                                .into(iv);
+                        return true;
+                    } else
+                        return false;
+                }
+            });
             girlHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> arg0, View arg1, int position,
@@ -292,7 +331,7 @@ public class ChannelActivity extends AppCompatActivity {
 
         @Override
         public void bindHolder(ChannelBean data, MyRecycleViewHolder holder) {
-            TuijianHolder girlHolder = (TuijianHolder) holder;
+            HotHolder girlHolder = (HotHolder) holder;
             List<Map<String, Object>> mDataList = new ArrayList<Map<String, Object>>();
             List<ChannelBean.DataBean.TlistBean> aitemDatas = data.getTItemDatas();
             for (ChannelBean.DataBean.TlistBean item : aitemDatas) {
@@ -304,8 +343,23 @@ public class ChannelActivity extends AppCompatActivity {
             }
             final String[] from = {"cover", "name"};
             final int[] to = {R.id.img, R.id.text};
-            SimpleAdapter gridAdapter = new SimpleAdapter(ChannelActivity.this, mDataList, R.layout.gridviewitem, from, to);
+            SimpleAdapter gridAdapter = new SimpleAdapter(ChannelActivity.this, mDataList, R.layout.item_common, from, to);
             girlHolder.gridView.setAdapter(gridAdapter);
+            gridAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+                @Override
+                public boolean setViewValue(View view, Object data,
+                                            String textRepresentation) {
+                    if (view instanceof ImageView) {
+                        String url = (String) data;
+                        ImageView iv = (ImageView) view;
+                        Picasso.with(ChannelActivity.this)
+                                .load(url)
+                                .into(iv);
+                        return true;
+                    } else
+                        return false;
+                }
+            });
             girlHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> arg0, View arg1, int position,
@@ -333,7 +387,7 @@ public class ChannelActivity extends AppCompatActivity {
 
         @Override
         public void bindHolder(ChannelBean data, MyRecycleViewHolder holder) {
-            TuijianHolder girlHolder = (TuijianHolder) holder;
+            LikeHolder girlHolder = (LikeHolder) holder;
             List<Map<String, Object>> mDataList = new ArrayList<Map<String, Object>>();
             List<ChannelBean.DataBean.LlistBean> aitemDatas = data.getLItemDatas();
             for (ChannelBean.DataBean.LlistBean item : aitemDatas) {
@@ -345,8 +399,23 @@ public class ChannelActivity extends AppCompatActivity {
             }
             final String[] from = {"cover", "name"};
             final int[] to = {R.id.img, R.id.text};
-            SimpleAdapter gridAdapter = new SimpleAdapter(ChannelActivity.this, mDataList, R.layout.gridviewitem, from, to);
+            SimpleAdapter gridAdapter = new SimpleAdapter(ChannelActivity.this, mDataList, R.layout.item_common, from, to);
             girlHolder.gridView.setAdapter(gridAdapter);
+            gridAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+                @Override
+                public boolean setViewValue(View view, Object data,
+                                            String textRepresentation) {
+                    if (view instanceof ImageView) {
+                        String url = (String) data;
+                        ImageView iv = (ImageView) view;
+                        Picasso.with(ChannelActivity.this)
+                                .load(url)
+                                .into(iv);
+                        return true;
+                    } else
+                        return false;
+                }
+            });
             girlHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> arg0, View arg1, int position,
