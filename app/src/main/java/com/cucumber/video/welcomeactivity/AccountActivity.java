@@ -27,6 +27,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +60,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     @BindView(R.id.login_btn)
     ImageView logoutBtn;
     private String token;
+    private Uri imageUri;
 
 
     /* 头像文件 */
@@ -341,10 +343,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         // 裁剪后输出图片的尺寸大小
-        intent.putExtra("outputX", 250);
-        intent.putExtra("outputY", 250);
+        intent.putExtra("outputX", output_X);
+        intent.putExtra("outputY", output_Y);
         // 图片格式
-        intent.putExtra("outputFormat", "JPEG");
+//        intent.putExtra("outputFormat", "JPEG");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, "JPEG");
+        intent.putExtra("scale", true);
         intent.putExtra("noFaceDetection", true);// 取消人脸识别
         intent.putExtra("return-data", true);
 
@@ -375,22 +379,47 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
     // 从本地相册选取图片作为头像
     private void choseHeadImageFromGallery() {
+        File outputImage = new File(Environment.getExternalStorageDirectory(),
+                "output_image.jpg");
+        imageUri = Uri.fromFile(outputImage);
+        try {
+            if (outputImage.exists()) {
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Intent intentFromGallery = new Intent(Intent.ACTION_PICK);
         // 设置文件类型
         intentFromGallery.setType("image/*");
+        intentFromGallery.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intentFromGallery, CODE_GALLERY_REQUEST);
     }
 
     // 启动手机相机拍摄照片作为头像
     private void choseHeadImageFromCameraCapture() {
-        Intent intentFromCapture = new Intent("android.media.action.IMAGE_CAPTURE");
-
-        // 判断存储卡是否可用，存储照片文件
-        if (hasSdcard()) {
-            intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri
-                    .fromFile(new File(Environment
-                            .getExternalStorageDirectory(), IMAGE_FILE_NAME)));
+        File outputImage = new File(Environment.getExternalStorageDirectory(),
+                "output_image.jpg");
+        try {
+            if (outputImage.exists()) {
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        //将File对象转换成Uri对象
+        //Uri表标识着图片的地址
+        imageUri = Uri.fromFile(outputImage);
+        Intent intentFromCapture = new Intent("android.media.action.IMAGE_CAPTURE");
+        intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        // 判断存储卡是否可用，存储照片文件
+//        if (hasSdcard()) {
+//            intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri
+//                    .fromFile(new File(Environment
+//                            .getExternalStorageDirectory(), IMAGE_FILE_NAME)));
+//        }
 
         startActivityForResult(intentFromCapture, CODE_CAMERA_REQUEST);
     }
