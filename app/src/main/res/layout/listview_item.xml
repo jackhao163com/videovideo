@@ -57,8 +57,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="32dp"
-            android:layout_centerVertical="true"
-            android:background="@mipmap/search"/>
+            android:layout_centerVertical="true"/>
 
         <LinearLayout
             android:layout_width="287dp"
@@ -84,9 +83,12 @@
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginBottom="@dimen/dp_20"
                 android:layout_marginLeft="@dimen/dp_10"
-                android:text="haode"
+                android:layout_marginRight="20dp"
+                android:text="简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介"
+                android:lines="2"
+                android:ellipsize="end"
                 android:textColor="#666666"
-                android:textSize="10sp" />
+                android:textSize="12sp" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

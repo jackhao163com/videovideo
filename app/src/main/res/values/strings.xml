@@ -27,4 +27,5 @@
     <string name="channel_title_like">猜你喜欢</string>
     <string name="setting_clearcache_title">清理缓存</string>
     <string name="setting_clearcache_content">已经成功清理缓存</string>
+    <string name="setting_clearcache_confirm">是否清理当前APP的缓存？</string>
 </resources>

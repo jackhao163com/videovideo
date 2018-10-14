@@ -31,16 +31,16 @@ public class XieYiActivity extends AppCompatActivity {
         setContentView(R.layout.activity_xieyi);
         getToken();
         progressBar= (ProgressBar)findViewById(R.id.progressbar);//进度条
-        mSettings = (ImageView)findViewById(R.id.setting);
+        mSettings = (ImageView)findViewById(R.id.setting_back);
         mSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(XieYiActivity.this, SettingActivity.class));
+                XieYiActivity.this.finish();
             }
         });
         webView = (WebView) findViewById(R.id.webview);
 //        webView.loadUrl("file:///android_asset/test.html");//加载asset文件夹下html
-        webView.loadUrl("http://hgweb.joysw.win:82/#/channel?token="+token);//加载url
+        webView.loadUrl("http://hgweb.joysw.win:82/#/xieyi?token="+token);//加载url
 
         //使用webview显示html代码
 //        webView.loadDataWithBaseURL(null,"<html><head><title> 欢迎您 </title></head>" +
