@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/actorwrapper"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/detailContent"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/actortitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="left"
+        android:text="明星影集"
+        android:textColor="#3f3f3f"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/actortitle">
+
+        <LinearLayout
+            android:id="@+id/actorinfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fffaf4"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_gravity="end"
+                    android:background="@mipmap/yingpian_bg" />
+
+                <TextView
+                    android:id="@+id/actor_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="14dp"
+                    android:text="13部电影"
+                    android:textColor="@android:color/white"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/actor_image"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="32dp" />
+
+                <LinearLayout
+                    android:layout_width="287dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="97dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/actor_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:text="haode"
+                        android:textColor="@android:color/black"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/actor_introduction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp_20"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:ellipsize="end"
+                        android:lines="2"
+                        android:text="简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介"
+                        android:textColor="#666666"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/hsw"
+            android:layout_width="fill_parent"
+            android:layout_height="102dp"
+            android:layout_below="@id/actorinfo"
+            android:layout_marginTop="20dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
+
+                <GridView
+                    android:id="@+id/historyGridView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="100dp"
+                    android:columnWidth="100dp"
+                    android:numColumns="auto_fit"
+                    android:stretchMode="spacingWidthUniform" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </RelativeLayout>
+</RelativeLayout>
