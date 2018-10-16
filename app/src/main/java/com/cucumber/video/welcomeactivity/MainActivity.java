@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements MyItemClickListen
 					Map<String, Object> map=new HashMap<String, Object>();
 					map.put("moreImg", (item.getCover()));
 					map.put("moreText",item.getName());
+					map.put("id",item.getId());
 					moreDataList.add(map);
 				}
 
@@ -198,6 +199,16 @@ public class MainActivity extends AppCompatActivity implements MyItemClickListen
 						String categoryId = (String) CatIdList[position];
 						Intent i = new Intent(MainActivity.this,MovieListActivity.class);
 						i.putExtra("catgoryId", categoryId);
+						startActivity(i);
+					}
+				});
+				moreGrideView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+					@Override
+					public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+											long arg3) {
+						String movieId = (String) moreDataList.get(position).get("id");
+						Intent i = new Intent(MainActivity.this,MovieDetailActivity.class);
+						i.putExtra("movieId", movieId);
 						startActivity(i);
 					}
 				});

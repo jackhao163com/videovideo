@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/likewrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,7 +8,7 @@
     android:background="@color/white">
 
     <TextView
-        android:id="@+id/actortitle"
+        android:id="@+id/liketitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -20,15 +21,17 @@
         android:textSize="15sp"
         android:textStyle="bold" />
 
-    <GridView
+    <com.cucumber.video.welcomeactivity.MyGridView
         android:id="@+id/likeMovieList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/actortitle"
-        android:background="@color/white"
+        android:layout_below="@+id/liketitle"
         android:layout_marginBottom="10dp"
-        android:columnWidth="100dp"
-        android:stretchMode="spacingWidthUniform"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:columnWidth="300dp"
+        android:gravity="left"
         android:numColumns="1"
-        />
+        android:stretchMode="spacingWidthUniform"
+        tools:listitem="@layout/item_movie_like" />
 </RelativeLayout>
