@@ -2,14 +2,20 @@ package com.cucumber.video.welcomeactivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -32,7 +38,7 @@ import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class MovieDetailActivity extends AppCompatActivity {
+public class MovieDetailActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
     @BindView(R.id.player_list_video)
     JCVideoPlayerStandard playerVideo;
     @BindView(R.id.moviename)
@@ -67,8 +73,21 @@ public class MovieDetailActivity extends AppCompatActivity {
     GridView actorGridView;
     @BindView(R.id.likeMovieList)
     GridView likeMovieList;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout refreshLayout;
     private String token;
     private String movieid;
+
+    private  List<Map<String, Object>> commentDataList;
+
+    private int lastVisibleItem = 0;
+    private final int PAGE_COUNT = 3;
+    private int pageIndex = 1;
+    private GridLayoutManager mLayoutManager;
+    private CommentListAdapter adapter;
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
 
     @Override
@@ -81,6 +100,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         movieid = intent.getStringExtra("movieId");
         getToken();
+        initRefreshLayout();
         getData();
     }
 
@@ -113,6 +133,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 commentnum.setText(detailInfo.getViews() + "条热评");
                 setActorInfo(bean);
                 setLikeListInfo(bean);
+                setCommentListInfo(bean);
             }
 
             /**
@@ -197,7 +218,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("likecover", (item.getCover()));
                 map.put("name", item.getName());
-                map.put("likemovieviews", item.getViews()+"次");
+                map.put("likemovieviews", item.getViews() + "次");
                 mDataList.add(map);
             }
             final String[] from = {"likecover", "name", "likemovieviews"};
@@ -220,12 +241,114 @@ public class MovieDetailActivity extends AppCompatActivity {
             });
             DisplayMetrics dm = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(dm);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(dm.widthPixels,
-                    LinearLayout.LayoutParams.MATCH_PARENT);
-            likeMovieList.setLayoutParams(params);
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(dm.widthPixels,
+//                    LinearLayout.LayoutParams.MATCH_PARENT);
+//            likeMovieList.setLayoutParams(params);
             likeMovieList.setColumnWidth(dm.widthPixels);
             likeMovieList.setAdapter(gridAdapter);
         }
+    }
+
+
+    private void setCommentListInfo(MovieDetailBean bean) {
+
+        initRecyclerView(bean);
+    }
+
+    private void initRefreshLayout() {
+        refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
+                android.R.color.holo_orange_light, android.R.color.holo_green_light);
+        refreshLayout.setOnRefreshListener(MovieDetailActivity.this);
+    }
+
+    private void initRecyclerView(MovieDetailBean bean) {
+        adapter = new CommentListAdapter(bean.getCommentlist(), this, bean.getCommentlist().size() > 0 ? true : false);
+        mLayoutManager = new GridLayoutManager(this, 1);
+//        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(MovieDetailActivity.this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.getLayoutManager().setAutoMeasureEnabled(false);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (adapter.isFadeTips() == false && lastVisibleItem + 1 == adapter.getItemCount()) {
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateRecyclerView(adapter.getRealLastPosition(), adapter.getRealLastPosition() + PAGE_COUNT);
+                            }
+                        }, 500);
+                    }
+
+                    if (adapter.isFadeTips() == true && lastVisibleItem + 2 == adapter.getItemCount()) {
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateRecyclerView(adapter.getRealLastPosition(), adapter.getRealLastPosition() + PAGE_COUNT);
+                            }
+                        }, 500);
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
+            }
+        });
+    }
+
+
+    private void updateRecyclerView(int fromIndex, int toIndex) {
+        //开始请求
+        Request request = ItheimaHttp.newGetRequest("getCommentList");//apiUrl格式："xxx/xxxxx"
+        Map<String,Object> map = new HashMap<>();
+        map.put("token",token);
+        map.put("movieid",movieid);
+        map.put("pageIndex",pageIndex);
+        map.put("pageSize",PAGE_COUNT);
+        request.putParamsMap(map);
+        Call call = ItheimaHttp.send(request, new HttpResponseListener<CommentListBean>() {
+
+            @Override
+            public void onResponse(CommentListBean bean, Headers headers) {
+                System.out.println("print data");
+                System.out.println("print data -- " + bean);
+                pageIndex++;
+                if (bean.getItemDatas().size() > 0) {
+                    adapter.updateList(bean.getItemDatas(), true);
+                } else {
+                    adapter.updateList(null, false);
+                }
+            }
+
+            /**
+             * 可以不重写失败回调
+             * @param call
+             * @param e
+             */
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable e) {
+                System.out.println("print data fail");
+            }
+        });
+    }
+
+    @Override
+    public void onRefresh() {
+        refreshLayout.setRefreshing(true);
+        adapter.resetDatas();
+        updateRecyclerView(0, PAGE_COUNT);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                refreshLayout.setRefreshing(false);
+            }
+        }, 1000);
     }
 
     private void getToken() {

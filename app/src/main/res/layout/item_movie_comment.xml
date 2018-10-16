@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/comment_avtar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="false"
+        android:layout_centerInParent="false"
+        android:layout_centerVertical="false"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:background="@mipmap/denglutouxiang"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/comment_mobile"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/comment_avtar"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:singleLine="true"
+        android:text="13588889999"
+        android:textColor="@color/fontgray"
+        android:textSize="14sp" />
+    <ImageView
+        android:id="@+id/comment_genderImg"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/comment_mobile"
+        android:src="@mipmap/male" />
+    <TextView
+        android:id="@+id/comment_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/comment_mobile"
+        android:layout_toRightOf="@+id/comment_avtar"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="3dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="1小时前"
+        android:textColor="@color/fontgray"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/comment_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/comment_avtar"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="20dp"
+        android:text="简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介"
+        android:lines="2"
+        android:ellipsize="end"
+        android:textColor="#666666"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:id="@+id/subcomment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/comment_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:background="#f6f8fb"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+    </LinearLayout>
+
+
+</RelativeLayout>

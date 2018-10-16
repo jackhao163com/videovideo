@@ -201,7 +201,22 @@
         <include layout="@layout/activity_movie_actor"></include>
         <include layout="@layout/activity_movie_like"></include>
 
+        <TextView
+            android:id="@+id/commenttitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/likewrapper"
+            android:gravity="left"
+            android:text="评论列表"
+            android:textColor="#3f3f3f"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
+        <include layout="@layout/activity_movie_commentlist"></include>
 
     </RelativeLayout>
 

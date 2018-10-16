@@ -503,6 +503,8 @@ public class MovieDetailBean {
             private String likenum;
             private Object createtime;
             private String username;
+            private String gender;
+            private String avatar;
             private List<?> items;
 
             public String getId() {
@@ -575,6 +577,22 @@ public class MovieDetailBean {
 
             public void setLikenum(String likenum) {
                 this.likenum = likenum;
+            }
+
+            public String getGender() {
+                return gender;
+            }
+
+            public void setGender(String gender) {
+                this.gender = gender;
+            }
+
+            public String getAvatar() {
+                return avatar;
+            }
+
+            public void setAvatar(String avatar) {
+                this.avatar = avatar;
             }
 
             public Object getCreatetime() {
