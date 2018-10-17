@@ -5,17 +5,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -38,7 +39,7 @@ import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class MovieDetailActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
+public class MovieDetailActivity extends AppCompatActivity {
     @BindView(R.id.player_list_video)
     JCVideoPlayerStandard playerVideo;
     @BindView(R.id.moviename)
@@ -75,12 +76,17 @@ public class MovieDetailActivity extends AppCompatActivity implements SwipeRefre
     GridView likeMovieList;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.refreshLayout)
-    SwipeRefreshLayout refreshLayout;
+
+    @BindView(R.id.actorwrapper)
+    RelativeLayout actorwrapper;
+    @BindView(R.id.likewrapper)
+    RelativeLayout likewrapper;
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
     private String token;
     private String movieid;
 
-    private  List<Map<String, Object>> commentDataList;
+    private List<Map<String, Object>> commentDataList;
 
     private int lastVisibleItem = 0;
     private final int PAGE_COUNT = 3;
@@ -187,6 +193,8 @@ public class MovieDetailActivity extends AppCompatActivity implements SwipeRefre
             });
             setGridView(gridAdapter, mDataList.size());
             actorGridView.setAdapter(gridAdapter);
+        } else{
+            actorwrapper.setVisibility(View.GONE);
         }
     }
 
@@ -246,6 +254,8 @@ public class MovieDetailActivity extends AppCompatActivity implements SwipeRefre
 //            likeMovieList.setLayoutParams(params);
             likeMovieList.setColumnWidth(dm.widthPixels);
             likeMovieList.setAdapter(gridAdapter);
+        } else {
+            likewrapper.setVisibility(View.GONE);
         }
     }
 
@@ -256,19 +266,34 @@ public class MovieDetailActivity extends AppCompatActivity implements SwipeRefre
     }
 
     private void initRefreshLayout() {
-        refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
-                android.R.color.holo_orange_light, android.R.color.holo_green_light);
-        refreshLayout.setOnRefreshListener(MovieDetailActivity.this);
+//        refreshLayout.setOnRefreshListener(MovieDetailActivity.this);
+        //解决数据加载不完的问题
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setHasFixedSize(true);
+        //解决数据加载完成后, 没有停留在顶部的问题
+        recyclerView.setFocusable(false);
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                //判断是否滑到的底部
+                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                    if(adapter.getHasMore()){
+                        updateRecyclerView(1,1);//调用刷新控件对应的加载更多方法
+                    }
+                }
+            }
+        });
+
     }
 
     private void initRecyclerView(MovieDetailBean bean) {
         adapter = new CommentListAdapter(bean.getCommentlist(), this, bean.getCommentlist().size() > 0 ? true : false);
         mLayoutManager = new GridLayoutManager(this, 1);
-//        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setLayoutManager(new LinearLayoutManager(MovieDetailActivity.this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(mLayoutManager);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(MovieDetailActivity.this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.getLayoutManager().setAutoMeasureEnabled(false);
+        // recyclerView.getLayoutManager().setAutoMeasureEnabled(false);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -306,11 +331,11 @@ public class MovieDetailActivity extends AppCompatActivity implements SwipeRefre
     private void updateRecyclerView(int fromIndex, int toIndex) {
         //开始请求
         Request request = ItheimaHttp.newGetRequest("getCommentList");//apiUrl格式："xxx/xxxxx"
-        Map<String,Object> map = new HashMap<>();
-        map.put("token",token);
-        map.put("movieid",movieid);
-        map.put("pageIndex",pageIndex);
-        map.put("pageSize",PAGE_COUNT);
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", token);
+        map.put("movieid", movieid);
+        map.put("pageIndex", pageIndex);
+        map.put("pageSize", PAGE_COUNT);
         request.putParamsMap(map);
         Call call = ItheimaHttp.send(request, new HttpResponseListener<CommentListBean>() {
 
@@ -338,18 +363,8 @@ public class MovieDetailActivity extends AppCompatActivity implements SwipeRefre
         });
     }
 
-    @Override
-    public void onRefresh() {
-        refreshLayout.setRefreshing(true);
-        adapter.resetDatas();
-        updateRecyclerView(0, PAGE_COUNT);
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                refreshLayout.setRefreshing(false);
-            }
-        }, 1000);
-    }
+
+
 
     private void getToken() {
         SharedPreferencesUtils helper = new SharedPreferencesUtils(this, "setting");

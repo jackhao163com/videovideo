@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private int footType = 1;       // 第二种ViewType，底部的提示View
 
     private boolean hasMore = true;   // 变量，是否有更多数据
+    private boolean isLoadMore = true;   // 变量，是否有更多数据
     private boolean fadeTips = false; // 变量，是否隐藏了底部的提示
 
     private Handler mHandler = new Handler(Looper.getMainLooper()); //获取主线程的Handler
@@ -63,46 +66,13 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    // 正常item的ViewHolder，用以缓存findView操作
-    class NormalHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.comment_avtar)
-        CircleImageView commentAvtar;
-        @BindView(R.id.comment_mobile)
-        TextView commentMobile;
-        @BindView(R.id.comment_genderImg)
-        ImageView commentGenderImg;
-        @BindView(R.id.comment_time)
-        TextView commentTime;
-        @BindView(R.id.comment_content)
-        TextView commentContent;
-        @BindView(R.id.subcomment)
-        LinearLayout subcomment;
-        private TextView textView;
-//        R.layout.item_movie_comment
-
-        public NormalHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
-
-    // // 底部footView的ViewHolder，用以缓存findView操作
-    class FootHolder extends RecyclerView.ViewHolder {
-        private TextView tips;
-
-        public FootHolder(View itemView) {
-            super(itemView);
-            tips = (TextView) itemView.findViewById(R.id.tips);
-        }
-    }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // 根据返回的ViewType，绑定不同的布局文件，这里只有两种
         if (viewType == normalType) {
-            return new NormalHolder(LayoutInflater.from(context).inflate(R.layout.item_movie_comment, null));
+            return new NormalHolder(LayoutInflater.from(context).inflate(R.layout.item_movie_comment, parent,false));
         } else {
-            return new FootHolder(LayoutInflater.from(context).inflate(R.layout.footview, null));
+            return new FootHolder(LayoutInflater.from(context).inflate(R.layout.footview,  parent,false));
         }
     }
 
@@ -120,12 +90,34 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 date = dateobj.toString();
                 date = DateUtils.timedate(date);
             }
+            else {
+                date = "几天前";
+            }
             commentHolder.commentMobile.setText(nickname);
             commentHolder.commentContent.setText(content);
             commentHolder.commentTime.setText(date);
             Picasso.with(context)
                     .load(avatar)
                     .into(commentHolder.commentAvtar);
+
+            //显示两条子评论
+            List<MovieDetailBean.DataBean.CommentlistBean.SubitemsBean> subitems = datas.get(position).getSubitems();
+            int i = 0;
+            if(commentHolder.subcomment.getChildCount() == 0){
+                for(MovieDetailBean.DataBean.CommentlistBean.SubitemsBean comment : subitems){
+                    if(i > 1)return;
+                    View subCommentItem = LayoutInflater.from(context).inflate(R.layout.item_movie_subcomment,null);
+                    TextView from = (TextView)subCommentItem.findViewById(R.id.subcomment_from);
+                    TextView to = (TextView)subCommentItem.findViewById(R.id.subcomment_to);
+                    TextView subcontent = (TextView)subCommentItem.findViewById(R.id.subcomment_content);
+                    from.setText(comment.getFromusername());
+                    to.setText(comment.getTousername());
+                    subcontent.setText(comment.getContent());
+                    commentHolder.subcomment.addView(subCommentItem);
+                    i++;
+                }
+            }
+
         } else {
             // 之所以要设置可见，是因为我在没有更多数据时会隐藏了这个footView
             ((FootHolder) holder).tips.setVisibility(View.VISIBLE);
@@ -169,28 +161,77 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         datas = new ArrayList<>();
     }
 
+    public boolean getHasMore(){
+        return isLoadMore;
+    }
+
     // 暴露接口，更新数据源，并修改hasMore的值，如果有增加数据，hasMore为true，否则为false
     public void updateList(List<CommentListBean.DataBean.ItemsBean> newDatas, boolean hasMore) {
         // 在原有的数据之上增加新数据
         List<MovieDetailBean.DataBean.CommentlistBean> mDatas = new ArrayList<MovieDetailBean.DataBean.CommentlistBean>();
-        for (CommentListBean.DataBean.ItemsBean item : newDatas) {
-            MovieDetailBean.DataBean.CommentlistBean map = new MovieDetailBean.DataBean.CommentlistBean();
-            map.setAvatar(item.getAvatar());
-            map.setContent(item.getContent());
-            map.setCreatetime(item.getCreatetime());
-            map.setGender(item.getGender());
-            map.setGroupid(item.getGroupid());
-            map.setId(item.getId());
-            map.setUserid(item.getUserid());
-            map.setParentid(item.getParentid());
-            map.setItems(item.getSubitems());
-            map.setUsername(item.getUsername());
-            mDatas.add(map);
+        if(newDatas != null){
+            for (CommentListBean.DataBean.ItemsBean item : newDatas) {
+                MovieDetailBean.DataBean.CommentlistBean map = new MovieDetailBean.DataBean.CommentlistBean();
+                map = modelA2B(item,MovieDetailBean.DataBean.CommentlistBean.class);
+                mDatas.add(map);
+            }
         }
+
         if (newDatas != null) {
             datas.addAll(mDatas);
         }
         this.hasMore = hasMore;
+        this.isLoadMore = hasMore;
         notifyDataSetChanged();
+    }
+
+
+
+    public static MovieDetailBean.DataBean.CommentlistBean modelA2B(CommentListBean.DataBean.ItemsBean modelA, Class<MovieDetailBean.DataBean.CommentlistBean> bClass) {
+        try {
+            Gson gson = new Gson();
+            String gsonA = gson.toJson(modelA);
+            MovieDetailBean.DataBean.CommentlistBean instanceB = gson.fromJson(gsonA, bClass);
+
+            Log.d("", "modelA2B A=" + modelA.getClass() + " B=" + bClass + " 转换后=" + instanceB);
+            return instanceB;
+        } catch (Exception e) {
+            Log.e("", "modelA2B Exception=" + modelA.getClass() + " " + bClass + " " + e.getMessage());
+            return null;
+        }
+    }
+
+
+    // 正常item的ViewHolder，用以缓存findView操作
+    class NormalHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.comment_avtar)
+        CircleImageView commentAvtar;
+        @BindView(R.id.comment_mobile)
+        TextView commentMobile;
+        @BindView(R.id.comment_genderImg)
+        ImageView commentGenderImg;
+        @BindView(R.id.comment_time)
+        TextView commentTime;
+        @BindView(R.id.comment_content)
+        TextView commentContent;
+        @BindView(R.id.subcomment)
+        LinearLayout subcomment;
+        private TextView textView;
+//        R.layout.item_movie_comment
+
+        public NormalHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    // // 底部footView的ViewHolder，用以缓存findView操作
+    class FootHolder extends RecyclerView.ViewHolder {
+        private TextView tips;
+
+        public FootHolder(View itemView) {
+            super(itemView);
+            tips = (TextView) itemView.findViewById(R.id.tips);
+        }
     }
 }
