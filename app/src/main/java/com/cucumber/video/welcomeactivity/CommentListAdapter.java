@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -27,6 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<MovieDetailBean.DataBean.CommentlistBean> datas; // 数据源
     private Context context;    // 上下文Context
+    private MovieDetailActivity activity;    // 上下文Context
 
     private int normalType = 0;     // 第一种ViewType，正常的item
     private int footType = 1;       // 第二种ViewType，底部的提示View
@@ -37,11 +39,12 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private Handler mHandler = new Handler(Looper.getMainLooper()); //获取主线程的Handler
 
-    public CommentListAdapter(List<MovieDetailBean.DataBean.CommentlistBean> datas, Context context, boolean hasMore) {
+    public CommentListAdapter(List<MovieDetailBean.DataBean.CommentlistBean> datas, Context context,MovieDetailActivity activity, boolean hasMore) {
         // 初始化变量
         this.datas = datas;
         this.context = context;
         this.hasMore = hasMore;
+        this.activity = activity;
     }
 
     // 获取条目数量，之所以要加1是因为增加了一条footView
@@ -77,7 +80,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         // 如果是正常的imte，直接设置TextView的值
         if (holder instanceof NormalHolder) {
             NormalHolder commentHolder = (NormalHolder) holder;
@@ -118,6 +121,17 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 }
             }
 
+            commentHolder.subcomment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    // 点击事件
+                    String commentid = datas.get(position).getId();
+                    String msg = "点击位置："+position + ",id:"+commentid;
+                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                    activity.initSubCommentListView(commentid);
+                }
+            });
+
         } else {
             // 之所以要设置可见，是因为我在没有更多数据时会隐藏了这个footView
             ((FootHolder) holder).tips.setVisibility(View.VISIBLE);
@@ -145,7 +159,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             // hasMore设为true是为了让再次拉到底时，会先显示正在加载更多
                             hasMore = true;
                         }
-                    }, 500);
+                    }, 0);
                 }
             }
         }

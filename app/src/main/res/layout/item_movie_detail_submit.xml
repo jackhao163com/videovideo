@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/submit_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_toRightOf="@+id/likecover"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:singleLine="true"
+        android:text="发表评论"
+        android:textColor="#3f3f3f"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/add_comment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/submit_title"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:drawable/edit_text"
+        android:backgroundTint="#f6f8fb"
+        android:enabled="true"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:maxLines="6"
+        android:minLines="4"
+        android:scrollbars="vertical"></EditText>
+
+    <ImageView
+        android:id="@+id/submit_btn"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/add_comment"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="1dp"
+        android:background="@mipmap/tijiao"
+        android:tag="2" />
+</RelativeLayout>

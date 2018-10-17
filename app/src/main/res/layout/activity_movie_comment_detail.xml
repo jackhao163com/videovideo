@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/comment_detail_wrapper"
+    android:layout_width="match_parent"
+    android:layout_height="400dp"
+    android:layout_alignParentBottom="true"
+    android:background="@color/fontgray"
+    android:visibility="gone">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout_subcomment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <org.itheima.recycler.widget.ItheimaRecyclerView
+                android:id="@+id/recycler_view_subcomment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:paddingBottom="20dp" />
+
+            <org.itheima.recycler.header.RecyclerViewHeader
+                android:id="@+id/recycler_header_subcomment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:background="#ffffff">
+
+                <RelativeLayout
+                    android:id="@+id/cdHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:id="@+id/et_bg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="top"
+                        android:text="评论详情"
+                        android:textColor="@color/fontgray"
+                        android:textSize="20sp"
+                        android:transitionName="shareTransition"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/cdClose"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="top|end"
+                        android:layout_marginEnd="27dp"
+                        android:contentDescription="关闭"
+                        android:gravity="center"
+                        android:src="@mipmap/close" />
+
+
+                </RelativeLayout>
+
+            </org.itheima.recycler.header.RecyclerViewHeader>
+        </FrameLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

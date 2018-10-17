@@ -12,18 +12,31 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.itheima.retrofitutils.ItheimaHttp;
+import com.itheima.retrofitutils.L;
 import com.itheima.retrofitutils.Request;
 import com.itheima.retrofitutils.listener.HttpResponseListener;
 import com.squareup.picasso.Picasso;
+
+import org.itheima.recycler.adapter.BaseLoadMoreRecyclerAdapter;
+import org.itheima.recycler.header.RecyclerViewHeader;
+import org.itheima.recycler.listener.ItemClickSupport;
+import org.itheima.recycler.viewholder.BaseRecyclerViewHolder;
+import org.itheima.recycler.widget.ItheimaRecyclerView;
+import org.itheima.recycler.widget.PullToLoadMoreRecyclerView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,6 +96,10 @@ public class MovieDetailActivity extends AppCompatActivity {
     RelativeLayout likewrapper;
     @BindView(R.id.nestedScrollView)
     NestedScrollView nestedScrollView;
+    @BindView(R.id.comment_detail_wrapper)
+    RelativeLayout commentDetailWrapper;
+    @BindView(R.id.comment_input)
+    TextView commentInput;
     private String token;
     private String movieid;
 
@@ -95,6 +112,15 @@ public class MovieDetailActivity extends AppCompatActivity {
     private CommentListAdapter adapter;
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
+    BaseLoadMoreRecyclerAdapter.LoadMoreViewHolder holder;
+    PullToLoadMoreRecyclerView pullToLoadMoreRecyclerView;
+    SwipeRefreshLayout myswipeRefreshLayout;
+    private ItheimaRecyclerView myrecyclerView;
+    ArrayList<subCommentBean.DataBean.ItemsBean> subitemsBeanList = new ArrayList<>();
+    Integer subPageIndex = 0;
+    private int state = 0;
+    private static final int STATE_FRESH = 1;
+    private static final int STATE_MORE = 2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -193,7 +219,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             });
             setGridView(gridAdapter, mDataList.size());
             actorGridView.setAdapter(gridAdapter);
-        } else{
+        } else {
             actorwrapper.setVisibility(View.GONE);
         }
     }
@@ -269,7 +295,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 //        refreshLayout.setOnRefreshListener(MovieDetailActivity.this);
         //解决数据加载不完的问题
         recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setHasFixedSize(true);
+//        recyclerView.setHasFixedSize(true);
         //解决数据加载完成后, 没有停留在顶部的问题
         recyclerView.setFocusable(false);
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
@@ -277,8 +303,8 @@ public class MovieDetailActivity extends AppCompatActivity {
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 //判断是否滑到的底部
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                    if(adapter.getHasMore()){
-                        updateRecyclerView(1,1);//调用刷新控件对应的加载更多方法
+                    if (adapter.getHasMore()) {
+                        updateRecyclerView(1, 1);//调用刷新控件对应的加载更多方法
                     }
                 }
             }
@@ -287,13 +313,23 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView(MovieDetailBean bean) {
-        adapter = new CommentListAdapter(bean.getCommentlist(), this, bean.getCommentlist().size() > 0 ? true : false);
+
+        commentInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MovieDetailActivity.this, "点击了", Toast.LENGTH_SHORT).show();
+                openCommentDialog();
+            }
+        });
+
+        adapter = new CommentListAdapter(bean.getCommentlist(), this, MovieDetailActivity.this, bean.getCommentlist().size() > 0 ? true : false);
         mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
 //        recyclerView.setLayoutManager(new LinearLayoutManager(MovieDetailActivity.this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        // recyclerView.getLayoutManager().setAutoMeasureEnabled(false);
+//         recyclerView.getLayoutManager().setAutoMeasureEnabled(false);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -344,10 +380,18 @@ public class MovieDetailActivity extends AppCompatActivity {
                 System.out.println("print data");
                 System.out.println("print data -- " + bean);
                 pageIndex++;
-                if (bean.getItemDatas().size() > 0) {
-                    adapter.updateList(bean.getItemDatas(), true);
+                if (bean.getStatus() == 1) {
+                    if (bean.getItemDatas().size() > 0) {
+                        adapter.updateList(bean.getItemDatas(), true);
+                    } else {
+                        adapter.updateList(null, false);
+                    }
                 } else {
-                    adapter.updateList(null, false);
+                    MaterialDialog dialog = new MaterialDialog.Builder(MovieDetailActivity.this)
+                            .title("温馨提示")
+                            .content(bean.getMsg())
+                            .positiveText("确定")
+                            .show();
                 }
             }
 
@@ -363,11 +407,198 @@ public class MovieDetailActivity extends AppCompatActivity {
         });
     }
 
+    public void openCommentDialog() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .title("发表评论")
+                .customView(R.layout.item_movie_detail_submit,true)
+                .positiveText("确认")
+                .negativeText("取消").show();
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialog.show();
+        View customeView = dialog.getCustomView();
+
+        ImageView button = (ImageView) customeView.findViewById(R.id.submit_btn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                Toast.makeText(MovieDetailActivity.this, "点击了", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 
 
+    public void initSubCommentListView(String commentid) {
+
+        commentDetailWrapper.setVisibility(View.VISIBLE);
+        RecyclerViewHeader header = (RecyclerViewHeader) findViewById(R.id.recycler_header_subcomment);
+        myrecyclerView = (ItheimaRecyclerView) findViewById(R.id.recycler_view_subcomment);
+        myswipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_subcomment);
+        header.attachTo(myrecyclerView);
+
+        RelativeLayout cdHeader = (RelativeLayout) findViewById(R.id.cdHeader);
+        cdHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                commentDetailWrapper.setVisibility(View.GONE);
+                clearRecyclerViewData();
+            }
+        });
+
+        final String cid = commentid;
+
+        ItemClickSupport itemClickSupport = new ItemClickSupport(myrecyclerView);
+        //点击事件
+        itemClickSupport.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                String cId = subitemsBeanList.get(position).getId();
+            }
+        });
+
+        pullToLoadMoreRecyclerView = new PullToLoadMoreRecyclerView<subCommentBean>(myswipeRefreshLayout, myrecyclerView, MyRecyclerViewHolder.class) {
+            @Override
+            public int getItemResId() {
+                //recylerview item资源id
+                return R.layout.item_movie_comment;
+            }
+
+            @Override
+            public String getApi() {
+                switch (state) {
+                    case STATE_FRESH:
+                        subPageIndex = 0;
+                        break;
+                    case STATE_MORE:
+                        subPageIndex++;
+                        break;
+                }
+                //接口
+                return "getSubCommentList?pageIndex=" + subPageIndex + "&token=" + token + "&commentid=" + cid + "&movieid=" + movieid;
+            }
+
+            //            //是否加载更多的数据，根据业务逻辑自行判断，true表示有更多的数据，false表示没有更多的数据，如果不需要监听可以不重写该方法
+            @Override
+            public boolean isMoreData(BaseLoadMoreRecyclerAdapter.LoadMoreViewHolder holder1) {
+                System.out.println("isMoreData---------------------" + holder1);
+                holder = holder1;
+                state = STATE_MORE;
+                return true;
+            }
+        };
+
+        pullToLoadMoreRecyclerView.setLoadingDataListener(new PullToLoadMoreRecyclerView.LoadingDataListener<subCommentBean>() {
+
+            @Override
+            public void onRefresh() {
+                //监听下啦刷新，如果不需要监听可以不重新该方法
+                L.i("setLoadingDataListener onRefresh");
+                state = STATE_FRESH;
+            }
+
+            @Override
+            public void onStart() {
+                //监听http请求开始，如果不需要监听可以不重新该方法
+                L.i("setLoadingDataListener onStart");
+            }
+
+            @Override
+            public void onSuccess(subCommentBean o, Headers headers) {
+                //监听http请求成功，如果不需要监听可以不重新该方法
+
+                L.i("setLoadingDataListener onSuccess: " + o);
+                List<subCommentBean.DataBean.ItemsBean> itemDatas = o.getItemDatas();
+                if (itemDatas.size() == 0) {
+                    holder.loadingFinish((String) null);
+                    if (myswipeRefreshLayout != null) {
+                        myswipeRefreshLayout.setRefreshing(false);
+                    }
+                } else {
+                    for (subCommentBean.DataBean.ItemsBean item : itemDatas) {
+                        subitemsBeanList.add(item);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure() {
+                //监听http请求失败，如果不需要监听可以不重新该方法
+                L.i("setLoadingDataListener onFailure");
+                myswipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        pullToLoadMoreRecyclerView.setPageSize(6);
+//        pullToLoadMoreRecyclerView.putParam("categoryId",catgoryId);
+//        pullToLoadMoreRecyclerView.putParam("orderId",orderId);
+        pullToLoadMoreRecyclerView.requestData();
+    }
+
+
+    public void clearRecyclerViewData() {
+        subitemsBeanList.clear();
+        subPageIndex = 0;
+        state = 0;
+        pullToLoadMoreRecyclerView.free();
+    }
 
     private void getToken() {
         SharedPreferencesUtils helper = new SharedPreferencesUtils(this, "setting");
         token = helper.getString("token");
+    }
+
+    public static class MyRecyclerViewHolder extends BaseRecyclerViewHolder<subCommentBean.DataBean.ItemsBean> {
+
+
+        @BindView(R.id.comment_avtar)
+        CircleImageView commentAvtar;
+        @BindView(R.id.comment_mobile)
+        TextView commentMobile;
+        @BindView(R.id.comment_genderImg)
+        ImageView commentGenderImg;
+        @BindView(R.id.comment_time)
+        TextView commentTime;
+        @BindView(R.id.comment_content)
+        TextView commentContent;
+
+        //换成你布局文件中的id
+        public MyRecyclerViewHolder(ViewGroup parentView, int itemResId) {
+            super(parentView, itemResId);
+//            R.layout.item_movie_comment
+        }
+
+        /**
+         * 绑定数据的方法，在mData获取数据（mData声明在基类中）
+         */
+        @Override
+        public void onBindRealData() {
+
+            String fromname = mData.getFromusername().equals("") ? "" : mData.getFromusername();
+            String toname = mData.getTousername().equals("") ? "" : mData.getTousername();
+            String cover = mData.getAvatar().equals("") ? "" : mData.getAvatar();
+            String gender = mData.getGender().equals("") ? "0" : mData.getGender();
+            String content = mData.getContent().equals("") ? "0" : mData.getContent();
+            String time = mData.getCreatetime().equals("") ? "0" : mData.getCreatetime();
+            commentMobile.setText(fromname);
+            commentContent.setText(content);
+            commentGenderImg.setImageResource(gender.equals("1") ? R.mipmap.female : R.mipmap.male);
+            commentTime.setText(DateUtils.timeDate(time));
+
+
+            if (!cover.isEmpty()) {
+                Picasso.with(mContext)
+                        .load(cover)
+                        .into(commentAvtar);
+            }
+        }
+
+        /**
+         * 给按钮添加点击事件（button改成你要添加点击事件的id）
+         * @param v
+         */
+//        @OnClick(R.id.button)
+//        public void click(View v) {
+//        }
     }
 }
