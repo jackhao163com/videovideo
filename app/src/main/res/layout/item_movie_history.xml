@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_height="85dp">
+
+        <ImageView
+            android:id="@+id/likecover"
+            android:layout_width="130dp"
+            android:layout_height="85dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="0dp"
+            android:background="@mipmap/zxpy1"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@+id/likecover"
+            android:ellipsize="end"
+            android:gravity="left"
+            android:singleLine="true"
+            android:text="xxx"
+            android:textColor="#3f3f3f"
+            android:textSize="15sp" />
+
+
+
+        <TextView
+            android:id="@+id/likemovieviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/likecover"
+            android:gravity="center_horizontal|center"
+            android:text="86.4万"
+            android:textColor="#999999"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
+            android:layout_toRightOf="@+id/likemovieviews"
+            android:gravity="center_horizontal|center"
+            android:text="播放"
+            android:textColor="#999999"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+</LinearLayout>
+

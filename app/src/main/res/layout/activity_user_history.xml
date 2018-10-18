@@ -43,6 +43,17 @@
             android:textColor="@color/fontgray"
             android:textSize="12sp" />
 
+        <ImageView
+            android:id="@+id/toHistoryList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="false"
+            android:layout_gravity="center|end"
+            android:layout_marginEnd="17dp"
+            android:layout_marginTop="25dp"
+            android:src="@mipmap/jiantou" />
+
         <HorizontalScrollView
             android:id="@+id/hsw"
             android:layout_width="fill_parent"
@@ -111,6 +122,16 @@
             android:text="目前本地大片有0部"
             android:textColor="@color/fontgray"
             android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/toStorageList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center|end"
+            android:layout_marginEnd="17dp"
+            android:src="@mipmap/jiantou" />
     </RelativeLayout>
 
     <View
@@ -158,6 +179,16 @@
             android:text="目前已有喜欢3部"
             android:textColor="@color/fontgray"
             android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/toLikeList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center|end"
+            android:layout_marginEnd="17dp"
+            android:src="@mipmap/jiantou" />
 
     </RelativeLayout>
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
@@ -26,6 +28,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.itheima.retrofitutils.ItheimaHttp;
@@ -315,7 +318,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        commentDetailWrapper.getLayoutParams().height = dm.heightPixels - playerVideo.getLayoutParams().height;
+        commentDetailWrapper.getLayoutParams().height = dm.heightPixels - playerVideo.getLayoutParams().height-40;
 
     }
 
@@ -325,7 +328,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(MovieDetailActivity.this, "点击了", Toast.LENGTH_SHORT).show();
-                openCommentDialog();
+                openCommentDialog("","","","",-1);
             }
         });
 
@@ -338,37 +341,37 @@ public class MovieDetailActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 //         recyclerView.getLayoutManager().setAutoMeasureEnabled(false);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (adapter.isFadeTips() == false && lastVisibleItem + 1 == adapter.getItemCount()) {
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                updateRecyclerView(adapter.getRealLastPosition(), adapter.getRealLastPosition() + PAGE_COUNT);
-                            }
-                        }, 500);
-                    }
-
-                    if (adapter.isFadeTips() == true && lastVisibleItem + 2 == adapter.getItemCount()) {
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                updateRecyclerView(adapter.getRealLastPosition(), adapter.getRealLastPosition() + PAGE_COUNT);
-                            }
-                        }, 500);
-                    }
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
-            }
-        });
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    if (adapter.isFadeTips() == false && lastVisibleItem + 1 == adapter.getItemCount()) {
+//                        mHandler.postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                updateRecyclerView(adapter.getRealLastPosition(), adapter.getRealLastPosition() + PAGE_COUNT);
+//                            }
+//                        }, 500);
+//                    }
+//
+//                    if (adapter.isFadeTips() == true && lastVisibleItem + 2 == adapter.getItemCount()) {
+//                        mHandler.postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                updateRecyclerView(adapter.getRealLastPosition(), adapter.getRealLastPosition() + PAGE_COUNT);
+//                            }
+//                        }, 500);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
+//            }
+//        });
     }
 
 
@@ -415,20 +418,21 @@ public class MovieDetailActivity extends AppCompatActivity {
         });
     }
 
-    public void openCommentDialog() {
+    public void openCommentDialog(final String parentid, final String groupid, String toname, final String toid,final  int position) {
         final MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .title("发表评论")
                 .customView(R.layout.item_movie_detail_submit,true)
 //                .positiveText("确认")
 //                .negativeText("取消")
                 .show();
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         android.view.WindowManager.LayoutParams p = dialog.getWindow().getAttributes();
-        p.width = (int)dm.widthPixels;
+        p.width =  ViewGroup.LayoutParams.MATCH_PARENT;
         dialog.show();
         View customeView = dialog.getCustomView();
+        final EditText comment_cotent = (EditText) customeView.findViewById(R.id.add_comment);
+        final SpannableString s = new SpannableString("回复"+toname);
+        comment_cotent.setHint(s);
+
 
         ImageView button = (ImageView) customeView.findViewById(R.id.submit_btn);
         button.setOnClickListener(new View.OnClickListener() {
@@ -436,13 +440,87 @@ public class MovieDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 dialog.dismiss();
                 Toast.makeText(MovieDetailActivity.this, "点击了", Toast.LENGTH_SHORT).show();
+                Map<String,Object> map = new HashMap<>();
+                map.put("token", token);
+                map.put("movieid", movieid);
+                map.put("parentid", parentid);
+                map.put("groupid", groupid);
+                map.put("content", comment_cotent.getText());
+                map.put("touserid", toid);
+                releyAction(map,position);
             }
         });
 
     }
 
+    public void releyAction(final Map<String,Object> map, final int position){
+        //开始请求
+        Request request = ItheimaHttp.newPostRequest("replyComment");//apiUrl格式："xxx/xxxxx"
+        request.putParamsMap(map);
+        Call call = ItheimaHttp.send(request, new HttpResponseListener<CommonCommentBean>() {
 
-    public void initSubCommentListView(String commentid) {
+            @Override
+            public void onResponse(final CommonCommentBean bean, Headers headers) {
+                System.out.println("print data");
+                System.out.println("print data -- " +bean);
+                int status = bean.getStatus();
+                //判断账号和密码
+                if(status == 1){
+                    MaterialDialog dialog = new MaterialDialog.Builder(MovieDetailActivity.this)
+                            .title("新增评论提示")
+                            .content(bean.getMsg())
+                            .positiveText("确认")
+                            //点击事件添加 方式1
+                            .onAny(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    if (which == DialogAction.POSITIVE) {
+                                        //列表中新增一条记录
+                                        if(map.get("parentid").equals("")){
+                                            //如果是主记录
+                                            MovieDetailBean.DataBean.CommentlistBean newBean = new MovieDetailBean.DataBean.CommentlistBean();
+                                            newBean = CommentListAdapter.modelC2B(bean.getData(),MovieDetailBean.DataBean.CommentlistBean.class);
+                                            adapter.addItem(newBean);
+                                        } else if(map.get("parentid").toString().equals(map.get("groupid").toString())){
+                                            //主页面子评论
+                                            MovieDetailBean.DataBean.CommentlistBean.SubitemsBean newsBean = new MovieDetailBean.DataBean.CommentlistBean.SubitemsBean();
+                                            newsBean = CommentListAdapter.modelD2B(bean.getData(),MovieDetailBean.DataBean.CommentlistBean.SubitemsBean.class);
+                                            adapter.addSubItem(newsBean,position);
+                                        } else {
+                                            //自评论列表
+                                            ArrayList<subCommentBean.DataBean.ItemsBean> sublist = new ArrayList<subCommentBean.DataBean.ItemsBean>();
+                                            subCommentBean.DataBean.ItemsBean newsBean = new subCommentBean.DataBean.ItemsBean();
+                                            newsBean = CommentListAdapter.modelE2B(bean.getData(),subCommentBean.DataBean.ItemsBean.class);
+                                            sublist.add(newsBean);
+                                            pullToLoadMoreRecyclerView.mLoadMoreRecyclerViewAdapter.addDatas(true,sublist);
+                                        }
+                                    }
+
+                                }
+                            })
+                            .show();
+                }else
+                {
+
+                }
+
+            }
+
+
+            /**
+             * 可以不重写失败回调
+             * @param call
+             * @param e
+             */
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable e) {
+                System.out.println("print data fail");
+            }
+        });
+    }
+
+
+    public void initSubCommentListView(final String commentid) {
 
         commentDetailWrapper.setVisibility(View.VISIBLE);
         RecyclerViewHeader header = (RecyclerViewHeader) findViewById(R.id.recycler_header_subcomment);
@@ -459,14 +537,15 @@ public class MovieDetailActivity extends AppCompatActivity {
             }
         });
 
-        final String cid = commentid;
-
         ItemClickSupport itemClickSupport = new ItemClickSupport(myrecyclerView);
         //点击事件
         itemClickSupport.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 String cId = subitemsBeanList.get(position).getId();
+                String username = subitemsBeanList.get(position).getFromusername();
+                String userid = subitemsBeanList.get(position).getUserid();
+                openCommentDialog(cId,commentid,username,userid,position);
             }
         });
 
@@ -488,7 +567,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                         break;
                 }
                 //接口
-                return "getSubCommentList?pageIndex=" + subPageIndex + "&token=" + token + "&commentid=" + cid + "&movieid=" + movieid;
+                return "getSubCommentList?pageIndex=" + subPageIndex + "&token=" + token + "&commentid=" + commentid + "&movieid=" + movieid;
             }
 
             //            //是否加载更多的数据，根据业务逻辑自行判断，true表示有更多的数据，false表示没有更多的数据，如果不需要监听可以不重写该方法
@@ -500,6 +579,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 return true;
             }
         };
+
 
         pullToLoadMoreRecyclerView.setLoadingDataListener(new PullToLoadMoreRecyclerView.LoadingDataListener<subCommentBean>() {
 
@@ -523,7 +603,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 L.i("setLoadingDataListener onSuccess: " + o);
                 List<subCommentBean.DataBean.ItemsBean> itemDatas = o.getItemDatas();
                 if (itemDatas.size() == 0) {
-                    holder.loadingFinish((String) null);
+                    if(holder != null)holder.loadingFinish((String) null);
                     if (myswipeRefreshLayout != null) {
                         myswipeRefreshLayout.setRefreshing(false);
                     }
@@ -591,8 +671,10 @@ public class MovieDetailActivity extends AppCompatActivity {
             String toname = mData.getTousername().equals("") ? "" : mData.getTousername();
             String cover = mData.getAvatar().equals("") ? "" : mData.getAvatar();
             String gender = mData.getGender().equals("") ? "0" : mData.getGender();
-            String content = mData.getContent().equals("") ? "0" : mData.getContent();
-            String time = mData.getCreatetime().equals("") ? "0" : mData.getCreatetime();
+            String content = mData.getContent().equals("") ? "" : mData.getContent();
+            String time = mData.getCreatetime().equals("") ? "" : mData.getCreatetime();
+            long timedate =  Long.parseLong(time);
+            time = DateUtils.getChatTimeStr(timedate);
             commentMobile.setText(fromname);
             commentContent.setText(content);
             commentGenderImg.setImageResource(gender.equals("1") ? R.mipmap.female : R.mipmap.male);

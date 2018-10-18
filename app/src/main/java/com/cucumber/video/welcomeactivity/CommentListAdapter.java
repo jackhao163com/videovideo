@@ -69,6 +69,35 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
+    public void addItem(MovieDetailBean.DataBean.CommentlistBean newBean){
+        try
+        {
+            datas.add(0,newBean);
+            notifyItemInserted(0);
+//            notifyItemRangeChanged(0,datas.size());
+            notifyDataSetChanged();
+        }catch (Exception ex){
+            Log.i("item",ex.toString());
+        }
+
+    }
+
+    public void addSubItem(MovieDetailBean.DataBean.CommentlistBean.SubitemsBean newBean,int position){
+        try
+        {
+            int subcount = datas.get(position).getSubitems().size();
+            if(subcount < 2){
+                List<MovieDetailBean.DataBean.CommentlistBean.SubitemsBean> subItemBeans = datas.get(position).getSubitems();
+                subItemBeans.add(0,newBean);
+
+                notifyItemChanged(position);
+                notifyDataSetChanged();
+            }
+        }catch (Exception ex){
+            Log.i("subitem",ex.toString());
+        }
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // 根据返回的ViewType，绑定不同的布局文件，这里只有两种
@@ -85,13 +114,15 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof NormalHolder) {
             NormalHolder commentHolder = (NormalHolder) holder;
             String avatar = datas.get(position).getAvatar();
-            String nickname = datas.get(position).getUsername();
+            final String commentid = datas.get(position).getId();
+            final String userid = datas.get(position).getUserid();
+            final String nickname = datas.get(position).getUsername();
             String content = datas.get(position).getContent();
             Object dateobj = datas.get(position).getCreatetime();
             String date = "";
             if(dateobj != null){
-                date = dateobj.toString();
-                date = DateUtils.timedate(date);
+                long timedate = (long)dateobj;
+                date = DateUtils.getChatTimeStr(timedate);
             }
             else {
                 date = "几天前";
@@ -102,11 +133,22 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Picasso.with(context)
                     .load(avatar)
                     .into(commentHolder.commentAvtar);
+            //点击内容进行回复
+            commentHolder.commentContent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    // 点击事件
+                    String msg = "点击内容：位置："+position + ",id:"+commentid;
+//                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                    activity.openCommentDialog(commentid,commentid,nickname,userid,position);
+                }
+            });
 
             //显示两条子评论
-            List<MovieDetailBean.DataBean.CommentlistBean.SubitemsBean> subitems = datas.get(position).getSubitems();
+
+            List<MovieDetailBean.DataBean.CommentlistBean.SubitemsBean> subitems = datas.get(holder.getAdapterPosition()).getSubitems();
             int i = 0;
-            if(commentHolder.subcomment.getChildCount() == 0){
+            if(commentHolder.subcomment.getChildCount() == 0 && subitems !=null && subitems.size() > 0){
                 for(MovieDetailBean.DataBean.CommentlistBean.SubitemsBean comment : subitems){
                     if(i > 1)return;
                     View subCommentItem = LayoutInflater.from(context).inflate(R.layout.item_movie_subcomment,null);
@@ -125,9 +167,10 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 @Override
                 public void onClick(View arg0) {
                     // 点击事件
-                    String commentid = datas.get(position).getId();
-                    String msg = "点击位置："+position + ",id:"+commentid;
-                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                    int curPosition = holder.getAdapterPosition();
+                    String commentid = datas.get(curPosition).getId();
+                    String msg = "点击位置："+curPosition + ",id:"+commentid;
+//                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
                     activity.initSubCommentListView(commentid);
                 }
             });
@@ -206,6 +249,48 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Gson gson = new Gson();
             String gsonA = gson.toJson(modelA);
             MovieDetailBean.DataBean.CommentlistBean instanceB = gson.fromJson(gsonA, bClass);
+
+            Log.d("", "modelA2B A=" + modelA.getClass() + " B=" + bClass + " 转换后=" + instanceB);
+            return instanceB;
+        } catch (Exception e) {
+            Log.e("", "modelA2B Exception=" + modelA.getClass() + " " + bClass + " " + e.getMessage());
+            return null;
+        }
+    }
+
+    public static MovieDetailBean.DataBean.CommentlistBean modelC2B(CommonCommentBean.DataBean modelA, Class<MovieDetailBean.DataBean.CommentlistBean> bClass) {
+        try {
+            Gson gson = new Gson();
+            String gsonA = gson.toJson(modelA);
+            MovieDetailBean.DataBean.CommentlistBean instanceB = gson.fromJson(gsonA, bClass);
+
+            Log.d("", "modelA2B A=" + modelA.getClass() + " B=" + bClass + " 转换后=" + instanceB);
+            return instanceB;
+        } catch (Exception e) {
+            Log.e("", "modelA2B Exception=" + modelA.getClass() + " " + bClass + " " + e.getMessage());
+            return null;
+        }
+    }
+
+    public static MovieDetailBean.DataBean.CommentlistBean.SubitemsBean modelD2B(CommonCommentBean.DataBean modelA, Class<MovieDetailBean.DataBean.CommentlistBean.SubitemsBean> bClass) {
+        try {
+            Gson gson = new Gson();
+            String gsonA = gson.toJson(modelA);
+            MovieDetailBean.DataBean.CommentlistBean.SubitemsBean instanceB = gson.fromJson(gsonA, bClass);
+
+            Log.d("", "modelA2B A=" + modelA.getClass() + " B=" + bClass + " 转换后=" + instanceB);
+            return instanceB;
+        } catch (Exception e) {
+            Log.e("", "modelA2B Exception=" + modelA.getClass() + " " + bClass + " " + e.getMessage());
+            return null;
+        }
+    }
+
+    public static subCommentBean.DataBean.ItemsBean modelE2B(CommonCommentBean.DataBean modelA, Class<subCommentBean.DataBean.ItemsBean> bClass) {
+        try {
+            Gson gson = new Gson();
+            String gsonA = gson.toJson(modelA);
+            subCommentBean.DataBean.ItemsBean instanceB = gson.fromJson(gsonA, bClass);
 
             Log.d("", "modelA2B A=" + modelA.getClass() + " B=" + bClass + " 转换后=" + instanceB);
             return instanceB;

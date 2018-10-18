@@ -287,6 +287,14 @@ public class UserActivity extends AppCompatActivity {
         TextView huancunNums;
         @BindView(R.id.likenums)
         TextView likenums;
+        @BindView(R.id.toHistoryList)
+        ImageView toHistoryList;
+        @BindView(R.id.toStorageList)
+        ImageView toStorageList;
+        @BindView(R.id.toLikeList)
+        ImageView toLikeList;
+
+//        R.layout.activity_user_history
 
         public HistoryHolder(View itemView) {
             super(itemView);
@@ -297,6 +305,15 @@ public class UserActivity extends AppCompatActivity {
 
         @Override
         public void bindHolder(UserDataModel data, MyRecycleViewHolder holder) {
+
+            toHistoryList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(UserActivity.this, HistoryActivity.class));
+                    UserActivity.this.finish();
+                }
+            });
+
             HistoryHolder girlHolder = (HistoryHolder) holder;
             List<Map<String, Object>> mDataList = new ArrayList<Map<String, Object>>();
             List<UserDataModel.DataBean.HlistBean> aitemDatas = data.getHItemDatas();
