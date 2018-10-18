@@ -12,9 +12,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -99,7 +102,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     @BindView(R.id.comment_detail_wrapper)
     RelativeLayout commentDetailWrapper;
     @BindView(R.id.comment_input)
-    TextView commentInput;
+    EditText commentInput;
     private String token;
     private String movieid;
 
@@ -310,6 +313,10 @@ public class MovieDetailActivity extends AppCompatActivity {
             }
         });
 
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        commentDetailWrapper.getLayoutParams().height = dm.heightPixels - playerVideo.getLayoutParams().height;
+
     }
 
     private void initRecyclerView(MovieDetailBean bean) {
@@ -321,6 +328,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 openCommentDialog();
             }
         });
+
 
         adapter = new CommentListAdapter(bean.getCommentlist(), this, MovieDetailActivity.this, bean.getCommentlist().size() > 0 ? true : false);
         mLayoutManager = new GridLayoutManager(this, 1);
@@ -411,9 +419,14 @@ public class MovieDetailActivity extends AppCompatActivity {
         final MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title("发表评论")
                 .customView(R.layout.item_movie_detail_submit,true)
-                .positiveText("确认")
-                .negativeText("取消").show();
+//                .positiveText("确认")
+//                .negativeText("取消")
+                .show();
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+        android.view.WindowManager.LayoutParams p = dialog.getWindow().getAttributes();
+        p.width = (int)dm.widthPixels;
         dialog.show();
         View customeView = dialog.getCustomView();
 

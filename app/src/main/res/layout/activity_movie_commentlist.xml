@@ -11,7 +11,9 @@
             android:id="@+id/submitwrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/submit_avtar"
                     android:layout_width="40dp"
@@ -21,25 +23,25 @@
                     android:layout_centerHorizontal="false"
                     android:layout_centerInParent="false"
                     android:layout_centerVertical="false"
-                    android:layout_marginTop="20dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
                     android:background="@mipmap/denglutouxiang"
                     android:scaleType="centerCrop" />
 
-                <TextView
+                <EditText
                     android:id="@+id/comment_input"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_gravity="center"
+                    android:layout_marginTop="25dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_toRightOf="@+id/comment_avtar"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
                     android:background="@drawable/co_border_gray"
-                    android:ellipsize="end"
-                    android:gravity="left"
-                    android:singleLine="true"
-                    android:textColor="#646464"
-                    android:textSize="14sp" />
+                    android:ems="10"
+                    android:hint="快来说说你的感想吧"
+                    android:inputType="textPersonName"
+                    android:textAlignment="center"
+                    android:textSize="12sp" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
