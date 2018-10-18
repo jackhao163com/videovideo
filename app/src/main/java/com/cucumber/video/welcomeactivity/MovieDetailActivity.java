@@ -14,6 +14,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -673,12 +674,16 @@ public class MovieDetailActivity extends AppCompatActivity {
             String gender = mData.getGender().equals("") ? "0" : mData.getGender();
             String content = mData.getContent().equals("") ? "" : mData.getContent();
             String time = mData.getCreatetime().equals("") ? "" : mData.getCreatetime();
-            long timedate =  Long.parseLong(time);
-            time = DateUtils.getChatTimeStr(timedate);
+            try{
+                long timedate =  Long.parseLong(time);
+                time = DateUtils.getChatTimeStr(timedate);
+            } catch (Exception ex0){
+                Log.i("",ex0.toString());
+            }
             commentMobile.setText(fromname);
             commentContent.setText(content);
             commentGenderImg.setImageResource(gender.equals("1") ? R.mipmap.female : R.mipmap.male);
-            commentTime.setText(DateUtils.timeDate(time));
+            commentTime.setText(time);
 
 
             if (!cover.isEmpty()) {

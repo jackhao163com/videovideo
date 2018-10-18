@@ -121,8 +121,15 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Object dateobj = datas.get(position).getCreatetime();
             String date = "";
             if(dateobj != null){
-                long timedate = (long)dateobj;
-                date = DateUtils.getChatTimeStr(timedate);
+                try
+                {
+                    long timedate = Long.parseLong( dateobj.toString());
+                    date = DateUtils.getChatTimeStr(timedate);
+                }
+                catch (Exception ex){
+
+                }
+
             }
             else {
                 date = "几天前";

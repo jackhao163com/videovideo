@@ -6,8 +6,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.Window;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,38 +19,52 @@ import java.util.List;
 public class HistoryActivity extends AppCompatActivity {
     private ViewPager my_viewpager;
     private TabLayout my_tab;
+    private ImageView gotoback;
     private List<Fragment> fragments;
     private List<String> titles;
-
+    private TabLayout.Tab one;
+    private TabLayout.Tab two;
+    private TabLayout.Tab three;
+    private TabLayout.Tab four;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //getSupportActionBar().hide();//隐藏掉整个ActionBar
         setContentView(R.layout.activity_history);
         initView();
     }
 
     private void initView() {
+        gotoback = (ImageView) findViewById(R.id.gotoback);
+        gotoback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                startActivity(new Intent(SettingActivity.this, MainActivity.class));
+                HistoryActivity.this.finish();
+            }
+        });
         my_tab = (TabLayout) findViewById(R.id.my_tab);
         my_viewpager = (ViewPager) findViewById(R.id.my_viewpager);
         fragments = new ArrayList<>();       //碎片的集合
         fragments.add(new FragmentToday());
-        fragments.add(new TwoFragment());
-        fragments.add(new ThreeFragment());
+        fragments.add(new FragmentWeek());
+        fragments.add(new FragmentAgo());
 
         titles = new ArrayList<>();     //标题的集合
         titles.add("今日");
         titles.add("七日");
         titles.add("更早");
+        my_tab.setTabMode(TabLayout.MODE_FIXED);
 
-        MyAdapter adapter = new MyAdapter(getSupportFragmentManager());
+        MyViewPagerAdapter adapter = new MyViewPagerAdapter(getSupportFragmentManager());
         my_viewpager.setAdapter(adapter);
         my_tab.setupWithViewPager(my_viewpager);    //关联TabLayout和ViewPager
 
     }
 
-    private class MyAdapter extends FragmentPagerAdapter {     //适配器
-        public MyAdapter(FragmentManager fm) {
+    private class MyViewPagerAdapter extends FragmentPagerAdapter {     //适配器
+        public MyViewPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

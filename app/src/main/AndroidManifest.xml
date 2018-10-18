@@ -41,6 +41,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.cucumber.video.welcomeactivity.GuideActivity"></activity>
+        <activity android:name="com.cucumber.video.welcomeactivity.NoticyActivity"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.HistoryActivity"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.MovieDetailActivity"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.AccountActivity"></activity>

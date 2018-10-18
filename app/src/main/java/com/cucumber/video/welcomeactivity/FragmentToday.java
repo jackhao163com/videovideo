@@ -7,10 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.itheima.retrofitutils.L;
@@ -26,19 +28,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import okhttp3.Headers;
 
 public class FragmentToday extends Fragment {
 
-    @BindView(R.id.recycler_view)
-    ItheimaRecyclerView recyclerView;
-    @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout myswipeRefreshLayout;
-    Unbinder unbinder;
+    public static Fragment newInstance() {
+        FragmentToday fragment = new FragmentToday();
+        return fragment;
+    }
+
+    public FragmentToday() {
+        // Required empty public constructor
+    }
+
     private ViewGroup mViewGroup;
+    SwipeRefreshLayout myswipeRefreshLayout;
     private ItheimaRecyclerView myrecyclerView;
+    private RelativeLayout footer;
     BaseLoadMoreRecyclerAdapter.LoadMoreViewHolder holder;
     PullToLoadMoreRecyclerView pullToLoadMoreRecyclerView;
     private String token;
@@ -52,15 +58,24 @@ public class FragmentToday extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        if (mViewGroup != null) {
-            ViewGroup parent = (ViewGroup) mViewGroup.getParent();
-            parent.removeView(mViewGroup);
-        }
+        if (mViewGroup != null) return mViewGroup;
         mViewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_today, container, false);
         myrecyclerView = (ItheimaRecyclerView) mViewGroup.findViewById(R.id.recycler_view);
-        unbinder = ButterKnife.bind(this, mViewGroup);
+        myswipeRefreshLayout = (SwipeRefreshLayout) mViewGroup.findViewById(R.id.swipe_refresh_layout);
+        footer = (RelativeLayout) mViewGroup.findViewById(R.id.footer);
+
+        getToken();
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.setAdapter(new RecyclerAdapter());
         initPage();
         return mViewGroup;
+    }
+
+    private void getToken() {
+        SharedPreferencesUtils helper = new SharedPreferencesUtils(mViewGroup.getContext(), "setting");
+        token = helper.getString("token");
     }
 
     private void initPage() {
@@ -135,9 +150,12 @@ public class FragmentToday extends Fragment {
                 L.i("setLoadingDataListener onSuccess: " + o);
                 List<MovieBean.DataBean.ItemsBean> itemDatas = o.getItemDatas();
                 if (itemDatas.size() == 0) {
-                    holder.loadingFinish((String) null);
+                    if(holder != null)holder.loadingFinish((String) null);
                     if (myswipeRefreshLayout != null) {
                         myswipeRefreshLayout.setRefreshing(false);
+                    }
+                    if(itemsBeanList.size() == 0){
+                        footer.setVisibility(View.VISIBLE);
                     }
                 } else {
                     for (MovieBean.DataBean.ItemsBean item : itemDatas) {
@@ -160,19 +178,23 @@ public class FragmentToday extends Fragment {
 
     public static class MyRecyclerViewHolder extends BaseRecyclerViewHolder<MovieBean.DataBean.ItemsBean> {
 
-
         @BindView(R.id.likecover)
-        ImageView cover;
+        ImageView likecover;
         @BindView(R.id.name)
         TextView name;
         @BindView(R.id.likemovieviews)
         TextView movieviews;
+//        private ImageView cover;
+//        private TextView name;
+//        private TextView movieviews;
+        private ViewGroup pView;
+
 //        R.layout.item_movie_history
 
         //换成你布局文件中的id
         public MyRecyclerViewHolder(ViewGroup parentView, int itemResId) {
             super(parentView, itemResId);
-            ButterKnife.bind(this, parentView);
+            pView = parentView;
         }
 
         /**
@@ -180,14 +202,18 @@ public class FragmentToday extends Fragment {
          */
         @Override
         public void onBindRealData() {
-            String actorname = mData.getName().equals("") ? "" : mData.getName();
-            String coverurl = mData.getCover().equals("") ? "" : mData.getCover();
-            String views = mData.getViews().equals("") ? "" : mData.getViews();
-            name.setText(actorname);
-            movieviews.setText(views+"次播放");
-            Picasso.with(mContext)
-                    .load(coverurl)
-                    .into(cover);
+            try {
+                String actorname = mData.getName().equals("") ? "" : mData.getName();
+                String coverurl = mData.getCover().equals("") ? "" : mData.getCover();
+                String views = mData.getViews().equals("") ? "" : mData.getViews();
+                name.setText(actorname);
+                movieviews.setText(views + "次");
+                Picasso.with(pView.getContext())
+                        .load(coverurl)
+                        .into(likecover);
+            } catch (Exception ex) {
+                Log.i("", ex.toString());
+            }
         }
 
         /**
@@ -202,7 +228,6 @@ public class FragmentToday extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
     }
 
 

@@ -81,6 +81,7 @@ public class UserActivity extends AppCompatActivity {
 
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.selectTabAtPosition(3);
+
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
@@ -253,9 +254,13 @@ public class UserActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> arg0, View arg1, int position,
                                         long arg3) {
                     String categoryId = (String) CatIdList[position];
-                    Intent i = new Intent(UserActivity.this, MovieListActivity.class);
-                    i.putExtra("catgoryId", categoryId);
-                    startActivity(i);
+                    switch (categoryId){
+                        case "3":
+                            Intent i = new Intent(UserActivity.this, NoticyActivity.class);
+                            i.putExtra("type", 0);
+                            startActivity(i);
+                            break;
+                    }
                 }
             });
         }
@@ -310,7 +315,6 @@ public class UserActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(UserActivity.this, HistoryActivity.class));
-                    UserActivity.this.finish();
                 }
             });
 
