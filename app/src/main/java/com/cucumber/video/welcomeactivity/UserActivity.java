@@ -254,9 +254,15 @@ public class UserActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> arg0, View arg1, int position,
                                         long arg3) {
                     String categoryId = (String) CatIdList[position];
+                    Intent i;
                     switch (categoryId){
                         case "3":
-                            Intent i = new Intent(UserActivity.this, NoticyActivity.class);
+                             i = new Intent(UserActivity.this, NoticyActivity.class);
+                            i.putExtra("type", 0);
+                            startActivity(i);
+                            break;
+                        case "1":
+                             i = new Intent(UserActivity.this, TuiGuangActivity.class);
                             i.putExtra("type", 0);
                             startActivity(i);
                             break;
