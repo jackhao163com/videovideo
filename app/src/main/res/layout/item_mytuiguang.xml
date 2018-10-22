@@ -13,24 +13,30 @@
         <TextView
             android:id="@+id/username"
             android:layout_width="0dp"
+            android:background="#323232"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:clickable="true"
+            android:textAlignment="center"
             android:ellipsize="end"
             android:paddingBottom="5dp"
             android:singleLine="true"
             android:text="用户名用户名"
             android:textSize="12sp"
+            android:textColor="@color/white"
             android:typeface="monospace" />
 
         <TextView
             android:id="@+id/mobile"
             android:layout_width="0dp"
+            android:background="#323232"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:clickable="true"
+            android:textAlignment="center"
             android:ellipsize="end"
             android:paddingBottom="5dp"
+            android:textColor="@color/white"
             android:singleLine="true"
             android:text="手机号"
             android:textSize="12sp"
@@ -39,13 +45,16 @@
         <TextView
             android:id="@+id/time"
             android:layout_width="0dp"
+            android:background="#323232"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:clickable="true"
+            android:textAlignment="center"
             android:ellipsize="end"
             android:paddingBottom="5dp"
             android:singleLine="true"
             android:text="时间"
+            android:textColor="@color/white"
             android:textSize="12sp"
             android:typeface="monospace" />
 

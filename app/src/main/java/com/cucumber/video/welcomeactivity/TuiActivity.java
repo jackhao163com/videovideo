@@ -65,7 +65,7 @@ public class TuiActivity extends AppCompatActivity {
         getToken();
 
         //开始请求
-        Request request = ItheimaHttp.newGetRequest("getuserindexdata?token=" + token);//apiUrl格式："xxx/xxxxx"
+        Request request = ItheimaHttp.newGetRequest("getuserdetail?token=" + token);//apiUrl格式："xxx/xxxxx"
         Call call = ItheimaHttp.send(request, new HttpResponseListener<UserBean>() {
 
             @Override
@@ -129,6 +129,13 @@ public class TuiActivity extends AppCompatActivity {
         });
 
         totuiguang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(TuiActivity.this, TuiGuangActivity.class));
+            }
+        });
+
+        tomytui.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(TuiActivity.this, TuiGuangActivity.class));

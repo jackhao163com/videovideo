@@ -37,16 +37,19 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/textView7"
+    <WebView
+        android:id="@+id/webview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:text="标题"
-        android:textColor="@color/common_yellow"
-        android:textSize="15sp" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="0dp" />
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="3dip"
+        android:max="100"
+        android:progress="0"
+        android:visibility="gone" />
 
 </LinearLayout>

@@ -324,13 +324,21 @@ public class UserActivity extends AppCompatActivity {
                 }
             });
 
+            toStorageList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(UserActivity.this, MyStorageListActivity.class));
+                }
+            });
+
             HistoryHolder girlHolder = (HistoryHolder) holder;
-            List<Map<String, Object>> mDataList = new ArrayList<Map<String, Object>>();
+            final List<Map<String, Object>> mDataList = new ArrayList<Map<String, Object>>();
             List<UserDataModel.DataBean.HlistBean> aitemDatas = data.getHItemDatas();
             for (UserDataModel.DataBean.HlistBean item : aitemDatas) {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("cover", (item.getCover()));
                 map.put("moviename", item.getMovieName());
+                map.put("movieid", item.getMovieid());
                 map.put("hid", item.getId());
                 mDataList.add(map);
             }
@@ -354,6 +362,17 @@ public class UserActivity extends AppCompatActivity {
             });
             setGridView(gridAdapter, mDataList.size());
             girlHolder.historyGridView.setAdapter(gridAdapter);
+
+            girlHolder.historyGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+                                        long arg3) {
+                    String movieId = (String) mDataList.get(position).get("movieid");
+                    Intent i = new Intent(UserActivity.this,MovieDetailActivity.class);
+                    i.putExtra("movieId", movieId);
+                    startActivity(i);
+                }
+            });
         }
 
         private void setGridView(SimpleAdapter adapter, int count) {

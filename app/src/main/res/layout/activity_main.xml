@@ -114,8 +114,8 @@
                         android:layout_width="wrap_content"
                         android:layout_gravity="top|right"
                         android:layout_marginLeft="@dimen/dp_5"
-                        android:layout_marginRight="@dimen/dp_5"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="2dp"
                         android:gravity="right"
                         android:src="@mipmap/jiantou" />
                         </LinearLayout>
@@ -173,7 +173,7 @@
                     android:layout_gravity="top|right|center_horizontal"
                     android:layout_marginLeft="@dimen/dp_5"
                     android:layout_marginRight="@dimen/dp_5"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="3dp"
                     android:gravity="right"
                     android:src="@mipmap/jiantou" />
                 </LinearLayout>

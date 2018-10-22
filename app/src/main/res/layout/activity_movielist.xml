@@ -35,14 +35,14 @@
 
                     <ImageView
                         android:id="@+id/togoback"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="120dp"
+                        android:layout_height="50dp"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
                         android:layout_gravity="top|end"
-                        android:layout_marginStart="10dp"
-                        android:contentDescription="影片列表"
+                        android:layout_marginStart="-30dp"
                         android:gravity="center"
+                        android:scaleType="centerInside"
                         android:src="@mipmap/back" />
 
                     <TextView

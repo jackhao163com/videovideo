@@ -86,7 +86,7 @@ public class FragmentWeek extends Fragment {
                 String movieid = itemsBeanList.get(position).getId();
 
                 Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-                intent.putExtra("movieid", movieid);
+                intent.putExtra("movieId", movieid);
                 startActivity(intent);
 
             }

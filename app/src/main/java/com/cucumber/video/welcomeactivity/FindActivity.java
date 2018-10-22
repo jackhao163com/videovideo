@@ -318,7 +318,7 @@ public class FindActivity extends AppCompatActivity {
             boolean setUp = player.setUp(videoPath, JCVideoPlayer.SCREEN_LAYOUT_LIST, "");
             if (setUp) {
 //            Glide.with(mContext).load("http://a4.att.hudong.com/05/71/01300000057455120185716259013.jpg").into(player.thumbImageView);
-                player.thumbImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                player.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 Picasso.with(mContext)
                         .load(cover)
                         .into(player.thumbImageView);

@@ -112,12 +112,10 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
         itemClickSupport.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                String actorId = itemsBeanList.get(position).getId();
-
-                Intent intent = new Intent(MovieListActivity.this, UserActivity.class);
-                intent.putExtra("actorId", actorId);
-                startActivity(intent);
-
+                String movieId = itemsBeanList.get(position).getId();
+                Intent i = new Intent(MovieListActivity.this,MovieDetailActivity.class);
+                i.putExtra("movieId", movieId);
+                startActivity(i);
             }
         });
 
@@ -148,7 +146,7 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
                         break;
                 }
                 //接口
-                return "getactorlist?pageIndex=" + pageIndex + "&token=" + token;
+                return "getMovieList?pageIndex=" + pageIndex + "&token=" + token;
             }
 
             //            //是否加载更多的数据，根据业务逻辑自行判断，true表示有更多的数据，false表示没有更多的数据，如果不需要监听可以不重写该方法

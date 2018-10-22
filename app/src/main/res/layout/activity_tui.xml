@@ -42,6 +42,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:layout_marginRight="10dp"
+            android:clickable="true"
             android:text="我的推广"
             android:textColor="@color/common_yellow" />
 

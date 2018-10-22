@@ -125,13 +125,15 @@
 
         <ImageView
             android:id="@+id/toStorageList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center|end"
-            android:layout_marginEnd="17dp"
+            android:layout_centerVertical="false"
+            android:layout_gravity="right"
+            android:layout_marginEnd="-20dp"
+            android:scaleType="centerInside"
             android:src="@mipmap/jiantou" />
+
     </RelativeLayout>
 
     <View
@@ -182,13 +184,15 @@
 
         <ImageView
             android:id="@+id/toLikeList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center|end"
-            android:layout_marginEnd="17dp"
+            android:layout_centerVertical="false"
+            android:layout_gravity="right"
+            android:layout_marginEnd="-20dp"
+            android:scaleType="centerInside"
             android:src="@mipmap/jiantou" />
+
 
     </RelativeLayout>
 </LinearLayout>

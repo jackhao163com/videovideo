@@ -110,6 +110,7 @@ public class MovieBean extends BasePageBean<MovieBean.DataBean.ItemsBean>{
             private String createtime;
             private String sequence;
             private String isdeleted;
+            private List<TaglistBean> taglist;
 
             public String getId() {
                 return id;
@@ -213,6 +214,40 @@ public class MovieBean extends BasePageBean<MovieBean.DataBean.ItemsBean>{
 
             public void setIsdeleted(String isdeleted) {
                 this.isdeleted = isdeleted;
+            }
+
+            public List<TaglistBean> getTaglist() {
+                return taglist;
+            }
+
+            public void setTaglist(List<TaglistBean> taglist) {
+                this.taglist = taglist;
+            }
+
+            public static class TaglistBean {
+                /**
+                 * tagid : 1
+                 * tagname : 励志
+                 */
+
+                private String tagid;
+                private String tagname;
+
+                public String getTagid() {
+                    return tagid;
+                }
+
+                public void setTagid(String tagid) {
+                    this.tagid = tagid;
+                }
+
+                public String getTagname() {
+                    return tagname;
+                }
+
+                public void setTagname(String tagname) {
+                    this.tagname = tagname;
+                }
             }
         }
     }

@@ -142,6 +142,10 @@ private String mNames[] = {
 public void onClick(View v) {
                 list.add(mNames[finalI]);
                 lv.setAdapter(new myBaseAdapter());
+                //跳转到搜索结果页
+            Intent i = new Intent(MainSearchActivity.this, MovieResultActivity.class);
+            i.putExtra("search",mNames[finalI]);
+            startActivity(i);
         }
         });
 

@@ -79,10 +79,10 @@ public class FragmentMsg extends Fragment {
         itemClickSupport.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                String movieid = itemsBeanList.get(position).getId();
+                String noticeId = itemsBeanList.get(position).getId();
 
-                Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-                intent.putExtra("movieid", movieid);
+                Intent intent = new Intent(getActivity(), NoticeDetailActivity.class);
+                intent.putExtra("noticeId", noticeId);
                 startActivity(intent);
 
             }
