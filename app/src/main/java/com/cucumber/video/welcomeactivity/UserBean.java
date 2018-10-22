@@ -2,10 +2,11 @@ package com.cucumber.video.welcomeactivity;
 
 public class UserBean {
 
+
     /**
      * status : 1
      * msg : 成功
-     * data : {"uid":"17","username":"18612346666","password":"e10adc3949ba59abbe56e057f20f883e","level":"2","nextlevel":null,"rand_code":"zR1wKO","apptype":"","email":null,"mobile":"18612346666","eastlongitude":null,"northlatitude":null,"gender":"1","avatar":"http://puui.qpic.cn/media_img/0/null1515381699/0","idauthtype":"0","phoneauthtype":"0","skillauthtype":"0","realname":null,"promuid":"0","status":"1","token":"9ff6ab7fac0f304ded96572b20376ae7","createtime":"1537685686","gendername":"女"}
+     * data : {"uid":"17","username":"晃儿","password":"e10adc3949ba59abbe56e057f20f883e","level":"2","nextlevel":null,"rand_code":"zR1wKO","apptype":"","email":null,"mobile":"18612346666","eastlongitude":null,"northlatitude":null,"gender":"32767","avatar":"http://hgmovie.joysw.win:82/Uploads/2018/10/13/3a95c6ca47d8917b61017ab312199014.jpg","idauthtype":"0","phoneauthtype":"0","skillauthtype":"0","realname":null,"promuid":"0","status":"1","token":"9ff6ab7fac0f304ded96572b20376ae7","createtime":"1537685686","viewnums":"0","storagenums":"0","levelname":"二级","nextlevelname":null,"gendername":"男"}
      */
 
     private int status;
@@ -39,7 +40,7 @@ public class UserBean {
     public static class DataBean {
         /**
          * uid : 17
-         * username : 18612346666
+         * username : 晃儿
          * password : e10adc3949ba59abbe56e057f20f883e
          * level : 2
          * nextlevel : null
@@ -49,8 +50,8 @@ public class UserBean {
          * mobile : 18612346666
          * eastlongitude : null
          * northlatitude : null
-         * gender : 1
-         * avatar : http://puui.qpic.cn/media_img/0/null1515381699/0
+         * gender : 32767
+         * avatar : http://hgmovie.joysw.win:82/Uploads/2018/10/13/3a95c6ca47d8917b61017ab312199014.jpg
          * idauthtype : 0
          * phoneauthtype : 0
          * skillauthtype : 0
@@ -59,7 +60,11 @@ public class UserBean {
          * status : 1
          * token : 9ff6ab7fac0f304ded96572b20376ae7
          * createtime : 1537685686
-         * gendername : 女
+         * viewnums : 0
+         * storagenums : 0
+         * levelname : 二级
+         * nextlevelname : null
+         * gendername : 男
          */
 
         private String uid;
@@ -83,6 +88,11 @@ public class UserBean {
         private String status;
         private String token;
         private String createtime;
+        private String viewnums;
+        private String remainnums;
+        private String storagenums;
+        private String levelname;
+        private Object nextlevelname;
         private String gendername;
 
         public String getUid() {
@@ -251,6 +261,46 @@ public class UserBean {
 
         public void setCreatetime(String createtime) {
             this.createtime = createtime;
+        }
+
+        public String getViewnums() {
+            return viewnums;
+        }
+
+        public void setViewnums(String viewnums) {
+            this.viewnums = viewnums;
+        }
+
+        public String getRemainnums() {
+            return remainnums;
+        }
+
+        public void setRemainnums(String remainnums) {
+            this.remainnums = remainnums;
+        }
+
+        public String getStoragenums() {
+            return storagenums;
+        }
+
+        public void setStoragenums(String storagenums) {
+            this.storagenums = storagenums;
+        }
+
+        public String getLevelname() {
+            return levelname;
+        }
+
+        public void setLevelname(String levelname) {
+            this.levelname = levelname;
+        }
+
+        public Object getNextlevelname() {
+            return nextlevelname;
+        }
+
+        public void setNextlevelname(Object nextlevelname) {
+            this.nextlevelname = nextlevelname;
         }
 
         public String getGendername() {

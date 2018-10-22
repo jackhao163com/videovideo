@@ -19,7 +19,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.NoBar">
 
 
         <provider
@@ -41,6 +41,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.cucumber.video.welcomeactivity.GuideActivity"></activity>
+        <activity android:name="com.cucumber.video.welcomeactivity.TuiActivity"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.TuiGuangActivity"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.NoticeDetailActivity"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.NoticyActivity"></activity>
@@ -60,10 +61,10 @@
         <activity android:name="com.cucumber.video.welcomeactivity.RegisterActivity"></activity>
         <activity
             android:name="com.cucumber.video.welcomeactivity.MainSearchActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme.NoBar"/>
         <activity
             android:name="com.cucumber.video.welcomeactivity.SettingActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme.NoBar"/>
     </application>
 
 </manifest>

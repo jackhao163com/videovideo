@@ -36,6 +36,11 @@
         <item name="android:activityCloseExitAnimation">@anim/default_anim_out</item>
     </style>
 
+    <style name="AppTheme.NoBar">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <!-- 最外层样式 -->
     <style name="wrap_layout">
         <item name="android:orientation">vertical</item>

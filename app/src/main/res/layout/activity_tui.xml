@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/tui_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#4f5555">
+
+        <ImageView
+            android:id="@+id/setting"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="top|end"
+            android:layout_marginStart="-30dp"
+            android:gravity="center"
+            android:scaleType="centerInside"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:id="@+id/et_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="top"
+            android:text="推广"
+            android:textColor="#CC9966"
+            android:textSize="20sp"
+            android:transitionName="shareTransition"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tomytui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="10dp"
+            android:text="我的推广"
+            android:textColor="@color/common_yellow" />
+
+
+    </RelativeLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tui_title"
+        android:layout_marginBottom="40dp"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:clipChildren="false">
+
+            <RelativeLayout
+                android:id="@+id/tui_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/co_border_white"
+                android:backgroundTint="#cca676"
+                android:paddingBottom="10dp">
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/user_image"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="false"
+                    android:layout_alignParentTop="false"
+                    android:layout_centerHorizontal="false"
+                    android:layout_centerInParent="false"
+                    android:layout_centerVertical="false"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@mipmap/denglutouxiang"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/textView_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_toRightOf="@+id/user_image"
+                    android:text="15866669999"
+                    android:textColor="@color/white"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textView_phone"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/user_image"
+                    android:paddingBottom="10dp"
+                    android:text="我的邀请码："
+                    android:textColor="@color/white"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/user_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textView_phone"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/textView3"
+                    android:paddingBottom="10dp"
+                    android:text="xxxxxx"
+                    android:textColor="@color/white"
+                    android:textSize="14dp" />
+
+                <ImageView
+                    android:id="@+id/icon_erweima"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@mipmap/erweima"
+                    android:scaleType="fitXY" />
+
+                <ImageView
+                    android:id="@+id/curlevelicon"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_below="@+id/user_image"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@mipmap/huizhang_rumen"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:id="@+id/curlevelname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="false"
+                    android:layout_below="@+id/curlevelicon"
+                    android:layout_marginLeft="20dp"
+                    android:text="L0小白"
+                    android:textColor="@color/white"
+                    android:textSize="12dp" />
+
+                <ImageView
+                    android:id="@+id/lines"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_below="@+id/user_image"
+                    android:layout_marginLeft="80dp"
+                    android:layout_marginRight="80dp"
+                    android:layout_marginTop="30dp"
+                    android:scaleType="matrix"
+                    android:src="@mipmap/line" />
+
+                <TextView
+                    android:id="@+id/levelnums"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/lines"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:text="下一等级还差几人哦"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/nextlevelicon"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="false"
+                    android:layout_below="@+id/user_image"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@mipmap/huizhang_rumen"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:id="@+id/nextlevelname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/curlevelicon"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="入门级别"
+                    android:textColor="@color/white"
+                    android:textSize="12dp" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/tui_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tui_top"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/border_gray"
+                android:divider="@drawable/line_shape_gray"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:showDividers="middle">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center">
+
+                    <TextView
+                        android:id="@+id/view_num"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/common_yellow"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/view_num"
+                        android:gravity="center"
+                        android:text="今日可观影次数"
+                        android:textSize="12sp" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:background="#ededed" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center">
+
+                    <TextView
+                        android:id="@+id/remain_num"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="#f65758"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/remain_num"
+                        android:gravity="center"
+                        android:text="剩余观影次数"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/task_day"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tui_view"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/border_gray"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="每日任务"
+                    android:textColor="@color/common_yellow"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="每日点击广告，当日光影次数+1，次数不累计" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/task_tuig"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/task_day"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/border_gray"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/textView_t"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="推广任务"
+                    android:textColor="@color/common_yellow"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="推广给好友成功下载APP并打开或注册时好友填写你的邀请码，可以永久增加每日观影次数及缓存次数。每日缓存次数同推广人数。" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/common_level2"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@mipmap/huizhang_rumen" />
+
+                    <TextView
+                        android:id="@+id/commmon_levelname2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_toRightOf="@+id/common_level2"
+                        android:ellipsize="end"
+                        android:gravity="left"
+                        android:singleLine="true"
+                        android:text="入门徽章"
+                        android:textColor="@color/common_yellow"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/commmon_desc2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/commmon_levelname2"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_toRightOf="@+id/common_level2"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="推广1人一每日观影次数+2,缓存次数+1"
+                        android:textColor="#646464"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/common_level3"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@mipmap/huizhang_jinjie" />
+
+                    <TextView
+                        android:id="@+id/commmon_levelname3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_toRightOf="@+id/common_level3"
+                        android:ellipsize="end"
+                        android:gravity="left"
+                        android:singleLine="true"
+                        android:text="进阶徽章"
+                        android:textColor="@color/common_yellow"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/commmon_desc3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/commmon_levelname3"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_toRightOf="@+id/common_level3"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="推广3人一每日观影次数+5,缓存次数+3"
+                        android:textColor="#646464"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/common_level4"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@mipmap/huizhang_daren" />
+
+                    <TextView
+                        android:id="@+id/commmon_levelname4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_toRightOf="@+id/common_level4"
+                        android:ellipsize="end"
+                        android:gravity="left"
+                        android:singleLine="true"
+                        android:text="达人徽章"
+                        android:textColor="@color/common_yellow"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/commmon_desc4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/commmon_levelname4"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_toRightOf="@+id/common_level4"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="推广10人一每日观影次数+30,缓存次数+10"
+                        android:textColor="#646464"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/common_level5"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@mipmap/huizhang_zhuanjia" />
+
+                    <TextView
+                        android:id="@+id/commmon_levelname5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_toRightOf="@+id/common_level5"
+                        android:ellipsize="end"
+                        android:gravity="left"
+                        android:singleLine="true"
+                        android:text="专家徽章"
+                        android:textColor="@color/common_yellow"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/commmon_desc5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/commmon_levelname5"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_toRightOf="@+id/common_level5"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="推广30人一每日观影次数+50,缓存次数+30"
+                        android:textColor="#646464"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/common_level1"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@mipmap/huizhang_jiaoshou" />
+
+                    <TextView
+                        android:id="@+id/commmon_levelname1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_toRightOf="@+id/common_level1"
+                        android:ellipsize="end"
+                        android:gravity="left"
+                        android:singleLine="true"
+                        android:text="教授徽章"
+                        android:textColor="@color/common_yellow"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/commmon_desc1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/commmon_levelname1"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_toRightOf="@+id/common_level1"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="推广50人一每日观影次数+无限,缓存次数+50"
+                        android:textColor="#646464"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/task_tuig"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitEnd"
+                    android:src="@mipmap/taskfuli_01" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/taskfuli_02" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitStart"
+                    android:src="@mipmap/taskfuli_03" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="false"
+        android:visibility="visible">
+
+        <Button
+            android:id="@+id/totuiguang"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:textColor="@color/common_yellow"
+            android:background="@drawable/co_border"
+            android:text="立即推广" />
+    </RelativeLayout>
+</RelativeLayout>

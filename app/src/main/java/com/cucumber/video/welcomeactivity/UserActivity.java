@@ -262,7 +262,7 @@ public class UserActivity extends AppCompatActivity {
                             startActivity(i);
                             break;
                         case "1":
-                             i = new Intent(UserActivity.this, TuiGuangActivity.class);
+                             i = new Intent(UserActivity.this, TuiActivity.class);
                             i.putExtra("type", 0);
                             startActivity(i);
                             break;

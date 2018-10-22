@@ -10,10 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.itheima.retrofitutils.L;
-import com.squareup.picasso.Picasso;
 
 import org.itheima.recycler.adapter.BaseLoadMoreRecyclerAdapter;
 import org.itheima.recycler.header.RecyclerViewHeader;
@@ -38,6 +38,8 @@ public class TuiGuangActivity extends AppCompatActivity implements View.OnClickL
     RecyclerViewHeader recyclerHeader;
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout myswipeRefreshLayout;
+    @BindView(R.id.footer)
+    RelativeLayout footer;
     private String token;
     private ItheimaRecyclerView myrecyclerView;
 
@@ -82,7 +84,7 @@ public class TuiGuangActivity extends AppCompatActivity implements View.OnClickL
         getToken();
 
 
-        pullToLoadMoreRecyclerView = new PullToLoadMoreRecyclerView<TuiGuangBean>(myswipeRefreshLayout, myrecyclerView, MovieListActivity.MyRecyclerViewHolder.class) {
+        pullToLoadMoreRecyclerView = new PullToLoadMoreRecyclerView<TuiGuangBean>(myswipeRefreshLayout, myrecyclerView, MyRecyclerViewHolder.class) {
             @Override
             public int getItemResId() {
                 //recylerview item资源id
@@ -134,9 +136,12 @@ public class TuiGuangActivity extends AppCompatActivity implements View.OnClickL
                 L.i("setLoadingDataListener onSuccess: " + o);
                 List<TuiGuangBean.DataBean.ItemsBean> itemDatas = o.getItemDatas();
                 if (itemDatas.size() == 0) {
-                    if(holder != null)holder.loadingFinish((String) null);
+                    if (holder != null) holder.loadingFinish((String) null);
                     if (myswipeRefreshLayout != null) {
                         myswipeRefreshLayout.setRefreshing(false);
+                    }
+                    if (itemsBeanList.size() == 0) {
+                        footer.setVisibility(View.VISIBLE);
                     }
                 } else {
                     for (TuiGuangBean.DataBean.ItemsBean item : itemDatas) {
@@ -199,10 +204,10 @@ public class TuiGuangActivity extends AppCompatActivity implements View.OnClickL
             username.setText(name);
             mobile.setText(mobiless);
             String str = "";
-            try{
-                str =   DateUtils.timeDate(createtime);
-            } catch (Exception ex0){
-                Log.i("",ex0.toString());
+            try {
+                str = DateUtils.timeDate(createtime);
+            } catch (Exception ex0) {
+                Log.i("", ex0.toString());
             }
             time.setText(str);
 
