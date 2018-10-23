@@ -57,7 +57,6 @@ public class FindActivity extends AppCompatActivity {
 
     private ArrayList<String> datas;
     private JCVideoPlayerStandard currPlayer;
-    private VideoAdapter adapter;
     private RecyclerView.OnScrollListener onScrollListener;
     private int firstVisible;//当前第一个可见的item
     private int visibleCount;//当前可见的item个数

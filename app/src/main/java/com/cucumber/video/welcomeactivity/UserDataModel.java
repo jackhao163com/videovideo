@@ -123,8 +123,8 @@ public class UserDataModel {
             private String status;
             private String token;
             private String createtime;
-            private String viewmums;
-            private String viewmum;
+            private String viewnums;
+            private String movieviewmums;
             private String remainnums;
             private String needcount;
             private String storagenums;
@@ -306,20 +306,20 @@ public class UserDataModel {
                 this.createtime = createtime;
             }
 
-            public String getViewmums() {
-                return viewmums;
+            public String getViewnums() {
+                return viewnums;
             }
 
-            public void setViewmums(String viewmums) {
-                this.viewmums = viewmums;
+            public void setViewnums(String viewmums) {
+                this.viewnums = viewnums;
             }
 
-            public String getViewmum() {
-                return viewmum;
+            public String getMovieviewmums() {
+                return movieviewmums;
             }
 
-            public void setViewmum(String viewmum) {
-                this.viewmum = viewmum;
+            public void setMovieviewmums(String movieviewmums) {
+                this.movieviewmums = movieviewmums;
             }
 
             public String getRemainnums() {

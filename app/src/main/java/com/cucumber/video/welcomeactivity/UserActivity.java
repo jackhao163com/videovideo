@@ -212,7 +212,7 @@ public class UserActivity extends AppCompatActivity {
                     .into(actorImage);
             textViewLevel.setText(userinfo.getLevelName());
             textViewPhone.setText(userinfo.getMobile());
-            remainNum.setText(userinfo.getRemainnums() + "/" + userinfo.getViewmums());
+            remainNum.setText(userinfo.getRemainnums() + "/" + userinfo.getViewnums());
             needPerson.setText("下一等级还差" + userinfo.getNeedcount() + "人");
 
             mSettings.setOnClickListener(new View.OnClickListener() {
@@ -337,7 +337,7 @@ public class UserActivity extends AppCompatActivity {
             });
 
             UserDataModel.DataBean.UserinfoBean userinfo = data.getUItemDatas();
-            viewnums.setText("目前历史观看过"+userinfo.getViewmum()+"部");
+            viewnums.setText("目前历史观看过"+userinfo.getMovieviewmums()+"部");
             likenums.setText("目前已有喜欢"+userinfo.getLikenums()+"部");
             huancunNums.setText("目前本地大片有"+userinfo.getStoragenums()+"部");
 
