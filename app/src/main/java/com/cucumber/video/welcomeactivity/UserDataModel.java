@@ -123,7 +123,12 @@ public class UserDataModel {
             private String status;
             private String token;
             private String createtime;
+            private String viewmums;
             private String viewmum;
+            private String remainnums;
+            private String needcount;
+            private String storagenums;
+            private String likenums;
 
             public String getUid() {
                 return uid;
@@ -301,12 +306,52 @@ public class UserDataModel {
                 this.createtime = createtime;
             }
 
+            public String getViewmums() {
+                return viewmums;
+            }
+
+            public void setViewmums(String viewmums) {
+                this.viewmums = viewmums;
+            }
+
             public String getViewmum() {
                 return viewmum;
             }
 
             public void setViewmum(String viewmum) {
                 this.viewmum = viewmum;
+            }
+
+            public String getRemainnums() {
+                return remainnums;
+            }
+
+            public void setRemainnums(String remainnums) {
+                this.remainnums = remainnums;
+            }
+
+            public String getLikenums() {
+                return likenums;
+            }
+
+            public void setLikenums(String likenums) {
+                this.likenums = likenums;
+            }
+
+            public String getNeedcount() {
+                return needcount;
+            }
+
+            public void setNeedcount(String needcount) {
+                this.needcount = needcount;
+            }
+
+            public String getStoragenums() {
+                return storagenums;
+            }
+
+            public void setStoragenums(String storagenums) {
+                this.storagenums = storagenums;
             }
         }
 

@@ -208,7 +208,7 @@ public class FragmentGongGao extends Fragment {
                 if(ntime == null){
                     time.setText("");
                 } else {
-                    time.setText(DateUtils.times(ntitle.toString()));
+                    time.setText(DateUtils.times(ntime.toString()));
                 }
             } catch (Exception ex) {
                 Log.i("", ex.toString());

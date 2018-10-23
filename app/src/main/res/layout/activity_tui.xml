@@ -141,12 +141,11 @@
 
                 <ImageView
                     android:id="@+id/curlevelicon"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
                     android:layout_below="@+id/user_image"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
-                    android:background="@mipmap/huizhang_rumen"
                     android:scaleType="fitXY" />
 
                 <TextView
@@ -156,7 +155,9 @@
                     android:layout_alignParentEnd="false"
                     android:layout_below="@+id/curlevelicon"
                     android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
                     android:text="L0小白"
+                    android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="12dp" />
 
@@ -186,15 +187,14 @@
 
                 <ImageView
                     android:id="@+id/nextlevelicon"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="false"
                     android:layout_below="@+id/user_image"
                     android:layout_marginEnd="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
-                    android:background="@mipmap/huizhang_rumen"
                     android:scaleType="fitXY" />
 
                 <TextView
@@ -205,9 +205,10 @@
                     android:layout_below="@+id/curlevelicon"
                     android:layout_marginEnd="20dp"
                     android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
                     android:text="入门级别"
                     android:textColor="@color/white"
-                    android:textSize="12dp" />
+                    android:textSize="14dp" />
 
             </RelativeLayout>
 

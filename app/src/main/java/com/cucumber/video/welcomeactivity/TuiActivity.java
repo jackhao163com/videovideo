@@ -79,7 +79,7 @@ public class TuiActivity extends AppCompatActivity {
                             .into(userImage);
                     textViewPhone.setText(userinfo.getUsername());
                     userCode.setText(userinfo.getRand_code());
-                    int[] levels = {R.mipmap.huizhang_rumen,R.mipmap.huizhang_rumen,R.mipmap.huizhang_jinjie,R.mipmap.huizhang_daren,R.mipmap.huizhang_zhuanjia,R.mipmap.huizhang_jiaoshou};
+                    int[] levels = {R.mipmap.l0,R.mipmap.l1,R.mipmap.l2,R.mipmap.l3,R.mipmap.l4,R.mipmap.l5};
                     int level = Integer.parseInt(userinfo.getLevel().equals("")?"0":userinfo.getLevel());
                     try{
                         curlevelicon.setImageResource(levels[level]);
@@ -139,6 +139,13 @@ public class TuiActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(TuiActivity.this, TuiGuangActivity.class));
+            }
+        });
+
+        iconErweima.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(TuiActivity.this, TuiMaActivity.class));
             }
         });
     }

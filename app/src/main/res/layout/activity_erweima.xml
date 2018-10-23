@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/tuiguangbeijing">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/maininfo"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/erweima_save"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="30dp"
+            android:background="@mipmap/baocunerweima"
+            android:tag="2" />
+
+        <ImageView
+            android:id="@+id/erweima_copy"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="30dp"
+            android:background="@mipmap/fuzhilianjie"
+            android:tag="2" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/m_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:id="@+id/setting_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="top|end"
+            android:layout_marginStart="23dp"
+            android:gravity="center"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:id="@+id/et_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="top"
+            android:text="推广分享获取永久免费观影"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:transitionName="shareTransition"
+            android:visibility="visible" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/maininfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/m_header"
+        android:layout_centerInParent="true"
+        android:background="@drawable/co_border_white"
+        android:gravity="center_vertical|center"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/ttt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="false"
+            android:layout_gravity="center_horizontal"
+            android:text="扫描下载黄瓜视频APP"
+            android:textSize="20sp"
+            android:transitionName="shareTransition" />
+
+        <ImageView
+            android:id="@+id/erweima"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ttt"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:scaleType="center" />
+
+        <TextView
+            android:id="@+id/code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/erweima"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="false"
+            android:layout_gravity="center_horizontal"
+            android:text="xxxxxxx"
+            android:textSize="24sp"
+            android:transitionName="shareTransition" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/code"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="false"
+            android:layout_gravity="center_horizontal"
+            android:text="您的推广码"
+            android:textSize="14sp"
+            android:transitionName="shareTransition" />
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -212,8 +212,8 @@ public class UserActivity extends AppCompatActivity {
                     .into(actorImage);
             textViewLevel.setText(userinfo.getLevelName());
             textViewPhone.setText(userinfo.getMobile());
-            remainNum.setText(userinfo.getViewmum() + "/" + userinfo.getViewmum());
-            needPerson.setText("下一等级还差" + userinfo.getViewmum() + "人");
+            remainNum.setText(userinfo.getRemainnums() + "/" + userinfo.getViewmums());
+            needPerson.setText("下一等级还差" + userinfo.getNeedcount() + "人");
 
             mSettings.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -263,6 +263,11 @@ public class UserActivity extends AppCompatActivity {
                             break;
                         case "1":
                              i = new Intent(UserActivity.this, TuiActivity.class);
+                            i.putExtra("type", 0);
+                            startActivity(i);
+                            break;
+                        case "2":
+                            i = new Intent(UserActivity.this, YijianActivity.class);
                             i.putExtra("type", 0);
                             startActivity(i);
                             break;
@@ -330,6 +335,11 @@ public class UserActivity extends AppCompatActivity {
                     startActivity(new Intent(UserActivity.this, MyStorageListActivity.class));
                 }
             });
+
+            UserDataModel.DataBean.UserinfoBean userinfo = data.getUItemDatas();
+            viewnums.setText("目前历史观看过"+userinfo.getViewmum()+"部");
+            likenums.setText("目前已有喜欢"+userinfo.getLikenums()+"部");
+            huancunNums.setText("目前本地大片有"+userinfo.getStoragenums()+"部");
 
             HistoryHolder girlHolder = (HistoryHolder) holder;
             final List<Map<String, Object>> mDataList = new ArrayList<Map<String, Object>>();
