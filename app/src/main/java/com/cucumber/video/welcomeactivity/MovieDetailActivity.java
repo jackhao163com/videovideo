@@ -1,11 +1,16 @@
 package com.cucumber.video.welcomeactivity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -33,6 +38,9 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.arialyy.annotations.Download;
+import com.arialyy.aria.core.Aria;
+import com.arialyy.aria.core.download.DownloadTask;
 import com.itheima.retrofitutils.ItheimaHttp;
 import com.itheima.retrofitutils.L;
 import com.itheima.retrofitutils.Request;
@@ -46,6 +54,7 @@ import org.itheima.recycler.viewholder.BaseRecyclerViewHolder;
 import org.itheima.recycler.widget.ItheimaRecyclerView;
 import org.itheima.recycler.widget.PullToLoadMoreRecyclerView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -110,6 +119,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     EditText commentInput;
     private String token;
     private String movieid;
+    private String moviepath;
 
     private List<Map<String, Object>> commentDataList;
 
@@ -119,6 +129,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     private GridLayoutManager mLayoutManager;
     private CommentListAdapter adapter;
     private Handler mHandler = new Handler(Looper.getMainLooper());
+
+    private int isDownload = 0;
 
     BaseLoadMoreRecyclerAdapter.LoadMoreViewHolder holder;
     PullToLoadMoreRecyclerView pullToLoadMoreRecyclerView;
@@ -155,7 +167,11 @@ public class MovieDetailActivity extends AppCompatActivity {
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                downloadAction();
+                try {
+                    downloadAction();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -219,7 +235,53 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
 
-    private void downloadAction(){
+    public static final int EXTERNAL_STORAGE_REQ_CODE = 10 ;
+    public void requestPermission() throws IOException {
+        //判断当前Activity是否已经获得了该权限
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            //如果App的权限申请曾经被用户拒绝过，就需要在这里跟用户做出解释
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Toast.makeText(this,"please give me the permission",Toast.LENGTH_SHORT).show();
+            } else {
+                //进行权限请求
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        EXTERNAL_STORAGE_REQ_CODE);
+            }
+        } else{
+            startToDownload();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case EXTERNAL_STORAGE_REQ_CODE: {
+                // 如果请求被拒绝，那么通常grantResults数组为空
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //申请成功，进行相应操作
+                    startToDownload();
+                } else {
+                    //申请失败，可以继续向用户解释。
+                }
+                return;
+            }
+        }
+    }
+
+    private void startToDownload(){
+
+        String downloadPath = Environment.getExternalStorageDirectory() + "/Download/" + "movie"+movieid+"_xx.mp4";
+        Aria.download(MovieDetailActivity.this)
+                .load(moviepath)
+                .setFilePath(downloadPath)
+                .start();
 
         final Map<String,Object> map = new HashMap<>();
         map.put("token", token);
@@ -272,6 +334,48 @@ public class MovieDetailActivity extends AppCompatActivity {
         });
     }
 
+    private void downloadAction() throws IOException {
+        if(isDownload == 0){
+            requestPermission();
+        }
+
+    }
+
+    @Download.onTaskStart void taskStart(DownloadTask task) {
+//        mAdapter.updateBtState(task.getKey(), false);
+        MaterialDialog dialog = new MaterialDialog.Builder(MovieDetailActivity.this)
+                .title("温馨提示")
+                .content("开始下载了！")
+                .show();
+
+        isDownload = 1;
+    }
+
+    @Download.onTaskResume void taskResume(DownloadTask task) {
+//        mAdapter.updateBtState(task.getKey(), false);
+        Toast.makeText(MovieDetailActivity.this, "taskResume", Toast.LENGTH_SHORT).show();
+    }
+
+    @Download.onTaskStop void taskStop(DownloadTask task) {
+//        mAdapter.updateBtState(task.getKey(), true);
+        Toast.makeText(MovieDetailActivity.this, "taskStop", Toast.LENGTH_SHORT).show();
+    }
+
+    @Download.onTaskCancel void taskCancel(DownloadTask task) {
+//        mAdapter.updateBtState(task.getKey(), true);
+        Toast.makeText(MovieDetailActivity.this, "taskCancel", Toast.LENGTH_SHORT).show();
+    }
+
+    @Download.onTaskFail void taskFail(DownloadTask task) {
+//        mAdapter.updateBtState(task.getKey(), true);
+        Toast.makeText(MovieDetailActivity.this, "taskFail", Toast.LENGTH_SHORT).show();
+    }
+
+    @Download.onTaskComplete void taskComplete(DownloadTask task){
+//        Log.d(TAG, FileUtil.getFileMD5(new File(task.getDownloadPath())));
+        Toast.makeText(MovieDetailActivity.this, "taskComplete", Toast.LENGTH_SHORT).show();
+    }
+
     private void getData() {
         //开始请求
         Request request = ItheimaHttp.newGetRequest("getMoiveDetailData?token=" + token + "&movieid=" + movieid);//apiUrl格式："xxx/xxxxx"
@@ -295,6 +399,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                                 .load(detailInfo.getCover())
                                 .into(playerVideo.thumbImageView);
                     }
+                    moviepath = videoPath;
                     moviename.setText(detailInfo.getName());
                     movieviews.setText(detailInfo.getViews());
                     movietime.setText(DateUtils.timeDate(detailInfo.getCreatetime()));

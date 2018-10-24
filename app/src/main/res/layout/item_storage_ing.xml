@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:zhy="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:layout_height="wrap_content">
 
@@ -17,7 +18,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
             android:text="正在缓存"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/likecover"
@@ -35,26 +36,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="35dp"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
+            android:layout_marginTop="35dp"
             android:layout_toRightOf="@+id/likecover"
             android:ellipsize="end"
             android:gravity="left"
             android:singleLine="true"
             android:text="xxx"
-            android:textColor="#3f3f3f"
             android:textSize="15sp" />
 
         <TextView
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/name"
             android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/likecover"
             android:gravity="center_horizontal|center"
             android:text="缓存中"
@@ -65,11 +65,12 @@
             android:id="@+id/curvideolength"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_marginBottom="15dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
             android:layout_toLeftOf="@+id/seperater"
+            android:layout_below="@+id/name"
             android:text="29MB"
             android:textColor="#999999"
             android:textSize="12sp" />
@@ -78,11 +79,12 @@
             android:id="@+id/seperater"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_marginBottom="15dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
             android:layout_toLeftOf="@+id/videolength"
+            android:layout_below="@+id/name"
             android:text="/"
             android:textColor="#999999"
             android:textSize="12sp" />
@@ -91,29 +93,30 @@
             android:id="@+id/videolength"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="15dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/name"
             android:text="128MB"
             android:textColor="#999999"
             android:textSize="12sp" />
 
-        <ProgressBar
+        <!--suppress AndroidElementNotAllowed -->
+        <com.cucumber.video.welcomeactivity.HorizontalProgressBarWithNumber
             android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="10dp"
             android:layout_below="@+id/status"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/likecover"
-            android:background="#d8b780"
+            android:background="#ebedec"
             android:max="100"
-            android:maxHeight="30dp"
-            android:minHeight="30dp"
             android:progress="10"
-            android:visibility="visible" />
+            zhy:progress_text_color="#d9b680"
+            zhy:progress_unreached_color="#ebedec" />
     </RelativeLayout>
 
 </LinearLayout>

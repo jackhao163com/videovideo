@@ -12,12 +12,18 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.arialyy.aria.core.download.DownloadEntity;
+import com.arialyy.aria.core.download.DownloadGroupEntity;
+import com.arialyy.aria.core.inf.AbsEntity;
+import com.arialyy.aria.core.inf.IEntity;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +32,8 @@ public class MyStorageAdapater extends RecyclerView.Adapter<RecyclerView.ViewHol
     private List<Map<String, Object>> datas; // 数据源
     private Context context;    // 上下文Context
     private MyStorageListActivity activity;
+    private List<AbsEntity> mData;
+    private Map<String, Integer> mPositions = new ConcurrentHashMap<>();
 
     private int normalType = 0;     // 第一种ViewType，正常的item
     private int footType = 1;       // 第二种ViewType，底部的提示View
@@ -36,11 +44,28 @@ public class MyStorageAdapater extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private Handler mHandler = new Handler(Looper.getMainLooper()); //获取主线程的Handler
 
-    public MyStorageAdapater(List<Map<String, Object>> datas, Context context, boolean hasMore) {
+    public MyStorageAdapater(List<Map<String, Object>> datas,List<AbsEntity> mData, Context context, boolean hasMore) {
         // 初始化变量
         this.datas = datas;
         this.context = context;
         this.hasMore = hasMore;
+        this.mData = mData;
+
+        setPositionList();
+    }
+
+    private void setPositionList(){
+        for (AbsEntity entity : mData) {
+            String url = getKey(entity);
+            int i = 0;
+            for(Map<String,Object> map : datas){
+                if(map.get("path").toString().equals(url)){
+                    mPositions.put(getKey(entity), i);
+                    break;
+                }
+                i++;
+            }
+        }
     }
 
     // 获取条目数量，之所以要加1是因为增加了一条footView
@@ -149,6 +174,11 @@ public class MyStorageAdapater extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder1.videolength.setText(videoMB+"");
             holder1.curvideolength.setText(curSizeMB+"");
 
+            String path = datas.get(holder1.getAdapterPosition()).get("path").toString();
+            AbsEntity entity = getEntity(path);
+            if(entity != null)
+              updateSpeed(holder1,entity);
+
         } else if (holder instanceof FinishHolder) {
             FinishHolder holder2 = (FinishHolder) holder;
             Map<String,Object> map = datas.get(holder.getAdapterPosition());
@@ -198,6 +228,91 @@ public class MyStorageAdapater extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
             }
         }
+    }
+
+    private String covertCurrentSize(long currentSize) {
+        if (currentSize < 0) return "0";
+        return CommonUtil.formatFileSize(currentSize);
+    }
+
+    /**
+     * 只更新速度
+     */
+    private void updateSpeed(NormalHolder holder, final AbsEntity entity) {
+        long size = entity.getFileSize();
+        long progress = entity.getCurrentProgress();
+        int current = size == 0 ? 0 : (int) (progress * 100 / size);
+        holder.curvideolength.setText(covertCurrentSize(progress));
+//        holder.fileSize.setText(covertCurrentSize(progress) + "/" + CommonUtil.formatFileSize(size));
+        holder.progressBar.setProgress(current);
+        //if (holder instanceof GroupHolder){
+        //  handleSubChild((GroupHolder) holder, entity);
+        //}
+    }
+
+    private String getKey(AbsEntity entity) {
+        if (entity instanceof DownloadEntity) {
+            return ((DownloadEntity) entity).getUrl();
+        } else if (entity instanceof DownloadGroupEntity) {
+            return ((DownloadGroupEntity) entity).getGroupName();
+        }
+        return "";
+    }
+
+    public synchronized void updateState(AbsEntity entity) {
+        if (entity.getState() == IEntity.STATE_CANCEL) {
+            mData.remove(entity);
+            mPositions.clear();
+            setPositionList();
+            notifyDataSetChanged();
+        } else {
+            int position = indexItem(getKey(entity));
+            if (position == -1 || position >= mData.size()) {
+                return;
+            }
+            mData.set(position, entity);
+            int cur = mPositions.get(getKey(entity));
+            Map<String,Object> map = datas.get(cur);
+            map.put("size",entity.getFileSize());
+            notifyItemChanged(cur);
+        }
+    }
+
+    /**
+     * 更新进度
+     */
+    public synchronized void setProgress(AbsEntity entity) {
+        String url = entity.getKey();
+        int position = indexItem(url);
+        if (position == -1 || position >= mData.size()) {
+            return;
+        }
+
+        mData.set(position, entity);
+        int cur = mPositions.get(getKey(entity));
+        Map<String,Object> map = datas.get(cur);
+        map.put("size",entity.getFileSize());
+        notifyItemChanged(cur);
+    }
+
+    private synchronized int indexItem(String url) {
+        Set<String> keys = mPositions.keySet();
+        for (String key : keys) {
+            if (key.equals(url)) {
+                return mPositions.get(key);
+            }
+        }
+        return -1;
+    }
+
+    private AbsEntity getEntity(String url) {
+        Set<String> keys = mPositions.keySet();
+        for (AbsEntity abs : mData) {
+            if (abs.getKey().equals(url)) {
+                return abs;
+            }
+        }
+        return null;
     }
 
     // 暴露接口，改变fadeTips的方法

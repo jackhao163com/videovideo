@@ -37,6 +37,8 @@ dependencies {
     implementation 'com.roughike:bottom-bar:2.3.1'
     implementation 'com.github.open-android:LoopViewPager:2.0.0'
     implementation 'com.github.ithedan:TextViewDrawable:v1.0'
+    implementation 'com.arialyy.aria:aria-core:3.5.1'
+    annotationProcessor 'com.arialyy.aria:aria-compiler:3.5.1'
     implementation 'com.google.code.gson:gson:2.6.2'
     implementation 'com.github.open-android:RetrofitUtils:0.1.9'
     implementation 'com.github.open-android:BaseRecyclerAndAdapter:0.5.13'

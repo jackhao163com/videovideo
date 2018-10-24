@@ -98,6 +98,7 @@ public class MovieStorageBean extends BasePageBean<MovieStorageBean.DataBean.Ite
             private String size;
             private String type;
             private String cover;
+            private String path;
 
             public String getId() {
                 return id;
@@ -137,6 +138,14 @@ public class MovieStorageBean extends BasePageBean<MovieStorageBean.DataBean.Ite
 
             public void setSize(String size) {
                 this.size = size;
+            }
+
+            public String getPath() {
+                return path;
+            }
+
+            public void setPath(String path) {
+                this.path = path;
             }
 
             public String getType() {

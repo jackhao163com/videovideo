@@ -17,7 +17,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
             android:text="已缓存"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/likecover"

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.arialyy.annotations.Download;
+import com.arialyy.aria.core.Aria;
+import com.arialyy.aria.core.download.DownloadTask;
+import com.arialyy.aria.core.inf.AbsEntity;
 import com.itheima.retrofitutils.ItheimaHttp;
 import com.itheima.retrofitutils.L;
 import com.itheima.retrofitutils.Request;
@@ -69,10 +74,15 @@ public class MyStorageListActivity extends AppCompatActivity implements SwipeRef
     private String url ;
     ArrayList<MovieStorageBean.DataBean.ItemsBean> itemsBeanList = new ArrayList<>();
     List<Map<String,Object>> mDataList = new ArrayList<Map<String,Object>>();
+    private List<AbsEntity> mData = new ArrayList<>();
+    private static final String TAG = "DownloadAdapter";
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mystorage);
+        Aria.download(this).register();
         getToken();
 
         //获取传参
@@ -87,9 +97,49 @@ public class MyStorageListActivity extends AppCompatActivity implements SwipeRef
                 MyStorageListActivity.this.finish();
             }
         });
-
+        List<AbsEntity> temps = Aria.download(this).getTotalTaskList();
+        if (temps != null && !temps.isEmpty()) {
+            mData.addAll(temps);
+        }
         initRefreshLayout();
         getData(1);
+    }
+
+
+    @Download.onPre void onPre(DownloadTask task) {
+        adapter.updateState(task.getEntity());
+        Log.d(TAG, task.getTaskName() + ", " + task.getState());
+    }
+
+    @Download.onTaskStart void taskStart(DownloadTask task) {
+        Log.d(TAG, task.getTaskName() + ", " + task.getState());
+        adapter.updateState(task.getEntity());
+    }
+
+    @Download.onTaskResume void taskResume(DownloadTask task) {
+        Log.d(TAG, task.getTaskName() + ", " + task.getState());
+        adapter.updateState(task.getEntity());
+    }
+
+    @Download.onTaskStop void taskStop(DownloadTask task) {
+        adapter.updateState(task.getEntity());
+    }
+
+    @Download.onTaskCancel void taskCancel(DownloadTask task) {
+        adapter.updateState(task.getEntity());
+    }
+
+    @Download.onTaskFail void taskFail(DownloadTask task) {
+        adapter.updateState(task.getEntity());
+    }
+
+    @Download.onTaskComplete void taskComplete(DownloadTask task) {
+        adapter.updateState(task.getEntity());
+    }
+
+    @Download.onTaskRunning() void taskRunning(DownloadTask task) {
+        Log.d(TAG, "running:"+task.getTaskName() + ", " + task.getState());
+        adapter.setProgress(task.getEntity());
     }
 
     private void getToken() {
@@ -127,6 +177,7 @@ public class MyStorageListActivity extends AppCompatActivity implements SwipeRef
                         Map<String, Object> map=new HashMap<String, Object>();
                         map.put("cover", (item.getCover()));
                         map.put("name",item.getName());
+                        map.put("path",item.getPath());
                         map.put("videoSize",item.getVideosize());
                         map.put("type",item.getType());
                         map.put("movieid",item.getMovieid());
@@ -164,7 +215,7 @@ public class MyStorageListActivity extends AppCompatActivity implements SwipeRef
         });
     }
     private void initRecyclerView() {
-        adapter = new MyStorageAdapater(mDataList, this, mDataList.size() > 0 ? true : false);
+        adapter = new MyStorageAdapater(mDataList, mData,this, mDataList.size() > 0 ? true : false);
         mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
@@ -210,15 +261,15 @@ public class MyStorageListActivity extends AppCompatActivity implements SwipeRef
 
     @Override
     public void onRefresh() {
-        refreshLayout.setRefreshing(true);
-        adapter.resetDatas();
-        pageIndex = 0;
-        getData(2);
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                refreshLayout.setRefreshing(false);
-            }
-        }, 1000);
+//        refreshLayout.setRefreshing(true);
+//        adapter.resetDatas();
+//        pageIndex = 0;
+//        getData(2);
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                refreshLayout.setRefreshing(false);
+//            }
+//        }, 1000);
     }
 }
