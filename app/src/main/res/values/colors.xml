@@ -22,4 +22,6 @@
     <color name="fontyellow">#d2b588</color>
     <color name="commonblack">#252627</color>
     <color name="fankuibg">#131313</color>
+    <color name="bottombarbg">#323232</color>
+    <color name="bottombarfont">#999999</color>
 </resources>

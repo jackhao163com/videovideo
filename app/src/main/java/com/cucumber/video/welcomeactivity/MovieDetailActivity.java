@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -140,7 +141,135 @@ public class MovieDetailActivity extends AppCompatActivity {
         movieid = intent.getStringExtra("movieId");
         getToken();
         initRefreshLayout();
+        initClick();
         getData();
+    }
+
+    private void initClick(){
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                likeAction();
+            }
+        });
+        download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                downloadAction();
+            }
+        });
+    }
+
+    private void likeAction(){
+
+        if(like.getTag().toString().equals("like")){
+            return;
+        }
+        final Map<String,Object> map = new HashMap<>();
+        map.put("token", token);
+        map.put("movieid",movieid);
+        //开始请求
+        Request request = ItheimaHttp.newPostRequest("addMovieLike");//apiUrl格式："xxx/xxxxx"
+        request.putParamsMap(map);
+        Call call = ItheimaHttp.send(request, new HttpResponseListener<CommonBean>() {
+
+            @Override
+            public void onResponse(final CommonBean bean, Headers headers) {
+                System.out.println("print data");
+                System.out.println("print data -- " +bean);
+                int status = bean.getStatus();
+                //判断账号和密码
+                if(status == 1){
+                    like.setImageResource(R.mipmap.xihuan2);
+                    like.setTag("like");
+                    MaterialDialog dialog = new MaterialDialog.Builder(MovieDetailActivity.this)
+                            .title("添加喜爱提示")
+                            .content(bean.getMsg())
+                            .positiveText("确认")
+                            //点击事件添加 方式1
+                            .onAny(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                }
+                            })
+                            .show();
+                }else
+                {
+                    MaterialDialog dialog = new MaterialDialog.Builder(MovieDetailActivity.this)
+                            .title("添加喜爱提示")
+                            .content(bean.getMsg())
+                            .positiveText("确认")
+                            .show();
+                }
+
+            }
+
+
+            /**
+             * 可以不重写失败回调
+             * @param call
+             * @param e
+             */
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable e) {
+                System.out.println("print data fail");
+            }
+        });
+    }
+
+
+    private void downloadAction(){
+
+        final Map<String,Object> map = new HashMap<>();
+        map.put("token", token);
+        map.put("movieid",movieid);
+        //开始请求
+        Request request = ItheimaHttp.newPostRequest("addMovieStorage");//apiUrl格式："xxx/xxxxx"
+        request.putParamsMap(map);
+        Call call = ItheimaHttp.send(request, new HttpResponseListener<CommonBean>() {
+
+            @Override
+            public void onResponse(final CommonBean bean, Headers headers) {
+                System.out.println("print data");
+                System.out.println("print data -- " +bean);
+                int status = bean.getStatus();
+                //判断账号和密码
+                if(status == 1){
+                    MaterialDialog dialog = new MaterialDialog.Builder(MovieDetailActivity.this)
+                            .title("离线缓存提示")
+                            .content(bean.getMsg())
+                            .positiveText("确认")
+                            //点击事件添加 方式1
+                            .onAny(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                }
+                            })
+                            .show();
+                }else
+                {
+                    MaterialDialog dialog = new MaterialDialog.Builder(MovieDetailActivity.this)
+                            .title("离线缓存提示")
+                            .content(bean.getMsg())
+                            .positiveText("确认")
+                            .show();
+                }
+
+            }
+
+
+            /**
+             * 可以不重写失败回调
+             * @param call
+             * @param e
+             */
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable e) {
+                System.out.println("print data fail");
+            }
+        });
     }
 
     private void getData() {
@@ -153,26 +282,39 @@ public class MovieDetailActivity extends AppCompatActivity {
                 System.out.println("print data");
                 System.out.println("print data -- " + bean);
 
-                MovieDetailBean.DataBean.DetailBean detailInfo = bean.getMovieDetailData();
-                String videoPath = detailInfo.getPath().equals("") ? "" : detailInfo.getPath();
-                if (playerVideo != null) {
-                    playerVideo.release();
+                if(bean.getStatus() == 1){
+                    MovieDetailBean.DataBean.DetailBean detailInfo = bean.getMovieDetailData();
+                    String videoPath = detailInfo.getPath().equals("") ? "" : detailInfo.getPath();
+                    if (playerVideo != null) {
+                        playerVideo.release();
+                    }
+                    boolean setUp = playerVideo.setUp(videoPath, JCVideoPlayer.SCREEN_LAYOUT_LIST, "");
+                    if (setUp) {
+                        playerVideo.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        Picasso.with(MovieDetailActivity.this)
+                                .load(detailInfo.getCover())
+                                .into(playerVideo.thumbImageView);
+                    }
+                    moviename.setText(detailInfo.getName());
+                    movieviews.setText(detailInfo.getViews());
+                    movietime.setText(DateUtils.timeDate(detailInfo.getCreatetime()));
+                    movieIntroduction.setText(detailInfo.getSubtitle());
+                    commentnum.setText(detailInfo.getViews() + "条热评");
+                    String islike = detailInfo.getIsLike();
+                    if(islike.equals("like")){
+                        like.setImageResource(R.mipmap.xihuan2);
+                        like.setTag("like");
+                    }
+                    setActorInfo(bean);
+                    setLikeListInfo(bean);
+                    setCommentListInfo(bean);
+                } else {
+                    MaterialDialog dialog = new MaterialDialog.Builder(MovieDetailActivity.this)
+                            .title("温馨提示")
+                            .content(bean.getMsg())
+                            .positiveText("确认")
+                            .show();
                 }
-                boolean setUp = playerVideo.setUp(videoPath, JCVideoPlayer.SCREEN_LAYOUT_LIST, "");
-                if (setUp) {
-                    playerVideo.thumbImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                    Picasso.with(MovieDetailActivity.this)
-                            .load(detailInfo.getCover())
-                            .into(playerVideo.thumbImageView);
-                }
-                moviename.setText(detailInfo.getName());
-                movieviews.setText(detailInfo.getViews());
-                movietime.setText(DateUtils.timeDate(detailInfo.getCreatetime()));
-                movieIntroduction.setText(detailInfo.getSubtitle());
-                commentnum.setText(detailInfo.getViews() + "条热评");
-                setActorInfo(bean);
-                setLikeListInfo(bean);
-                setCommentListInfo(bean);
             }
 
             /**

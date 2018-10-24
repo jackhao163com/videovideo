@@ -2,8 +2,9 @@ package com.cucumber.video.welcomeactivity;
 
 import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,9 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.hedan.textdrawablelibrary.TextViewDrawable;
+import com.itheima.retrofitutils.ItheimaHttp;
 import com.itheima.retrofitutils.L;
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
+import com.itheima.retrofitutils.Request;
+import com.itheima.retrofitutils.listener.HttpResponseListener;
 import com.squareup.picasso.Picasso;
 
 import org.itheima.recycler.adapter.BaseLoadMoreRecyclerAdapter;
@@ -26,13 +31,17 @@ import org.itheima.recycler.widget.ItheimaRecyclerView;
 import org.itheima.recycler.widget.PullToLoadMoreRecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import okhttp3.Headers;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 public class FindActivity extends AppCompatActivity {
     BaseLoadMoreRecyclerAdapter.LoadMoreViewHolder holder;
@@ -47,6 +56,14 @@ public class FindActivity extends AppCompatActivity {
     RecyclerViewHeader recyclerHeader;
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout myswipeRefreshLayout;
+    @BindView(R.id.tab_home)
+    TextViewDrawable tabHome;
+    @BindView(R.id.tab_channel)
+    TextViewDrawable tabChannel;
+    @BindView(R.id.tab_find)
+    TextViewDrawable tabFind;
+    @BindView(R.id.tab_user)
+    TextViewDrawable tabUser;
     private ItheimaRecyclerView myrecyclerView;
     private String token;
     Integer pageIndex = 0;
@@ -72,6 +89,7 @@ public class FindActivity extends AppCompatActivity {
         myrecyclerView = (ItheimaRecyclerView) findViewById(R.id.recycler_view);
         header.attachTo(myrecyclerView);
 
+        setTabClick();
         initListener();
 
         ItemClickSupport itemClickSupport = new ItemClickSupport(myrecyclerView);
@@ -151,6 +169,7 @@ public class FindActivity extends AppCompatActivity {
                     }
                 } else {
                     for (FindBean.DataBean.ItemsBean item : itemDatas) {
+                        item.setIsdeleted(token);
                         itemsBeanList.add(item);
                     }
                 }
@@ -165,34 +184,58 @@ public class FindActivity extends AppCompatActivity {
 
         pullToLoadMoreRecyclerView.setPageSize(6);
         pullToLoadMoreRecyclerView.requestData();
+    }
 
-        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-        bottomBar.selectTabAtPosition(2);
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+    private void setTabClick() {
+        Drawable top = getResources().getDrawable(R.drawable.tab3_1);
+        tabFind.setCompoundDrawablesWithIntrinsicBounds(null, top , null, null);
+
+        tabHome.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTabSelected(@IdRes int tabId) {
-                if (tabId == R.id.tab_user) {
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                    Intent i;
-                    i = new Intent(FindActivity.this, UserActivity.class);
-                    startActivity(i);
-                } else if (tabId == R.id.tab_channel) {
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                    Intent i = new Intent(FindActivity.this, ChannelActivity.class);
-                    startActivity(i);
-                } else if (tabId == R.id.tab_find) {
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                } else if (tabId == R.id.tab_home) {
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                    Intent i = new Intent(FindActivity.this, MainActivity.class);
-                    startActivity(i);
-                }
+            public void onClick(View view) {
+                BottomBarTabClick(0);
             }
         });
+        tabChannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomBarTabClick(1);
+            }
+        });
+        tabFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomBarTabClick(2);
+            }
+        });
+        tabUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomBarTabClick(3);
+            }
+        });
+    }
+
+    private void BottomBarTabClick(int tab) {
+        Intent i;
+        switch (tab) {
+            case 0:
+                i = new Intent(FindActivity.this, MainActivity.class);
+                startActivity(i);
+                return;
+            case 1:
+                i = new Intent(FindActivity.this, ChannelActivity.class);
+                startActivity(i);
+                return;
+            case 2:
+                i = new Intent(FindActivity.this, FindActivity.class);
+                startActivity(i);
+                return;
+            case 3:
+                i = new Intent(FindActivity.this, UserActivity.class);
+                startActivity(i);
+                return;
+        }
     }
 
     /**
@@ -289,7 +332,7 @@ public class FindActivity extends AppCompatActivity {
         ImageView downloads;
         @BindView(R.id.share)
         ImageView share;
-//        @BindView(R.id.img)
+        //        @BindView(R.id.img)
 //        ImageView img;
         @BindView(R.id.text)
         TextView text;
@@ -300,6 +343,7 @@ public class FindActivity extends AppCompatActivity {
         //换成你布局文件中的id
         public MyRecyclerViewHolder(ViewGroup parentView, int itemResId) {
             super(parentView, itemResId);
+
         }
 
         /**
@@ -309,7 +353,9 @@ public class FindActivity extends AppCompatActivity {
         public void onBindRealData() {
             String actorname = mData.getName().equals("") ? "" : mData.getName();
             String cover = mData.getCover().equals("") ? "" : mData.getCover();
-            String videoPath = mData.getPath().equals("") ? "" :mData.getPath();
+            String videoPath = mData.getPath().equals("") ? "" : mData.getPath();
+            String movieid = mData.getId();
+            String token = mData.getIsdeleted();
             text.setText(actorname);
             if (player != null) {
                 player.release();
@@ -322,8 +368,128 @@ public class FindActivity extends AppCompatActivity {
                         .load(cover)
                         .into(player.thumbImageView);
             }
+            initClick(movieid,token);
         }
 
+        private void initClick(final String movieid,final String token){
+            like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    likeAction(movieid,token);
+                }
+            });
+            downloads.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    downloadAction(movieid,token);
+                }
+            });
+        }
+
+        private void likeAction(String movieid,final String token){
+
+            final Map<String,Object> map = new HashMap<>();
+            map.put("token", token);
+            map.put("movieid",movieid);
+            //开始请求
+            Request request = ItheimaHttp.newPostRequest("addMovieLike");//apiUrl格式："xxx/xxxxx"
+            request.putParamsMap(map);
+            Call call = ItheimaHttp.send(request, new HttpResponseListener<CommonBean>() {
+
+                @Override
+                public void onResponse(final CommonBean bean, Headers headers) {
+                    System.out.println("print data");
+                    System.out.println("print data -- " +bean);
+                    int status = bean.getStatus();
+                    //判断账号和密码
+                    if(status == 1){
+                        MaterialDialog dialog = new MaterialDialog.Builder(mContext)
+                                .title("添加喜爱提示")
+                                .content(bean.getMsg())
+                                .positiveText("确认")
+                                //点击事件添加 方式1
+                                .onAny(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                    }
+                                })
+                                .show();
+                    }else
+                    {
+                        MaterialDialog dialog = new MaterialDialog.Builder(mContext)
+                                .title("添加喜爱提示")
+                                .content(bean.getMsg())
+                                .positiveText("确认")
+                                .show();
+                    }
+
+                }
+
+
+                /**
+                 * 可以不重写失败回调
+                 * @param call
+                 * @param e
+                 */
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable e) {
+                    System.out.println("print data fail");
+                }
+            });
+        }
+        private void downloadAction(String movieid,final String token){
+
+            final Map<String,Object> map = new HashMap<>();
+            map.put("token", mContext);
+            map.put("movieid",movieid);
+            //开始请求
+            Request request = ItheimaHttp.newPostRequest("addMovieStorage");//apiUrl格式："xxx/xxxxx"
+            request.putParamsMap(map);
+            Call call = ItheimaHttp.send(request, new HttpResponseListener<CommonBean>() {
+
+                @Override
+                public void onResponse(final CommonBean bean, Headers headers) {
+                    System.out.println("print data");
+                    System.out.println("print data -- " +bean);
+                    int status = bean.getStatus();
+                    //判断账号和密码
+                    if(status == 1){
+                        MaterialDialog dialog = new MaterialDialog.Builder(mContext)
+                                .title("离线缓存提示")
+                                .content(bean.getMsg())
+                                .positiveText("确认")
+                                //点击事件添加 方式1
+                                .onAny(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                    }
+                                })
+                                .show();
+                    }else
+                    {
+                        MaterialDialog dialog = new MaterialDialog.Builder(mContext)
+                                .title("离线缓存提示")
+                                .content(bean.getMsg())
+                                .positiveText("确认")
+                                .show();
+                    }
+
+                }
+
+
+                /**
+                 * 可以不重写失败回调
+                 * @param call
+                 * @param e
+                 */
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable e) {
+                    System.out.println("print data fail");
+                }
+            });
+        }
         /**
          * 给按钮添加点击事件（button改成你要添加点击事件的id）
          * @param v

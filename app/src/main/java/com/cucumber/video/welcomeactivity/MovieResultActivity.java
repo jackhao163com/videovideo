@@ -39,8 +39,6 @@ public class MovieResultActivity extends AppCompatActivity implements View.OnCli
     ImageView setting;
     @BindView(R.id.et_bg)
     TextView etBg;
-    @BindView(R.id.tuiguagn_title)
-    RelativeLayout tuiguagnTitle;
     @BindView(R.id.recycler_header)
     RecyclerViewHeader recyclerHeader;
     @BindView(R.id.swipe_refresh_layout)

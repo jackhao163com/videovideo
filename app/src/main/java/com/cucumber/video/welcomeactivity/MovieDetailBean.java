@@ -198,6 +198,7 @@ public class MovieDetailBean {
             private String createtime;
             private String sequence;
             private String isdeleted;
+            private String isLike;
 
             public String getId() {
                 return id;
@@ -213,6 +214,14 @@ public class MovieDetailBean {
 
             public void setName(String name) {
                 this.name = name;
+            }
+
+            public String getIsLike() {
+                return isLike;
+            }
+
+            public void setIsLike(String isLike) {
+                this.isLike = isLike;
             }
 
             public String getSubtitle() {

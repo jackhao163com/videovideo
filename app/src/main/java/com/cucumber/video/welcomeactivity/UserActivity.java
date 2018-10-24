@@ -2,8 +2,8 @@ package com.cucumber.video.welcomeactivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,11 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.hedan.textdrawablelibrary.TextViewDrawable;
 import com.itheima.retrofitutils.ItheimaHttp;
 import com.itheima.retrofitutils.Request;
 import com.itheima.retrofitutils.listener.HttpResponseListener;
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -41,6 +41,14 @@ public class UserActivity extends AppCompatActivity {
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
+    @BindView(R.id.tab_home)
+    TextViewDrawable tabHome;
+    @BindView(R.id.tab_channel)
+    TextViewDrawable tabChannel;
+    @BindView(R.id.tab_find)
+    TextViewDrawable tabFind;
+    @BindView(R.id.tab_user)
+    TextViewDrawable tabUser;
     private ImageView mSettings;
     private String token;
     private MyRecycleAdapter mAdapter;
@@ -51,7 +59,7 @@ public class UserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user);
         ButterKnife.bind(this);
         getToken();
-
+        setTabClick();
 
         //开始请求
         Request request = ItheimaHttp.newGetRequest("getuserindexdata?token=" + token);//apiUrl格式："xxx/xxxxx"
@@ -62,9 +70,18 @@ public class UserActivity extends AppCompatActivity {
                 System.out.println("print data");
                 System.out.println("print data -- " + bean);
 
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(UserActivity.this, LinearLayoutManager.VERTICAL, false));
-                mAdapter = new MyRecycleAdapter(UserActivity.this, bean);
-                mRecyclerView.setAdapter(mAdapter);
+                if (bean.getStatus() == 1) {
+                    mRecyclerView.setLayoutManager(new LinearLayoutManager(UserActivity.this, LinearLayoutManager.VERTICAL, false));
+                    mAdapter = new MyRecycleAdapter(UserActivity.this, bean);
+                    mRecyclerView.setAdapter(mAdapter);
+                }
+                else {
+                    MaterialDialog dialog = new MaterialDialog.Builder(UserActivity.this)
+                            .title("温馨提示")
+                            .content(bean.getMsg())
+                            .positiveText("确认")
+                            .show();
+                }
             }
 
             /**
@@ -78,35 +95,56 @@ public class UserActivity extends AppCompatActivity {
             }
         });
 
+    }
 
-        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-        bottomBar.selectTabAtPosition(3);
+    private void setTabClick() {
+        Drawable top = getResources().getDrawable(R.drawable.tab4_1);
+        tabUser.setCompoundDrawablesWithIntrinsicBounds(null, top , null, null);
 
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+        tabHome.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTabSelected(@IdRes int tabId) {
-                if (tabId == R.id.tab_user) {
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                } else if (tabId == R.id.tab_channel) {
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                    Intent i;
-                    i = new Intent(UserActivity.this, ChannelActivity.class);
-                    startActivity(i);
-                } else if (tabId == R.id.tab_find) {
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                    Intent i = new Intent(UserActivity.this, FindActivity.class);
-                    startActivity(i);
-                } else if (tabId == R.id.tab_home) {
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                    Intent i = new Intent(UserActivity.this, MainActivity.class);
-                    startActivity(i);
-                }
+            public void onClick(View view) {
+                BottomBarTabClick(0);
             }
         });
+        tabChannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomBarTabClick(1);
+            }
+        });
+        tabFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomBarTabClick(2);
+            }
+        });
+        tabUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomBarTabClick(3);
+            }
+        });
+    }
+
+    private void BottomBarTabClick(int tab) {
+        Intent i;
+        switch (tab) {
+            case 0:
+                i = new Intent(UserActivity.this, MainActivity.class);
+                startActivity(i);
+                return;
+            case 1:
+                i = new Intent(UserActivity.this, ChannelActivity.class);
+                startActivity(i);
+                return;
+            case 2:
+                i = new Intent(UserActivity.this, FindActivity.class);
+                startActivity(i);
+                return;
+            case 3:
+                return;
+        }
     }
 
     private void getToken() {
@@ -115,7 +153,7 @@ public class UserActivity extends AppCompatActivity {
     }
 
 
-    public class MyRecycleAdapter extends RecyclerView.Adapter<UserActivity.MyRecycleViewHolder> {
+    public class MyRecycleAdapter extends RecyclerView.Adapter<MyRecycleViewHolder> {
         private LayoutInflater mInflater;
         private Context context;
         private UserDataModel userdata;
@@ -255,14 +293,14 @@ public class UserActivity extends AppCompatActivity {
                                         long arg3) {
                     String categoryId = (String) CatIdList[position];
                     Intent i;
-                    switch (categoryId){
+                    switch (categoryId) {
                         case "3":
-                             i = new Intent(UserActivity.this, NoticyActivity.class);
+                            i = new Intent(UserActivity.this, NoticyActivity.class);
                             i.putExtra("type", 0);
                             startActivity(i);
                             break;
                         case "1":
-                             i = new Intent(UserActivity.this, TuiActivity.class);
+                            i = new Intent(UserActivity.this, TuiActivity.class);
                             i.putExtra("type", 0);
                             startActivity(i);
                             break;
@@ -336,10 +374,16 @@ public class UserActivity extends AppCompatActivity {
                 }
             });
 
+            toLikeList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(UserActivity.this, LikeActivity.class));
+                }
+            });
             UserDataModel.DataBean.UserinfoBean userinfo = data.getUItemDatas();
-            viewnums.setText("目前历史观看过"+userinfo.getMovieviewmums()+"部");
-            likenums.setText("目前已有喜欢"+userinfo.getLikenums()+"部");
-            huancunNums.setText("目前本地大片有"+userinfo.getStoragenums()+"部");
+            viewnums.setText("目前历史观看过" + userinfo.getMovieviewmums() + "部");
+            likenums.setText("目前已有喜欢" + userinfo.getLikenums() + "部");
+            huancunNums.setText("目前本地大片有" + userinfo.getStoragenums() + "部");
 
             HistoryHolder girlHolder = (HistoryHolder) holder;
             final List<Map<String, Object>> mDataList = new ArrayList<Map<String, Object>>();
@@ -378,7 +422,7 @@ public class UserActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> arg0, View arg1, int position,
                                         long arg3) {
                     String movieId = (String) mDataList.get(position).get("movieid");
-                    Intent i = new Intent(UserActivity.this,MovieDetailActivity.class);
+                    Intent i = new Intent(UserActivity.this, MovieDetailActivity.class);
                     i.putExtra("movieId", movieId);
                     startActivity(i);
                 }

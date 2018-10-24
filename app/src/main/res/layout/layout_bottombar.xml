@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomBar"
+    android:background="@color/bottombarbg"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true">
+
+    <LinearLayout
+        android:id="@+id/tab_menu"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <com.hedan.textdrawablelibrary.TextViewDrawable
+            android:id="@+id/tab_home"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/tab1_2"
+            android:gravity="center"
+            android:text="首页"
+            android:textColor="@color/bottombarfont"
+            app:drawableTopHeight="24dp"
+            app:drawableTopWidth="24dp" />
+
+        <com.hedan.textdrawablelibrary.TextViewDrawable
+            android:id="@+id/tab_channel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/tab2_2"
+            android:gravity="center"
+            android:text="频道"
+            android:textColor="@color/bottombarfont"
+            app:drawableTopHeight="24dp"
+            app:drawableTopWidth="24dp" />
+
+        <com.hedan.textdrawablelibrary.TextViewDrawable
+            android:id="@+id/tab_find"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/tab3_2"
+            android:gravity="center"
+            android:text="发现"
+            android:textColor="@color/bottombarfont"
+            app:drawableTopHeight="24dp"
+            app:drawableTopWidth="24dp" />
+
+        <com.hedan.textdrawablelibrary.TextViewDrawable
+            android:id="@+id/tab_user"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/tab4_2"
+            android:gravity="center"
+            android:text="我的"
+            android:textColor="@color/bottombarfont"
+            app:drawableTopHeight="24dp"
+            app:drawableTopWidth="24dp" />
+
+
+    </LinearLayout>
+</LinearLayout>

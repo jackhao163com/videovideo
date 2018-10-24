@@ -9,7 +9,7 @@
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="70dp">
+        android:layout_marginBottom="55dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -19,13 +19,5 @@
         </android.support.v7.widget.RecyclerView>
     </RelativeLayout>
 
-    <com.roughike.bottombar.BottomBar
-        android:id="@+id/bottomBar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        app:bb_activeTabColor="#f58a76"
-        app:bb_inActiveTabColor="#767676"
-        app:bb_tabXmlResource="@xml/bottombar_tabs" />
+    <include layout="@layout/layout_bottombar"></include>
 </RelativeLayout>

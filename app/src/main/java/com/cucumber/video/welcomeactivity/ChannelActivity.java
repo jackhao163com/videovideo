@@ -2,8 +2,8 @@ package com.cucumber.video.welcomeactivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,12 +19,12 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.hedan.textdrawablelibrary.TextViewDrawable;
 import com.itheima.loopviewpager.LoopViewPager;
 import com.itheima.retrofitutils.ItheimaHttp;
 import com.itheima.retrofitutils.Request;
 import com.itheima.retrofitutils.listener.HttpResponseListener;
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -47,8 +47,14 @@ public class ChannelActivity extends AppCompatActivity {
     RelativeLayout header;
     @BindView(R.id.et_bg)
     TextView etBg;
-    @BindView(R.id.bottomBar)
-    BottomBar bottomBar;
+    @BindView(R.id.tab_home)
+    TextViewDrawable tabHome;
+    @BindView(R.id.tab_channel)
+    TextViewDrawable tabChannel;
+    @BindView(R.id.tab_find)
+    TextViewDrawable tabFind;
+    @BindView(R.id.tab_user)
+    TextViewDrawable tabUser;
 
     private ImageView mSettings;
     private String token;
@@ -65,7 +71,7 @@ public class ChannelActivity extends AppCompatActivity {
     }
 
     private void initActivity() {
-
+        setTabClick();
         getToken();
 //        mSettings = (ImageView)findViewById(R.id.setting);
 //        mSettings.setOnClickListener(new View.OnClickListener() {
@@ -82,10 +88,18 @@ public class ChannelActivity extends AppCompatActivity {
             public void onResponse(ChannelBean bean, Headers headers) {
                 System.out.println("print data");
                 System.out.println("print data -- " + bean);
+                if(bean.getStatus() == 1) {
 
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(ChannelActivity.this, LinearLayoutManager.VERTICAL, false));
-                mAdapter = new MyRecycleAdapter(ChannelActivity.this, bean);
-                mRecyclerView.setAdapter(mAdapter);
+                    mRecyclerView.setLayoutManager(new LinearLayoutManager(ChannelActivity.this, LinearLayoutManager.VERTICAL, false));
+                    mAdapter = new MyRecycleAdapter(ChannelActivity.this, bean);
+                    mRecyclerView.setAdapter(mAdapter);
+                } else {
+                    MaterialDialog dialog = new MaterialDialog.Builder(ChannelActivity.this)
+                            .title("温馨提示")
+                            .content(bean.getMsg())
+                            .positiveText("确认")
+                            .show();
+                }
             }
 
             /**
@@ -99,32 +113,83 @@ public class ChannelActivity extends AppCompatActivity {
             }
         });
 
-        bottomBar.selectTabAtPosition(1);
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+//        bottomBar.selectTabAtPosition(1);
+//        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+//            @Override
+//            public void onTabSelected(@IdRes int tabId) {
+//                if (tabId == R.id.tab_user) {
+//                    // The tab with id R.id.tab_favorites was selected,
+//                    // change your content accordingly.
+//                    Intent i;
+//                    i = new Intent(ChannelActivity.this, UserActivity.class);
+//                    startActivity(i);
+//                } else if (tabId == R.id.tab_channel) {
+//                    // The tab with id R.id.tab_favorites was selected,
+//                    // change your content accordingly.
+//                } else if (tabId == R.id.tab_find) {
+//                    // The tab with id R.id.tab_favorites was selected,
+//                    // change your content accordingly.
+//                    Intent i = new Intent(ChannelActivity.this, FindActivity.class);
+//                    startActivity(i);
+//                } else if (tabId == R.id.tab_home) {
+//                    // The tab with id R.id.tab_favorites was selected,
+//                    // change your content accordingly.
+//                    Intent i = new Intent(ChannelActivity.this, MainActivity.class);
+//                    startActivity(i);
+//                }
+//            }
+//        });
+    }
+
+    private void setTabClick() {
+        Drawable top = getResources().getDrawable(R.drawable.tab2_1);
+        tabChannel.setCompoundDrawablesWithIntrinsicBounds(null, top , null, null);
+
+        tabHome.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTabSelected(@IdRes int tabId) {
-                if (tabId == R.id.tab_user) {
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                    Intent i;
-                    i = new Intent(ChannelActivity.this, UserActivity.class);
-                    startActivity(i);
-                } else if (tabId == R.id.tab_channel) {
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                } else if (tabId == R.id.tab_find) {
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                    Intent i = new Intent(ChannelActivity.this, FindActivity.class);
-                    startActivity(i);
-                } else if (tabId == R.id.tab_home) {
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
-                    Intent i = new Intent(ChannelActivity.this, MainActivity.class);
-                    startActivity(i);
-                }
+            public void onClick(View view) {
+                BottomBarTabClick(0);
             }
         });
+        tabChannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomBarTabClick(1);
+            }
+        });
+        tabFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomBarTabClick(2);
+            }
+        });
+        tabUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomBarTabClick(3);
+            }
+        });
+    }
+
+    private void BottomBarTabClick(int tab) {
+        Intent i;
+        switch (tab) {
+            case 0:
+                i = new Intent(ChannelActivity.this, MainActivity.class);
+                startActivity(i);
+                return;
+            case 1:
+
+                return;
+            case 2:
+                i = new Intent(ChannelActivity.this, FindActivity.class);
+                startActivity(i);
+                return;
+            case 3:
+                i = new Intent(ChannelActivity.this, UserActivity.class);
+                startActivity(i);
+                return;
+        }
     }
 
     private void getToken() {
@@ -152,7 +217,7 @@ public class ChannelActivity extends AppCompatActivity {
         return titleData;
     }
 
-    public class MyRecycleAdapter extends RecyclerView.Adapter<ChannelActivity.MyRecycleViewHolder> {
+    public class MyRecycleAdapter extends RecyclerView.Adapter<MyRecycleViewHolder> {
         private LayoutInflater mInflater;
         private Context context;
         private ChannelBean userdata;
@@ -288,7 +353,7 @@ public class ChannelActivity extends AppCompatActivity {
             }
             final String[] from = {"cover", "name"};
             final int[] to = {R.id.img, R.id.text};
-            SimpleAdapter gridAdapter = new SimpleAdapter(ChannelActivity.this, mDataList, R.layout.item_common, from, to);
+            SimpleAdapter gridAdapter = new SimpleAdapter(ChannelActivity.this, mDataList, R.layout.item_channel, from, to);
             girlHolder.gridView.setAdapter(gridAdapter);
             gridAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
                 @Override
@@ -343,7 +408,7 @@ public class ChannelActivity extends AppCompatActivity {
             }
             final String[] from = {"cover", "name"};
             final int[] to = {R.id.img, R.id.text};
-            SimpleAdapter gridAdapter = new SimpleAdapter(ChannelActivity.this, mDataList, R.layout.item_common, from, to);
+            SimpleAdapter gridAdapter = new SimpleAdapter(ChannelActivity.this, mDataList, R.layout.item_channel, from, to);
             girlHolder.gridView.setAdapter(gridAdapter);
             gridAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
                 @Override
@@ -399,7 +464,7 @@ public class ChannelActivity extends AppCompatActivity {
             }
             final String[] from = {"cover", "name"};
             final int[] to = {R.id.img, R.id.text};
-            SimpleAdapter gridAdapter = new SimpleAdapter(ChannelActivity.this, mDataList, R.layout.item_common, from, to);
+            SimpleAdapter gridAdapter = new SimpleAdapter(ChannelActivity.this, mDataList, R.layout.item_channel, from, to);
             girlHolder.gridView.setAdapter(gridAdapter);
             gridAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
                 @Override
