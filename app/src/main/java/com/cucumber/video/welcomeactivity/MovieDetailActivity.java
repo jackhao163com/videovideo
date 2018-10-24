@@ -278,7 +278,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         Call call = ItheimaHttp.send(request, new HttpResponseListener<MovieDetailBean>() {
 
             @Override
-            public void onResponse(MovieDetailBean bean, Headers headers) {
+            public void onResponse(final MovieDetailBean bean, Headers headers) {
                 System.out.println("print data");
                 System.out.println("print data -- " + bean);
 
@@ -313,6 +313,17 @@ public class MovieDetailActivity extends AppCompatActivity {
                             .title("温馨提示")
                             .content(bean.getMsg())
                             .positiveText("确认")
+                            //点击事件添加 方式1
+                            .onAny(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    if(bean.getStatus() == -99){
+                                        Intent i = new Intent(MovieDetailActivity.this, MainActivity.class);
+                                        startActivity(i);
+                                        MovieDetailActivity.this.finish();
+                                    }
+                                }
+                            })
                             .show();
                 }
             }
