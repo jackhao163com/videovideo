@@ -139,68 +139,6 @@
                             android:typeface="monospace" />
 
 
-                        <TextView
-                            android:id="@+id/order_renqi3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:clickable="true"
-                            android:paddingBottom="5dp"
-                            android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
-                            android:paddingTop="5dp"
-                            android:text="人气最高"
-                            android:textSize="15sp"
-                            android:typeface="monospace" />
-
-                        <TextView
-                            android:id="@+id/order_pianliang3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:clickable="true"
-                            android:text="片量最多"
-                            android:textSize="15sp"
-                            android:typeface="monospace" />
-
-                        <TextView
-                            android:id="@+id/order_renqi4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:clickable="true"
-                            android:text="人气最高"
-                            android:textSize="15sp"
-                            android:typeface="monospace" />
-
-                        <TextView
-                            android:id="@+id/order_pianliang4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:text="片量最多"
-                            android:textSize="15sp"
-                            android:typeface="monospace" />
-
-                        <TextView
-                            android:id="@+id/order_renqi5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:text="人气最高"
-                            android:textSize="15sp"
-                            android:typeface="monospace" />
-
-                        <TextView
-                            android:id="@+id/order_pianliang5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:clickable="true"
-                            android:text="片量最多"
-                            android:textSize="15sp"
-                            android:typeface="monospace" />
-
                     </LinearLayout>
                 </HorizontalScrollView>
 

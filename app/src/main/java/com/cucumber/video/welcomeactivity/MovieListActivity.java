@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
@@ -14,8 +15,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.itheima.retrofitutils.ItheimaHttp;
 import com.itheima.retrofitutils.L;
+import com.itheima.retrofitutils.Request;
+import com.itheima.retrofitutils.listener.HttpResponseListener;
 import com.squareup.picasso.Picasso;
 
 import org.itheima.recycler.adapter.BaseLoadMoreRecyclerAdapter;
@@ -32,6 +37,8 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Headers;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 
 public class MovieListActivity extends AppCompatActivity implements View.OnClickListener {
@@ -53,18 +60,6 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
     HorizontalScrollView orderHh;
     @BindView(R.id.order_all)
     TextView orderAll;
-    @BindView(R.id.order_renqi3)
-    TextView orderRenqi3;
-    @BindView(R.id.order_pianliang3)
-    TextView orderPianliang3;
-    @BindView(R.id.order_renqi4)
-    TextView orderRenqi4;
-    @BindView(R.id.order_pianliang4)
-    TextView orderPianliang4;
-    @BindView(R.id.order_renqi5)
-    TextView orderRenqi5;
-    @BindView(R.id.order_pianliang5)
-    TextView orderPianliang5;
     @BindView(R.id.order_cat)
     LinearLayout orderCat;
     @BindView(R.id.recycler_header)
@@ -90,7 +85,7 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movielist);
         getToken();
-
+        addCateList();
         //获取传参
         Intent intent = getIntent();
         String catgoryId = intent.getStringExtra("catgoryId");
@@ -123,7 +118,6 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
         orderLike.setOnClickListener(this);
         orderNew.setOnClickListener(this);
         orderAll.setOnClickListener(this);
-        orderRenqi3.setOnClickListener(this);
 
         getToken();
 
@@ -219,7 +213,6 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
                 refreshPage(v, 1);
                 break;
             case R.id.order_all:
-            case R.id.order_renqi3:
                 refreshPage(v, 2);
                 break;
             case R.id.togoback:
@@ -228,6 +221,60 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    private void addCateList(){
+
+        //开始请求
+        Request request = ItheimaHttp.newGetRequest("getMovieCategoryList?token=" + token);//apiUrl格式："xxx/xxxxx"
+        Call call = ItheimaHttp.send(request, new HttpResponseListener<CatBean>() {
+
+            @Override
+            public void onResponse(CatBean bean, Headers headers) {
+                System.out.println("print data");
+                System.out.println("print data -- " + bean);
+
+                if(bean.getStatus() == 1){
+                    List<CatBean.DataBean> taglistdata =  bean.getData();
+                    if(taglistdata.size() > 0){
+                        for(CatBean.DataBean tag : taglistdata){
+                            TextView tagdiv = (TextView) LayoutInflater.from(MovieListActivity.this).inflate(R.layout.item_order_div,null);
+//                    TextView tagdiv = (TextView)tagItem.findViewById(R.id.tagid);
+                            tagdiv.setText(tag.getName());
+                            tagdiv.setTag(tag.getId());
+                            tagdiv.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    refreshPage(view, 2);
+                                }
+                            });
+                            orderCat.addView(tagdiv);
+                        }
+                    }
+
+                } else {
+                    showToast(bean.getMsg());
+                }
+            }
+
+            /**
+             * 可以不重写失败回调
+             * @param call
+             * @param e
+             */
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable e) {
+                System.out.println("print data fail");
+            }
+        });
+    }
+    public void showToast(final String msg) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MovieListActivity.this, msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
     private void refreshPage(View v, int group) {
         TextView textview = (TextView) v;
         textview.setBackground(getResources().getDrawable(R.drawable.bg_yuan));
