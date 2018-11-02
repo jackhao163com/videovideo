@@ -68,6 +68,7 @@ public class MovieResultActivity extends AppCompatActivity implements View.OnCli
         //获取传参
         Intent intent = getIntent();
         final String search = intent.getStringExtra("search");
+        final String tagId = intent.getStringExtra("tagId");
 
         ButterKnife.bind(this);
 
@@ -111,7 +112,7 @@ public class MovieResultActivity extends AppCompatActivity implements View.OnCli
                         break;
                 }
                 //接口
-                return "getMovieList?pageIndex=" + pageIndex + "&token=" + token + "&search=" + search;
+                return "getMovieList?pageIndex=" + pageIndex + "&token=" + token + "&search=" + search + "&tagId=" + tagId;
             }
 
             //            //是否加载更多的数据，根据业务逻辑自行判断，true表示有更多的数据，false表示没有更多的数据，如果不需要监听可以不重写该方法
