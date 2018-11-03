@@ -72,6 +72,10 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
     private ItheimaRecyclerView myrecyclerView;
     private TextView currentOrder;
     private TextView currentCat;
+    private RelativeLayout footer;
+
+    private String categoryId ;
+    private String orderId ;
 
     Integer pageIndex = 0;
     private int state = 0;
@@ -88,8 +92,8 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
         addCateList();
         //获取传参
         Intent intent = getIntent();
-        String catgoryId = intent.getStringExtra("catgoryId");
-        String orderId = intent.getStringExtra("orderId");
+        categoryId = intent.getStringExtra("categoryId");
+        orderId = intent.getStringExtra("orderId");
 
         ButterKnife.bind(this);
 
@@ -101,6 +105,7 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
         RecyclerViewHeader header = (RecyclerViewHeader) findViewById(R.id.recycler_header);
         myrecyclerView = (ItheimaRecyclerView) findViewById(R.id.recycler_view);
         header.attachTo(myrecyclerView);
+        footer = (RelativeLayout) findViewById(R.id.footer);
 
         ItemClickSupport itemClickSupport = new ItemClickSupport(myrecyclerView);
         //点击事件
@@ -140,7 +145,7 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
                         break;
                 }
                 //接口
-                return "getMovieList?pageIndex=" + pageIndex + "&token=" + token;
+                return "getMovieList?pageIndex=" + pageIndex + "&token=" + token +"&categoryId="+categoryId+"&orderId="+orderId;
             }
 
             //            //是否加载更多的数据，根据业务逻辑自行判断，true表示有更多的数据，false表示没有更多的数据，如果不需要监听可以不重写该方法
@@ -174,9 +179,12 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
                 L.i("setLoadingDataListener onSuccess: " + o);
                 List<MovieBean.DataBean.ItemsBean> itemDatas = o.getItemDatas();
                 if (itemDatas.size() == 0) {
-                    holder.loadingFinish((String) null);
+                    if(holder != null)holder.loadingFinish((String) null);
                     if (myswipeRefreshLayout != null) {
                         myswipeRefreshLayout.setRefreshing(false);
+                    }
+                    if(itemsBeanList.size() == 0){
+                        footer.setVisibility(View.VISIBLE);
                     }
                 } else {
                     for (MovieBean.DataBean.ItemsBean item : itemDatas) {
@@ -208,11 +216,19 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
         Log.i("", "点击了---" + v.getId());
         switch (v.getId()) {
             case R.id.order_like:
+                orderId = "likest";
+                refreshPage(v, 1);
+                break;
             case R.id.order_morest:
+                orderId = "morest";
+                refreshPage(v, 1);
+                break;
             case R.id.order_new:
+                orderId = "newest";
                 refreshPage(v, 1);
                 break;
             case R.id.order_all:
+                categoryId = "";
                 refreshPage(v, 2);
                 break;
             case R.id.togoback:
@@ -235,14 +251,16 @@ public class MovieListActivity extends AppCompatActivity implements View.OnClick
                 if(bean.getStatus() == 1){
                     List<CatBean.DataBean> taglistdata =  bean.getData();
                     if(taglistdata.size() > 0){
-                        for(CatBean.DataBean tag : taglistdata){
+                        for(final CatBean.DataBean tag : taglistdata){
                             TextView tagdiv = (TextView) LayoutInflater.from(MovieListActivity.this).inflate(R.layout.item_order_div,null);
 //                    TextView tagdiv = (TextView)tagItem.findViewById(R.id.tagid);
                             tagdiv.setText(tag.getName());
                             tagdiv.setTag(tag.getId());
+                            final String tempid = tag.getId();
                             tagdiv.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+                                    categoryId = tempid;
                                     refreshPage(view, 2);
                                 }
                             });

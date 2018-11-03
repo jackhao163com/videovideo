@@ -65,7 +65,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="20dp"
                 android:gravity="center"
-                android:text="取消"
+                android:text="搜索"
                 android:textColor="#CC9966"
                 android:textSize="15sp"
                 />

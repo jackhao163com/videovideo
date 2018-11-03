@@ -161,7 +161,15 @@ public class MovieDetailActivity extends AppCompatActivity {
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                likeAction();
+                try {
+                    likeAction();
+                }catch (Exception ex){
+                    MaterialDialog dialog = new MaterialDialog.Builder(MovieDetailActivity.this)
+                            .title("添加喜爱提示")
+                            .content("添加喜爱失败了！！！")
+                            .positiveText("确认")
+                            .show();
+                }
             }
         });
         download.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +186,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private void likeAction(){
 
-        if(like.getTag().toString().equals("like")){
+        if(like.getTag() != null && like.getTag().toString().equals("like")){
             return;
         }
         final Map<String,Object> map = new HashMap<>();
@@ -401,10 +409,10 @@ public class MovieDetailActivity extends AppCompatActivity {
                     }
                     moviepath = videoPath;
                     moviename.setText(detailInfo.getName());
-                    movieviews.setText(detailInfo.getViews());
+                    movieviews.setText(detailInfo.getViews() +"次");
                     movietime.setText(DateUtils.timeDate(detailInfo.getCreatetime()));
                     movieIntroduction.setText(detailInfo.getSubtitle());
-                    commentnum.setText(detailInfo.getViews() + "条热评");
+                    commentnum.setText(detailInfo.getCommentnums() + "条热评");
                     String islike = detailInfo.getIsLike();
                     if(islike.equals("like")){
                         like.setImageResource(R.mipmap.xihuan2);

@@ -16,7 +16,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="0dp"
             android:background="@mipmap/zxpy1"
-            android:scaleType="fitXY" />
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/text"

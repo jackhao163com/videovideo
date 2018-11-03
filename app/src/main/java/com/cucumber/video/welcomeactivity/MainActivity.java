@@ -192,7 +192,8 @@ public class MainActivity extends AppCompatActivity {
                                                 long arg3) {
                             String categoryId = (String) CatIdList[position];
                             Intent i = new Intent(MainActivity.this, MovieListActivity.class);
-                            i.putExtra("catgoryId", categoryId);
+                            categoryId = categoryId.equals("8") ? "" : categoryId;
+                            i.putExtra("categoryId", categoryId);
                             startActivity(i);
                         }
                     });

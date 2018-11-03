@@ -159,4 +159,25 @@
         </FrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_marginTop="150dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@null">
+
+        <ImageView
+            android:id="@+id/emptyImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="top|end"
+            android:layout_marginStart="0dp"
+            android:contentDescription="影片列表"
+            android:gravity="center"
+            android:src="@mipmap/guankanlishi" />
+    </RelativeLayout>
+
 </RelativeLayout>

@@ -63,7 +63,7 @@ public class TuiMaActivity extends AppCompatActivity {
             }
         });
 
-        String content = "http://hgweb.joysw.win:82/#/movielist";
+        String content = "http://hgmovie.joysw.win:82/uploads/apk/huanggua.apk?inviteCode="+tuicode;
         Bitmap bitmap = null;
         try {
             bitmap = BitmapUtils.create2DCode(content);

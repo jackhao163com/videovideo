@@ -97,8 +97,9 @@ private String mNames[] = {
          findViewById(R.id.search_cancle).setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
-                 startActivity(new Intent(MainSearchActivity.this, MainActivity.class));
-                 finish();//关闭页面
+                 Intent i = new Intent(MainSearchActivity.this, MovieResultActivity.class);
+                 i.putExtra("search",mEdit.getText());
+                 startActivity(i);
              }
          });
 

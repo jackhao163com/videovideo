@@ -193,6 +193,7 @@ public class MovieDetailBean {
             private String path;
             private String actorlist;
             private String likenum;
+            private String commentnums;
             private String views;
             private String ishot;
             private String createtime;
@@ -278,6 +279,14 @@ public class MovieDetailBean {
 
             public void setViews(String views) {
                 this.views = views;
+            }
+
+            public String getCommentnums() {
+                return commentnums;
+            }
+
+            public void setCommentnums(String commentnums) {
+                this.commentnums = commentnums;
             }
 
             public String getIshot() {
