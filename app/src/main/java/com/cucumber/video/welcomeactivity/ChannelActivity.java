@@ -376,7 +376,7 @@ public class ChannelActivity extends AppCompatActivity {
                                         long arg3) {
                     String categoryId = "";//(String) CatIdList[position];
                     Intent i = new Intent(ChannelActivity.this, MovieListActivity.class);
-                    i.putExtra("catgoryId", categoryId);
+                    i.putExtra("categoryId", categoryId);
                     startActivity(i);
                 }
             });
@@ -430,8 +430,8 @@ public class ChannelActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> arg0, View arg1, int position,
                                         long arg3) {
                     String categoryId = "";//(String) CatIdList[position];
-                    Intent i = new Intent(ChannelActivity.this, MovieListActivity.class);
-                    i.putExtra("catgoryId", categoryId);
+                    Intent i = new Intent(ChannelActivity.this, TagListActivity.class);
+                    i.putExtra("tagId", categoryId);
                     startActivity(i);
                 }
             });
@@ -486,8 +486,8 @@ public class ChannelActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> arg0, View arg1, int position,
                                         long arg3) {
                     String categoryId = "";//(String) CatIdList[position];
-                    Intent i = new Intent(ChannelActivity.this, MovieListActivity.class);
-                    i.putExtra("catgoryId", categoryId);
+                    Intent i = new Intent(ChannelActivity.this, TagListActivity.class);
+                    i.putExtra("tagId", categoryId);
                     startActivity(i);
                 }
             });

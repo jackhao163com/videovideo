@@ -2,38 +2,89 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:layout_marginTop="10dp">
 
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#4f5555">
+
+        <ImageView
+            android:id="@+id/setting"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="top|end"
+            android:layout_marginStart="-30dp"
+            android:gravity="center"
+            android:scaleType="centerInside"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:id="@+id/et_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="top"
+            android:text="标签列表"
+            android:textColor="#CC9966"
+            android:textSize="20sp"
+            android:transitionName="shareTransition"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tomytui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:text="筛选"
+            android:textColor="@color/common_yellow" />
+
+
+    </RelativeLayout>
+
     <LinearLayout
-        android:id="@+id/cateList"
-        android:layout_width="100dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_below="@+id/header"
+        android:layout_marginTop="20dp">
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/cateList"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <View
-        android:layout_width="1dip"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="100dp"
-        android:layout_marginTop="10dp"
-        android:background="#ededed" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/container"
-        android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:layout_marginLeft="102dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:background="#ededed" />
 
-        <com.cucumber.video.welcomeactivity.XCFlowLayout
-            android:id="@+id/flowlayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        </com.cucumber.video.welcomeactivity.XCFlowLayout>
+            <com.cucumber.video.welcomeactivity.XCFlowLayout
+                android:id="@+id/flowlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible">
 
+            </com.cucumber.video.welcomeactivity.XCFlowLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

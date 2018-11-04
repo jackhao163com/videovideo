@@ -20,7 +20,7 @@
             android:layout_gravity="top|end"
             android:layout_marginStart="-30dp"
             android:gravity="center"
-            android:scaleType="centerInside"
+            android:scaleType="centerCrop"
             android:src="@mipmap/back" />
 
         <TextView
