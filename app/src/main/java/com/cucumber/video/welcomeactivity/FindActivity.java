@@ -162,14 +162,13 @@ public class FindActivity extends AppCompatActivity {
                 //监听http请求成功，如果不需要监听可以不重新该方法
                 L.i("setLoadingDataListener onSuccess: " + o);
                 List<FindBean.DataBean.ItemsBean> itemDatas = o.getItemDatas();
-                if (itemDatas.size() == 0) {
+                if (itemDatas == null || itemDatas.size() == 0) {
                     holder.loadingFinish((String) null);
                     if (myswipeRefreshLayout != null) {
                         myswipeRefreshLayout.setRefreshing(false);
                     }
                 } else {
                     for (FindBean.DataBean.ItemsBean item : itemDatas) {
-                        item.setIsdeleted(token);
                         itemsBeanList.add(item);
                     }
                 }
@@ -321,7 +320,9 @@ public class FindActivity extends AppCompatActivity {
     private void getToken() {
         SharedPreferencesUtils helper = new SharedPreferencesUtils(this, "setting");
         token = helper.getString("token");
+
     }
+
 
     public static class MyRecyclerViewHolder extends BaseRecyclerViewHolder<FindBean.DataBean.ItemsBean> {
 
@@ -355,7 +356,10 @@ public class FindActivity extends AppCompatActivity {
             String cover = mData.getCover().equals("") ? "" : mData.getCover();
             String videoPath = mData.getPath().equals("") ? "" : mData.getPath();
             String movieid = mData.getId();
-            String token = mData.getIsdeleted();
+
+            SharedPreferencesUtils helper = new SharedPreferencesUtils(mContext, "setting");
+            String token = helper.getString("token");
+
             text.setText(actorname);
             if (player != null) {
                 player.release();
@@ -415,7 +419,10 @@ public class FindActivity extends AppCompatActivity {
                                     }
                                 })
                                 .show();
-                    }else
+                    } else if(status == -1 || status == -2){
+                        mContext.startActivity(new Intent(mContext, LoginActivity.class));
+                    }
+                    else
                     {
                         MaterialDialog dialog = new MaterialDialog.Builder(mContext)
                                 .title("添加喜爱提示")

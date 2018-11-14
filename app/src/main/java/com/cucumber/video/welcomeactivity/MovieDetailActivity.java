@@ -218,7 +218,10 @@ public class MovieDetailActivity extends AppCompatActivity {
                                 }
                             })
                             .show();
-                }else
+                } else if(status == -1 || status == -2){
+                    startActivity(new Intent(MovieDetailActivity.this, LoginActivity.class));
+                }
+                else
                 {
                     MaterialDialog dialog = new MaterialDialog.Builder(MovieDetailActivity.this)
                             .title("添加喜爱提示")
@@ -318,7 +321,10 @@ public class MovieDetailActivity extends AppCompatActivity {
                                 }
                             })
                             .show();
-                }else
+                } else if(status == -1 || status == -2){
+                    startActivity(new Intent(MovieDetailActivity.this, LoginActivity.class));
+                }
+                else
                 {
                     MaterialDialog dialog = new MaterialDialog.Builder(MovieDetailActivity.this)
                             .title("离线缓存提示")
@@ -421,7 +427,9 @@ public class MovieDetailActivity extends AppCompatActivity {
                     setActorInfo(bean);
                     setLikeListInfo(bean);
                     setCommentListInfo(bean);
-                } else {
+                }  else if(bean.getStatus() == -1 || bean.getStatus() == -2){
+                    startActivity(new Intent(MovieDetailActivity.this, LoginActivity.class));
+                }  else {
                     MaterialDialog dialog = new MaterialDialog.Builder(MovieDetailActivity.this)
                             .title("温馨提示")
                             .content(bean.getMsg())
@@ -686,6 +694,12 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     public void openCommentDialog(final String parentid, final String groupid, String toname, final String toid,final  int position) {
+
+        if(token == null || token.length() == 0){
+            startActivity(new Intent(MovieDetailActivity.this, LoginActivity.class));
+            return;
+        }
+
         final MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .customView(R.layout.item_movie_detail_submit,true)
 //                .positiveText("确认")
@@ -766,9 +780,9 @@ public class MovieDetailActivity extends AppCompatActivity {
                                 }
                             })
                             .show();
-                }else
+                }else if(status == -1 || status == -2)
                 {
-
+                    startActivity(new Intent(MovieDetailActivity.this, LoginActivity.class));
                 }
 
             }

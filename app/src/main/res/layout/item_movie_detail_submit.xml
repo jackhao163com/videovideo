@@ -36,14 +36,16 @@
         android:inputType="textMultiLine"
         android:maxLines="6"
         android:minLines="4"
+        android:textSize="13sp"
         android:scrollbars="vertical"></EditText>
 
     <ImageView
         android:id="@+id/submit_btn"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/add_comment"
+        android:scaleType="fitCenter"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="1dp"

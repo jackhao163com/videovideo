@@ -65,14 +65,14 @@ public class LoginActivity extends Activity implements View.OnClickListener,Comp
     @Override
     public void afterTextChanged(Editable s)
     {
-        if(s.toString().length() == 11){
-            if(et_name.isFocused()){
-                et_name.clearFocus();
-                et_password.setFocusable(true);
-                et_password.setFocusableInTouchMode(true);
-                et_password.requestFocus();
-            }
-        }
+//        if(s.toString().length() == 11){
+//            if(et_name.isFocused()){
+//                et_name.clearFocus();
+//                et_password.setFocusable(true);
+//                et_password.setFocusableInTouchMode(true);
+//                et_password.requestFocus();
+//            }
+//        }
     }
     private void initData() {
 
@@ -249,8 +249,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,Comp
             showToast("你输入的密码为空！");
             return;
         }
-        if(!RegisterActivity.isPhone(getAccount())){
-            showToast("手机号不符合格式请重新输入");
+        if(!RegisterActivity.isEmail(getAccount())){
+            showToast("邮箱帐号不符合格式请重新输入");
             return;
         }
         if(!RegisterActivity.isPassword(getPassword())){
@@ -283,7 +283,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Comp
                     break;
                     case -2:
                     {
-                        showToast("手机号或密码错误");
+                        showToast("帐号或密码错误");
                     }
                     break;
                     case -1:
@@ -439,7 +439,7 @@ private  void saveToken(){
      * 保存用户账号
      */
     public void loadUserName() {
-        if (!getAccount().equals("") || !getAccount().equals("请输入您的手机号")) {
+        if (!getAccount().equals("") || !getAccount().equals("请输入您的帐号")) {
             SharedPreferencesUtils helper = new SharedPreferencesUtils(this, "setting");
             helper.putValues(new SharedPreferencesUtils.ContentValue("name", getAccount()));
         }

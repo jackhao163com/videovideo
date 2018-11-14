@@ -140,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="20dp"
-                    android:text="+86"
+                    android:text="邮箱"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -158,8 +158,8 @@
                     android:layout_gravity="bottom"
                     android:layout_marginStart="10dp"
                     android:background="@null"
-                    android:hint="@string/phoneNumber"
-                    android:inputType="phone"
+                    android:hint="@string/emailNumber"
+                    android:inputType="textEmailAddress"
                     android:textSize="14sp" />
             </LinearLayout>
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">黄瓜视频</string>
+    <string name="app_name">果子App</string>
     <string name="hello_world">Hello world!</string>
     <string name="strPoint">小圆点</string>
     <string name="agree">确定</string>
@@ -9,6 +9,8 @@
     <string name="strWelcomeEn">Welcome back</string>
     <string name="phone">+86</string>
     <string name="phoneNumber">请输入您的手机号..</string>
+    <string name="emailNumber">请输入您的邮箱..</string>
+    <string name="accountNumber">请输入您的帐号..</string>
     <string name="password">请输入您的密码..</string>
     <string name="mima">密码</string>
     <string name="usernamelogin">用户名登录</string>

@@ -42,7 +42,7 @@ public class FindBean extends BasePageBean<FindBean.DataBean.ItemsBean>{
 
     @Override
     public List<DataBean.ItemsBean> getItemDatas() {
-        return data.items;
+        return data == null ? null : data.items;
     }
 
     public static class DataBean {
@@ -99,17 +99,18 @@ public class FindBean extends BasePageBean<FindBean.DataBean.ItemsBean>{
 
             private String id;
             private String name;
-            private String subtitle;
-            private String desc;
+//            private String subtitle;
+//            private String desc;
             private String cover;
             private String path;
-            private String actorlist;
+//            private String actorlist;
             private String likenum;
             private String views;
-            private String ishot;
-            private String createtime;
-            private String sequence;
-            private String isdeleted;
+//            private String ishot;
+//            private String createtime;
+//            private String sequence;
+            private String islike;
+//            private String isdeleted;
 
             public String getId() {
                 return id;
@@ -127,21 +128,21 @@ public class FindBean extends BasePageBean<FindBean.DataBean.ItemsBean>{
                 this.name = name;
             }
 
-            public String getSubtitle() {
-                return subtitle;
-            }
-
-            public void setSubtitle(String subtitle) {
-                this.subtitle = subtitle;
-            }
-
-            public String getDesc() {
-                return desc;
-            }
-
-            public void setDesc(String desc) {
-                this.desc = desc;
-            }
+//            public String getSubtitle() {
+//                return subtitle;
+//            }
+//
+//            public void setSubtitle(String subtitle) {
+//                this.subtitle = subtitle;
+//            }
+//
+//            public String getDesc() {
+//                return desc;
+//            }
+//
+//            public void setDesc(String desc) {
+//                this.desc = desc;
+//            }
 
             public String getCover() {
                 return cover;
@@ -150,7 +151,13 @@ public class FindBean extends BasePageBean<FindBean.DataBean.ItemsBean>{
             public void setCover(String cover) {
                 this.cover = cover;
             }
+            public String getIslike() {
+                return islike;
+            }
 
+            public void setIslike(String islike) {
+                this.islike = islike;
+            }
             public String getPath() {
                 return path;
             }
@@ -159,13 +166,13 @@ public class FindBean extends BasePageBean<FindBean.DataBean.ItemsBean>{
                 this.path = path;
             }
 
-            public String getActorlist() {
-                return actorlist;
-            }
-
-            public void setActorlist(String actorlist) {
-                this.actorlist = actorlist;
-            }
+//            public String getActorlist() {
+//                return actorlist;
+//            }
+//
+//            public void setActorlist(String actorlist) {
+//                this.actorlist = actorlist;
+//            }
 
             public String getLikenum() {
                 return likenum;
@@ -183,37 +190,37 @@ public class FindBean extends BasePageBean<FindBean.DataBean.ItemsBean>{
                 this.views = views;
             }
 
-            public String getIshot() {
-                return ishot;
-            }
-
-            public void setIshot(String ishot) {
-                this.ishot = ishot;
-            }
-
-            public String getCreatetime() {
-                return createtime;
-            }
-
-            public void setCreatetime(String createtime) {
-                this.createtime = createtime;
-            }
-
-            public String getSequence() {
-                return sequence;
-            }
-
-            public void setSequence(String sequence) {
-                this.sequence = sequence;
-            }
-
-            public String getIsdeleted() {
-                return isdeleted;
-            }
-
-            public void setIsdeleted(String isdeleted) {
-                this.isdeleted = isdeleted;
-            }
+//            public String getIshot() {
+//                return ishot;
+//            }
+//
+//            public void setIshot(String ishot) {
+//                this.ishot = ishot;
+//            }
+//
+//            public String getCreatetime() {
+//                return createtime;
+//            }
+//
+//            public void setCreatetime(String createtime) {
+//                this.createtime = createtime;
+//            }
+//
+//            public String getSequence() {
+//                return sequence;
+//            }
+//
+//            public void setSequence(String sequence) {
+//                this.sequence = sequence;
+//            }
+//
+//            public String getIsdeleted() {
+//                return isdeleted;
+//            }
+//
+//            public void setIsdeleted(String isdeleted) {
+//                this.isdeleted = isdeleted;
+//            }
         }
     }
 }

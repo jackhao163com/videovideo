@@ -43,7 +43,7 @@ public class CategoryBean extends BasePageBean<CategoryBean.DataBean.MlistBean> 
 
     @Override
     public List<DataBean.MlistBean> getItemDatas() {
-        return data.mlist;
+        return data == null ? null : data.mlist;
     }
 
     public List<DataBean.AlistBean> getAItemDatas() {

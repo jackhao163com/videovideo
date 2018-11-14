@@ -124,6 +124,14 @@ public class RegisterActivity extends Activity implements View.OnClickListener,C
         Matcher m = p.matcher(inputText);
         return m.matches();
     }
+    public static boolean isEmail(String inputText) {
+        String strPattern = "^[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$";
+        if (inputText.isEmpty()) {
+            return false;
+        } else {
+            return inputText.matches(strPattern);
+        }
+    }
     public static boolean isPassword(String password){
         Pattern p = Pattern.compile("^([0-9a-zA-Z]){6,20}$");
         Matcher m = p.matcher(password);
@@ -148,8 +156,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener,C
             showToast("请先同意用户协议！");
             return;
         }
-        if(!isPhone(getAccount())){
-            showToast("手机号不符合格式请重新输入");
+        if(!isEmail(getAccount())){
+            showToast("邮箱不符合格式请重新输入");
             return;
         }
         if(!isPassword(getPassword())){
@@ -235,18 +243,18 @@ public class RegisterActivity extends Activity implements View.OnClickListener,C
                     case 1:
                     {
                         showToast("注册成功");
-
+                        hideLoading();//隐藏加载框
                         startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                         finish();//关闭页面
                     }
                     break;
                     case -1:
                     {
-                        showToast("手机号码不能为空!");
+                        showToast("帐号不能为空!");
                     }
                     case -3:
                     {
-                        showToast("该手机号码已被注册，请登录");
+                        showToast("该帐号已被注册，请登录");
                     }
                     break;
                     case -4:
@@ -415,14 +423,14 @@ public class RegisterActivity extends Activity implements View.OnClickListener,C
                 register_new_password.requestFocus();
             }
         }
-        if(s.toString().length() == 11){
-            if(register_phoneNumber.isFocused()){
-                register_phoneNumber.clearFocus();
-                mFirstCheckNum.setFocusable(true);
-                mFirstCheckNum.setFocusableInTouchMode(true);
-                mFirstCheckNum.requestFocus();
-            }
-        }
+//        if(s.toString().length() == 11){
+//            if(register_phoneNumber.isFocused()){
+//                register_phoneNumber.clearFocus();
+//                mFirstCheckNum.setFocusable(true);
+//                mFirstCheckNum.setFocusableInTouchMode(true);
+//                mFirstCheckNum.requestFocus();
+//            }
+//        }
     }
             class MyHandler extends Handler {
         public MyHandler() {}

@@ -144,8 +144,8 @@ public class PasswordRecoveryActivity extends Activity implements View.OnClickLi
             showToast("你输入的密码为空！");
             return;
         }
-        if(!RegisterActivity.isPhone(getAccount())){
-            showToast("手机号不符合格式请重新输入");
+        if(!RegisterActivity.isEmail(getAccount())){
+            showToast("帐号不符合格式请重新输入");
             return;
         }
         if(!RegisterActivity.isPassword(getPassword())){
@@ -228,7 +228,7 @@ public class PasswordRecoveryActivity extends Activity implements View.OnClickLi
             /*封装子对象*/
             JSONObject ClientKey = new JSONObject();
             ClientKey.put("mobile", getAccount());
-            ClientKey.put("new_password", getPassword());
+            ClientKey.put("newpassword", getPassword());
            // ClientKey.put("rand_code", appendCheckNum());
          //   ClientKey.put("apptype", "android");
 
@@ -241,6 +241,7 @@ public class PasswordRecoveryActivity extends Activity implements View.OnClickLi
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(5000);
             conn.setDoOutput(true);//设置允许输出
+            conn.setDoInput(true);//设置允许输出
             conn.setRequestMethod("POST");
             conn.setRequestProperty("User-Agent", "Fiddler");
             conn.setRequestProperty("Content-Type", "application/json");
@@ -354,14 +355,14 @@ public class PasswordRecoveryActivity extends Activity implements View.OnClickLi
                 register_new_password.requestFocus();
             }
         }
-        if(s.toString().length() == 11){
-            if(register_phoneNumber.isFocused()){
-                register_phoneNumber.clearFocus();
-                mFirstCheckNum.setFocusable(true);
-                mFirstCheckNum.setFocusableInTouchMode(true);
-                mFirstCheckNum.requestFocus();
-            }
-        }
+//        if(s.toString().length() == 11){
+//            if(register_phoneNumber.isFocused()){
+//                register_phoneNumber.clearFocus();
+//                mFirstCheckNum.setFocusable(true);
+//                mFirstCheckNum.setFocusableInTouchMode(true);
+//                mFirstCheckNum.requestFocus();
+//            }
+//        }
     }
     class MyHandler extends Handler {
         public MyHandler() {}

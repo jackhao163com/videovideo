@@ -75,7 +75,9 @@ public class UserActivity extends AppCompatActivity {
                     mAdapter = new MyRecycleAdapter(UserActivity.this, bean);
                     mRecyclerView.setAdapter(mAdapter);
                 }
-                else {
+                else if(bean.getStatus() == -1){
+                    startActivity(new Intent(UserActivity.this, LoginActivity.class));
+                } else{
                     MaterialDialog dialog = new MaterialDialog.Builder(UserActivity.this)
                             .title("温馨提示")
                             .content(bean.getMsg())
@@ -318,7 +320,7 @@ public class UserActivity extends AppCompatActivity {
             //图标
             int icno[] = {R.mipmap.tuiguang, R.mipmap.fankui, R.mipmap.tongzhi, R.mipmap.jiaoliuqun};
             //图标下的文字
-            String name[] = {"我要推广", "意见反馈", "通知", "火爆交流群"};
+            String name[] = {"我要分享", "意见反馈", "通知", "火爆交流群"};
             CatIdList = new String[]{"1", "2", "3", "4"};
             dataList = new ArrayList<Map<String, Object>>();
             for (int i = 0; i < icno.length; i++) {

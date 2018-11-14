@@ -42,7 +42,7 @@ public class MovieBean extends BasePageBean<MovieBean.DataBean.ItemsBean>{
 
     @Override
     public List<MovieBean.DataBean.ItemsBean> getItemDatas() {
-        return data.items;
+        return data == null ? null : data.items;
     }
 
     public static class DataBean {
