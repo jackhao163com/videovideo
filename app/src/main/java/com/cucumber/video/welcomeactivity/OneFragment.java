@@ -213,7 +213,7 @@ public class OneFragment extends Fragment{
         SharedPreferencesUtils helper = new SharedPreferencesUtils(getActivity(), "setting");
         String mToken = helper.getString("token");
         try {
-            url = new URL("http://hgmovie.joysw.win:82/index.php/font/app/getBannerList");
+            url = new URL(MyToolUtils.getAppDomain() + "index.php/font/app/getBannerList");
             /*封装子对象*/
             JSONObject ClientKey = new JSONObject();
 
@@ -281,7 +281,7 @@ public class OneFragment extends Fragment{
         SharedPreferencesUtils helper = new SharedPreferencesUtils(getActivity(), "setting");
         String mToken = helper.getString("token");
         try {
-            url = new URL("http://hgmovie.joysw.win:82/index.php/font/app/getMovieCategoryList");
+            url = new URL(MyToolUtils.getAppDomain() + "index.php/font/app/getMovieCategoryList");
             /*封装子对象*/
             JSONObject ClientKey = new JSONObject();
 

@@ -2,7 +2,6 @@ package com.cucumber.video.welcomeactivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -26,6 +25,8 @@ public class SettingActivity extends AppCompatActivity {
     ImageView toXieYi;
     @BindView(R.id.toUserAccount)
     ImageView toUserAccount;
+    @BindView(R.id.toDomainLine)
+    ImageView toDomainLine;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +52,13 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(SettingActivity.this, AccountActivity.class));
+                SettingActivity.this.finish();
+            }
+        });
+        toDomainLine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SettingActivity.this, DomainLineActiviy.class));
                 SettingActivity.this.finish();
             }
         });

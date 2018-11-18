@@ -44,6 +44,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.cucumber.video.welcomeactivity.GuideActivity"></activity>
+        <activity android:name="com.cucumber.video.welcomeactivity.DomainLineActiviy"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.TagListActivity"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.LikeActivity"></activity>
         <activity android:name="com.cucumber.video.welcomeactivity.YijianActivity"></activity>

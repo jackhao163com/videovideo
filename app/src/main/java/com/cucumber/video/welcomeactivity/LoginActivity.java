@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
@@ -39,7 +40,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Comp
     private TextView user_Register;
     MyHandler myHandler;
     private  boolean defaultSee;
-    private  final String urlPath = "http://hgmovie.joysw.win:82/index.php/font/app/login";
+    private  final String urlPath = MyToolUtils.getAppDomain() + "index.php/font/app/login";
 
     private LoadingDialog mLoadingDialog; //显示正在加载的对话框
     private  String mToken;
@@ -422,7 +423,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Comp
                 Toast.makeText(getApplicationContext(), "服务器未响应", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
-
+            Log.i("login",e.toString());
         }
         return 9;
     }

@@ -37,7 +37,7 @@ public class ThreeFragment extends Fragment{
         mSearch = mViewGroup.findViewById(R.id.search_faxian);
         mWebview = mViewGroup.findViewById(R.id.faxian_webview);
         progressBar = (ProgressBar) mViewGroup.findViewById(R.id.faxian_progressbar);
-        mWebview.loadUrl("http://hgweb.joysw.win:82/#/findlist?token=xxx");
+        mWebview.loadUrl(MyToolUtils.getWebDomain() + "findlist?token=xxx");
         mWebview.addJavascriptInterface(this, "android");//添加js监听 这样html就能调用客户端
         mWebview.setWebChromeClient(webChromeClient);
         mWebview.setWebViewClient(webViewClient);

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -40,7 +41,7 @@ public class PasswordRecoveryActivity extends Activity implements View.OnClickLi
     MyHandler myHandler;
     private LoadingDialog mLoadingDialog;
     private String mToken;
-    private  final String urlPath = "http://hgmovie.joysw.win:82/index.php/font/app/updatepd";
+    private  final String urlPath = MyToolUtils.getAppDomain() + "index.php/font/app/updatepdGet";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -231,7 +232,8 @@ public class PasswordRecoveryActivity extends Activity implements View.OnClickLi
             ClientKey.put("newpassword", getPassword());
            // ClientKey.put("rand_code", appendCheckNum());
          //   ClientKey.put("apptype", "android");
-
+            String urlpath = urlPath + "?mobile="+getAccount()+"&newpassword="+getPassword();
+            url = new URL(urlpath);
             /*封装Person数组*/
             //   JSONObject params = new JSONObject();
             //   params.put("Person", ClientKey);
@@ -240,15 +242,16 @@ public class PasswordRecoveryActivity extends Activity implements View.OnClickLi
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(5000);
-            conn.setDoOutput(true);//设置允许输出
+//            conn.setDoOutput(true);//设置允许输出
             conn.setDoInput(true);//设置允许输出
-            conn.setRequestMethod("POST");
+//            conn.setRequestMethod("POST");
             conn.setRequestProperty("User-Agent", "Fiddler");
             conn.setRequestProperty("Content-Type", "application/json");
+            conn.connect();
             // conn.setRequestProperty("Charset", encoding);
-            OutputStream os = conn.getOutputStream();
-            os.write(content.getBytes());
-            os.close();
+//            DataOutputStream os = new DataOutputStream(conn.getOutputStream()) ;
+//            os.writeBytes(content);
+//            os.close();
             /*服务器返回的响应码*/
           //  return conn.getResponseCode();
          /*   if (code == 200) {

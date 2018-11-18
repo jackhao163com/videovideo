@@ -67,7 +67,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener,C
     private LoadingDialog mLoadingDialog;
     private boolean isAgreed;
     private String mToken;
-    private  final String urlPath = "http://hgmovie.joysw.win:82/index.php/font/app/register";
+    private  final String urlPath =  MyToolUtils.getAppDomain() + "index.php/font/app/register";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
