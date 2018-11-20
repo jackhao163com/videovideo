@@ -16,16 +16,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.itheima.retrofitutils.ItheimaHttp;
 import com.itheima.retrofitutils.Request;
@@ -67,6 +66,14 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     ImageView updateNickname;
     @BindView(R.id.login_btn)
     ImageView logoutBtn;
+    @BindView(R.id.row_avtar)
+    RelativeLayout rowAvtar;
+    @BindView(R.id.row_nick)
+    RelativeLayout rowNick;
+    @BindView(R.id.row_sex)
+    RelativeLayout rowSex;
+    @BindView(R.id.row_pd)
+    RelativeLayout rowPd;
     private String token;
     private Uri imageUri;
     private Uri mCutUri;
@@ -94,14 +101,21 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         getToken();
         initActivity();
         togoback.setOnClickListener(this);
+
         genderImg.setOnClickListener(this);
         editpd.setOnClickListener(this);
         updateAvtar.setOnClickListener(this);
         updateNickname.setOnClickListener(this);
+
         logoutBtn.setOnClickListener(this);
+
+        rowAvtar.setOnClickListener(this);
+        rowNick.setOnClickListener(this);
+        rowPd.setOnClickListener(this);
+        rowSex.setOnClickListener(this);
     }
 
-    private void initActivity(){
+    private void initActivity() {
         //开始请求
         Request request = ItheimaHttp.newGetRequest("getUserDetail?token=" + token);//apiUrl格式："xxx/xxxxx"
         Call call = ItheimaHttp.send(request, new HttpResponseListener<UserBean>() {
@@ -111,9 +125,9 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 System.out.println("print data");
                 System.out.println("print data -- " + bean);
 
-                if(bean.getStatus() == 1){
-                    UserBean.DataBean data =  bean.getData();
-                    if(!data.getAvatar().isEmpty()){
+                if (bean.getStatus() == 1) {
+                    UserBean.DataBean data = bean.getData();
+                    if (!data.getAvatar().isEmpty()) {
                         Picasso.with(AccountActivity.this)
                                 .load(data.getAvatar())
                                 .into(userImg);
@@ -121,7 +135,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                     nickname.setText(data.getUsername());
                     gengdername.setText(data.getGendername());
                     String gender = data.getGender();
-                    if(gender.equals("1")){
+                    if (gender.equals("1")) {
                         genderImg.setImageResource(R.mipmap.female);
                     }
                     mobile.setText(data.getMobile());
@@ -160,11 +174,11 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
     private void updateAction(final String key, final String value) {
         //开始请求
-        String url = "updateUserInfo" ;
-        Map<String,Object> map = new HashMap<>();
-        map.put("token",token);
-        if(!key.isEmpty()){
-            map.put(key,value);
+        String url = "updateUserInfo";
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", token);
+        if (!key.isEmpty()) {
+            map.put(key, value);
         }
         Request request = ItheimaHttp.newPostRequest(url);//apiUrl格式："xxx/xxxxx"
         request.putParamsMap(map);
@@ -174,16 +188,16 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             public void onResponse(CommonBean bean, Headers headers) {
                 System.out.println("print data");
                 System.out.println("print data -- " + bean);
-                switch (key){
+                switch (key) {
                     case "nickname":
                         nickname.setText(value);
                         break;
                     case "gender":
-                        gengdername.setText(value.equals("1")?"女":"男");
-                        genderImg.setImageResource(value.equals("1")?R.mipmap.female:R.mipmap.male);
+                        gengdername.setText(value.equals("1") ? "女" : "男");
+                        genderImg.setImageResource(value.equals("1") ? R.mipmap.female : R.mipmap.male);
                         break;
                 }
-                Toast.makeText(AccountActivity.this,bean.getMsg(),Toast.LENGTH_LONG).show();
+                Toast.makeText(AccountActivity.this, bean.getMsg(), Toast.LENGTH_LONG).show();
             }
 
             /**
@@ -201,10 +215,10 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private void fileUpload(String data) {
         //开始请求
         String url = "fileUpload";
-        Map<String,Object> map = new HashMap<>();
-        map.put("token",token);
-        if(!data.isEmpty()){
-            map.put("imgdata",data);
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", token);
+        if (!data.isEmpty()) {
+            map.put("imgdata", data);
         }
         Request request = ItheimaHttp.newPostRequest(url);//apiUrl格式："xxx/xxxxx"
         request.putParamsMap(map);
@@ -214,7 +228,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             public void onResponse(CommonBean bean, Headers headers) {
                 System.out.println("print data");
                 System.out.println("print data -- " + bean);
-                Toast.makeText(AccountActivity.this,bean.getMsg(),Toast.LENGTH_LONG).show();
+                Toast.makeText(AccountActivity.this, bean.getMsg(), Toast.LENGTH_LONG).show();
             }
 
             /**
@@ -234,23 +248,24 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         Log.i("", "点击了---" + v.getId());
         Intent i;
         switch (v.getId()) {
-            case R.id.editpd:
+            case R.id.row_pd:
                 i = new Intent(AccountActivity.this, PasswordRecoveryActivity.class);
                 startActivity(i);
                 break;
-            case R.id.updateNickname:
+            case R.id.row_nick:
                 updateNickname();
                 break;
-            case R.id.genderImg:
-                    updateGender();
+            case R.id.row_sex:
+                updateGender();
                 break;
-            case R.id.updateAvtar:
+            case R.id.row_avtar:
                 updateAvtar();
                 break;
             case R.id.setting_back:
                 AccountActivity.this.finish();
                 break;
             case R.id.login_btn:
+                saveToken("");
                 i = new Intent(AccountActivity.this, LoginActivity.class);
                 startActivity(i);
                 AccountActivity.this.finish();
@@ -258,7 +273,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void updateNickname(){
+    private void saveToken(String mToken) {
+        SharedPreferencesUtils helper = new SharedPreferencesUtils(this, "setting");
+        helper.putValues(new SharedPreferencesUtils.ContentValue("token", mToken));
+    }
+
+    private void updateNickname() {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title("修改昵称")
                 .content("2-20个字节，支持中文、英文、数字和下划线")
@@ -273,7 +293,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 .negativeText("取消")
                 .show();
     }
-    private void updateGender(){
+
+    private void updateGender() {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title("修改性别")
                 .content("性别只可以修改一次，设置后不可修改")
@@ -285,14 +306,14 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         int gender = which;
-                        updateAction("gender",gender+"");
+                        updateAction("gender", gender + "");
                         return true;
                     }
                 })
                 .show();
     }
 
-    private void updateAvtar(){
+    private void updateAvtar() {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title("修改头像")
                 .negativeText("取消")
@@ -302,9 +323,9 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         int select = view.getId();
-                        if(select == 0){//相册选择
+                        if (select == 0) {//相册选择
                             choseHeadImageFromGallery();
-                        }else{//拍照
+                        } else {//拍照
                             try {
                                 requestPermissionCamera();
                             } catch (IOException e) {
@@ -323,7 +344,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
         // 用户没有进行有效的设置操作，返回
         if (resultCode == RESULT_CANCELED) {
-            Toast.makeText(this,"取消", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "取消", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -342,7 +363,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 if (hasSdcard()) {
                     CutForCamera();
                 } else {
-                    Toast.makeText(this,"没有SDCard!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "没有SDCard!", Toast.LENGTH_LONG).show();
                 }
 
                 break;
@@ -370,28 +391,28 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 //设置裁剪之后的图片路径文件
         File cutfile = new File(Environment.getExternalStorageDirectory().getPath(),
                 "cutcamera.png"); //随便命名一个
-        if (cutfile.exists()){ //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
+        if (cutfile.exists()) { //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
             cutfile.delete();
         }
         cutfile.createNewFile();
         //初始化 uri
         Uri imageUri = uri; //返回来的 uri
         Uri outputUri = null; //真实的 uri
-        Log.d("", "CutForPhoto: "+cutfile);
+        Log.d("", "CutForPhoto: " + cutfile);
         outputUri = Uri.fromFile(cutfile);
         mCutUri = outputUri;
-        Log.d("", "mCameraUri: "+ mCutUri);
+        Log.d("", "mCameraUri: " + mCutUri);
         // crop为true是设置在开启的intent中设置显示的view可以剪裁
-        intent.putExtra("crop",true);
+        intent.putExtra("crop", true);
         // aspectX,aspectY 是宽高的比例，这里设置正方形
-        intent.putExtra("aspectX",1);
-        intent.putExtra("aspectY",1);
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
         //设置要裁剪的宽高
         intent.putExtra("outputX", 40); //200dp
-        intent.putExtra("outputY",40);
-        intent.putExtra("scale",true);
+        intent.putExtra("outputY", 40);
+        intent.putExtra("scale", true);
         //如果图片过大，会导致oom，这里设置为false
-        intent.putExtra("return-data",false);
+        intent.putExtra("return-data", false);
         if (imageUri != null) {
             intent.setDataAndType(imageUri, "image/*");
         }
@@ -407,6 +428,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
     /**
      * 拍照之后，启动裁剪
+     *
      * @return
      */
     @NonNull
@@ -418,7 +440,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             //设置裁剪之后的图片路径文件
             File cutfile = new File(Environment.getExternalStorageDirectory().getPath(),
                     "cutcamera.png"); //随便命名一个
-            if (cutfile.exists()){ //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
+            if (cutfile.exists()) { //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
                 cutfile.delete();
             }
             cutfile.createNewFile();
@@ -427,7 +449,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             Uri outputUri = null; //真实的 uri
             Intent intent = new Intent("com.android.camera.action.CROP");
             //拍照留下的图片
-            File camerafile = new File(camerapath,imgname);
+            File camerafile = new File(camerapath, imgname);
             if (Build.VERSION.SDK_INT >= 24) {
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
@@ -441,16 +463,16 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             //把这个 uri 提供出去，就可以解析成 bitmap了
             mCutUri = imageUri;
             // crop为true是设置在开启的intent中设置显示的view可以剪裁
-            intent.putExtra("crop",true);
+            intent.putExtra("crop", true);
             // aspectX,aspectY 是宽高的比例，这里设置正方形
-            intent.putExtra("aspectX",1);
-            intent.putExtra("aspectY",1);
+            intent.putExtra("aspectX", 1);
+            intent.putExtra("aspectY", 1);
             //设置要裁剪的宽高
             intent.putExtra("outputX", 50);
-            intent.putExtra("outputY",50);
-            intent.putExtra("scale",true);
+            intent.putExtra("outputY", 50);
+            intent.putExtra("scale", true);
             //如果图片过大，会导致oom，这里设置为false
-            intent.putExtra("return-data",false);
+            intent.putExtra("return-data", false);
             if (imageUri != null) {
                 intent.setDataAndType(imageUri, "image/*");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
@@ -467,9 +489,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
-    public static final int EXTERNAL_STORAGE_REQ_CODE = 10 ;
-    public static final int CAMERA_CODE = 11 ;
+    public static final int EXTERNAL_STORAGE_REQ_CODE = 10;
+    public static final int CAMERA_CODE = 11;
 
     public void requestPermission() throws IOException {
         //判断当前Activity是否已经获得了该权限
@@ -480,14 +501,14 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             //如果App的权限申请曾经被用户拒绝过，就需要在这里跟用户做出解释
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                Toast.makeText(this,"please give me the permission",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "please give me the permission", Toast.LENGTH_SHORT).show();
             } else {
                 //进行权限请求
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         EXTERNAL_STORAGE_REQ_CODE);
             }
-        } else{
+        } else {
             cropRawPhoto(mCutUri);
         }
     }
@@ -501,14 +522,14 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             //如果App的权限申请曾经被用户拒绝过，就需要在这里跟用户做出解释
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.CAMERA)) {
-                Toast.makeText(this,"please give me the permission",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "please give me the permission", Toast.LENGTH_SHORT).show();
             } else {
                 //进行权限请求
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.CAMERA},
                         CAMERA_CODE);
             }
-        } else{
+        } else {
             choseHeadImageFromCameraCapture();
         }
     }
@@ -558,7 +579,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 //            fileUpload(getBase64(photo));
 //        }
         Bitmap photo = BitmapFactory.decodeStream(
-         AccountActivity.this.getContentResolver().openInputStream(mCutUri));
+                AccountActivity.this.getContentResolver().openInputStream(mCutUri));
         userImg.setImageBitmap(photo);
         fileUpload(getBase64(photo));
     }
@@ -593,28 +614,28 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 //                Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "cutcamera.png")));
 //        startActivityForResult(intent2, 2);// 采用ForResult打开
         //创建一个file，用来存储拍照后的照片
-        File outputfile = new File(AccountActivity.this.getExternalCacheDir(),"output.png");
+        File outputfile = new File(AccountActivity.this.getExternalCacheDir(), "output.png");
         try {
-            if (outputfile.exists()){
+            if (outputfile.exists()) {
                 outputfile.delete();//删除
             }
             outputfile.createNewFile();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Uri imageuri ;
-        if (Build.VERSION.SDK_INT >= 24){
+        Uri imageuri;
+        if (Build.VERSION.SDK_INT >= 24) {
             imageuri = FileProvider.getUriForFile(AccountActivity.this,
                     "com.cucumber.video.welcomeactivity.fileprovider", //可以是任意字符串
                     outputfile);
-        }else{
+        } else {
             imageuri = Uri.fromFile(outputfile);
         }
         //启动相机程序
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageuri);
-        startActivityForResult(intent,2);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageuri);
+        startActivityForResult(intent, 2);
     }
 
     public boolean hasSdcard() {

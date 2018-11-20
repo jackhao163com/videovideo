@@ -1,6 +1,7 @@
 package com.cucumber.video.welcomeactivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,7 +25,9 @@ import org.itheima.recycler.header.RecyclerViewHeader;
 import org.itheima.recycler.listener.ItemClickSupport;
 import org.itheima.recycler.widget.ItheimaRecyclerView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -130,6 +134,53 @@ public class DomainLineActiviy extends AppCompatActivity {
     }
 
 
+    private int updateDomainLine(String domainId) {
+
+        //开始请求
+        Request request = ItheimaHttp.newPostRequest("updateDomainline");//apiUrl格式："xxx/xxxxx"
+        Map<String,Object> map = new HashMap<>();
+        map.put("domainid", domainId);
+        map.put("token", token);
+        request.putParamsMap(map);
+        Call call = ItheimaHttp.send(request, new HttpResponseListener<RegisterBean>() {
+
+            @Override
+            public void onResponse(RegisterBean bean, Headers headers) {
+                System.out.println("print data");
+                System.out.println("print data -- " +bean);
+                int status = bean.getStatus();
+                if (status == 1) {
+                    MaterialDialog dialog = new MaterialDialog.Builder(DomainLineActiviy.this)
+                            .title("温馨提示")
+                            .content(bean.getMsg())
+                            .positiveText("确认")
+                            .show();
+
+                } else {
+                    MaterialDialog dialog = new MaterialDialog.Builder(DomainLineActiviy.this)
+                            .title("温馨提示")
+                            .content(bean.getMsg())
+                            .positiveText("确认")
+                            .show();
+                }
+            }
+
+
+            /**
+             * 可以不重写失败回调
+             * @param call
+             * @param e
+             */
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable e) {
+                System.out.println("print data fail");
+            }
+        });
+
+
+        return 9;
+    }
+
     public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapter.ViewHolder> {
 
         private Context context;
@@ -149,30 +200,34 @@ public class DomainLineActiviy extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-            holder.domainname.setText(data.get(position).getName());
-            if (data.get(position).isIschecked()) {
-                holder.isChecked.setVisibility(View.VISIBLE);
-            } else {
-                holder.isChecked.setVisibility(View.GONE);
-            }
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.e("这里是点击每一行item的响应事件", "" + position);
-                    ImageView imageView = (ImageView) v;
-
-                    for (int i = 0; i < data.size(); i++) {
-                        if (i == position) {
-                            data.get(position).setIschecked(true);
-                        } else {
-                            data.get(position).setIschecked(false);
-                        }
-                    }
-                    notifyDataSetChanged();
-
+            try {
+                holder.domainname.setText(data.get(position).getName());
+                if (data.get(position).isIschecked()) {
+                    holder.isChecked.setVisibility(View.VISIBLE);
+                } else {
+                    holder.isChecked.setVisibility(View.GONE);
                 }
-            });
+
+                holder.rowLine.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("这里是点击每一行item的响应事件", "" + position);
+
+                        for (int i = 0; i < data.size(); i++) {
+                            if (i == position) {
+                                data.get(i).setIschecked(true);
+                            } else {
+                                data.get(i).setIschecked(false);
+                            }
+                        }
+                        updateDomainLine(data.get(position).getId());
+                        notifyDataSetChanged();
+
+                    }
+                });
+            } catch (Exception ex) {
+
+            }
 
         }
 
@@ -187,10 +242,13 @@ public class DomainLineActiviy extends AppCompatActivity {
             TextView domainname;
             @BindView(R.id.isChecked)
             ImageView isChecked;
+            @BindView(R.id.row_line)
+            RelativeLayout rowLine;
 //            R.layout.item_domain_line
 
             public ViewHolder(View itemView) {
                 super(itemView);
+                ButterKnife.bind(this, itemView);
             }
         }
     }

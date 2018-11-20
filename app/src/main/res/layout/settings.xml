@@ -72,12 +72,12 @@
 
         <ImageView
             android:id="@+id/toUserAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_gravity="center|end"
-            android:layout_marginEnd="17dp"
+            android:layout_marginEnd="-40dp"
+            android:scaleType="centerInside"
             android:src="@mipmap/jiantou" />
     </RelativeLayout>
     <LinearLayout
@@ -104,12 +104,12 @@
 
         <ImageView
             android:id="@+id/toDomainLine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_gravity="center|end"
-            android:layout_marginEnd="17dp"
+            android:layout_marginEnd="-40dp"
+            android:scaleType="centerInside"
             android:src="@mipmap/jiantou" />
     </RelativeLayout>
     <LinearLayout
@@ -135,14 +135,15 @@
 
         <TextView
             android:id="@+id/huancun"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center|end"
+            android:layout_marginEnd="17dp"
+            android:gravity="right|center_vertical"
             android:text="33.85 M"
-            android:textColor="#CC9966"
-            android:layout_marginEnd="17dp" />
+            android:textColor="#CC9966" />
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -166,12 +167,12 @@
             android:textSize="16sp" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_gravity="center|end"
-            android:layout_marginEnd="17dp"
+            android:layout_marginEnd="-40dp"
+            android:scaleType="centerInside"
             android:src="@mipmap/jiantou" />
     </RelativeLayout>
     <LinearLayout
@@ -197,12 +198,12 @@
 
         <ImageView
             android:id="@+id/toXieYi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_gravity="center|end"
-            android:layout_marginEnd="17dp"
+            android:layout_marginEnd="-40dp"
+            android:scaleType="centerInside"
             android:src="@mipmap/jiantou" />
     </RelativeLayout>
 </LinearLayout>

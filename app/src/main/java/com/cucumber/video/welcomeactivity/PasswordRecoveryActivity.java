@@ -204,6 +204,7 @@ public class PasswordRecoveryActivity extends Activity implements View.OnClickLi
                     {
                         showToast("更新密码成功");
                         hideLoading();//隐藏加载框
+                        saveToken("");
                         startActivity(new Intent(PasswordRecoveryActivity.this, LoginActivity.class));
                         finish();//关闭页面
                     }
@@ -232,6 +233,11 @@ public class PasswordRecoveryActivity extends Activity implements View.OnClickLi
 
 
         return 9;
+    }
+
+    private  void saveToken(String mToken){
+        SharedPreferencesUtils helper = new SharedPreferencesUtils(this, "setting");
+        helper.putValues(new SharedPreferencesUtils.ContentValue("token", mToken));
     }
     public void hideLoading() {
         if (mLoadingDialog != null) {

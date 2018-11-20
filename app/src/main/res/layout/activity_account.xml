@@ -54,6 +54,7 @@
 
     </LinearLayout>
     <RelativeLayout
+        android:id="@+id/row_avtar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_60"
         android:background="#4f5555">
@@ -70,12 +71,12 @@
 
         <ImageView
             android:id="@+id/updateAvtar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_gravity="center|end"
-            android:layout_marginEnd="17dp"
+            android:layout_marginEnd="-40dp"
+            android:scaleType="centerInside"
             android:src="@mipmap/jiantou" />
     </RelativeLayout>
     <LinearLayout
@@ -84,6 +85,7 @@
         android:background="#00000000">
     </LinearLayout>
     <RelativeLayout
+        android:id="@+id/row_nick"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_60"
         android:background="#4f5555">
@@ -113,12 +115,12 @@
 
         <ImageView
             android:id="@+id/updateNickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_gravity="center|end"
-            android:layout_marginEnd="17dp"
+            android:layout_marginEnd="-40dp"
+            android:scaleType="centerInside"
             android:src="@mipmap/jiantou" />
     </RelativeLayout>
     <LinearLayout
@@ -127,6 +129,7 @@
         android:background="#665139">
     </LinearLayout>
     <RelativeLayout
+        android:id="@+id/row_sex"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_60"
         android:background="#4f5555">
@@ -204,6 +207,7 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/row_pd"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_60"
         android:background="#4f5555">

@@ -3,10 +3,12 @@ package com.cucumber.video.welcomeactivity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -54,6 +56,7 @@ import org.itheima.recycler.viewholder.BaseRecyclerViewHolder;
 import org.itheima.recycler.widget.ItheimaRecyclerView;
 import org.itheima.recycler.widget.PullToLoadMoreRecyclerView;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -142,6 +145,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     private static final int STATE_FRESH = 1;
     private static final int STATE_MORE = 2;
 
+    private MovieDetailBean.DataBean.DetailBean detailInfo;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,6 +185,13 @@ public class MovieDetailActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareAction();
             }
         });
     }
@@ -355,6 +367,30 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     }
 
+    protected void shareAction(){
+        Intent sendIntent = new Intent();
+        // 比如发送文本形式的数据内容
+// 指定发送的内容
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+// 指定发送内容的类型
+        if(detailInfo != null){
+            String cover = detailInfo.getCover();
+            String title = detailInfo.getName();
+            if(cover.isEmpty()){
+                sendIntent.setType("text/plain");
+            }else{
+                sendIntent.setType("image/jpeg");
+            }
+        }
+        String imagePath = Environment.getExternalStorageDirectory() + File.separator + "share.jpg";
+        //由文件得到uri
+        Uri imageUri = Uri.fromFile(new File(imagePath));
+        Log.d("share", "uri:" + imageUri);
+        sendIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        sendIntent.setAction(Intent.ACTION_SEND);
+        startActivity(Intent.createChooser(sendIntent, "分享"));
+    }
+
     @Download.onTaskStart void taskStart(DownloadTask task) {
 //        mAdapter.updateBtState(task.getKey(), false);
         MaterialDialog dialog = new MaterialDialog.Builder(MovieDetailActivity.this)
@@ -401,7 +437,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 System.out.println("print data -- " + bean);
 
                 if(bean.getStatus() == 1){
-                    MovieDetailBean.DataBean.DetailBean detailInfo = bean.getMovieDetailData();
+                    detailInfo = bean.getMovieDetailData();
                     String videoPath = detailInfo.getPath().equals("") ? "" : detailInfo.getPath();
                     if (playerVideo != null) {
                         playerVideo.release();
