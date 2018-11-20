@@ -15,6 +15,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.itheima.retrofitutils.ItheimaHttp;
+import com.itheima.retrofitutils.Request;
+import com.itheima.retrofitutils.listener.HttpResponseListener;
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -23,6 +27,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.Headers;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 public class PasswordRecoveryActivity extends Activity implements View.OnClickListener,TextWatcher {
 
@@ -163,22 +173,7 @@ public class PasswordRecoveryActivity extends Activity implements View.OnClickLi
                 setLoginBtnClickable(false);//点击登录后，设置登录按钮不可点击状态
 
 
-                switch (registerToServer()){
-                    case 1:
-                    {
-                        showToast("修改成功");
-
-                        startActivity(new Intent(PasswordRecoveryActivity.this, LoginActivity.class));
-                        finish();//关闭页面
-                    }
-                    break;
-                    case 9:
-                    {
-                        showToast("网络错误");
-                    }
-                    break;
-
-                }
+                registerToServer();
 
                 setLoginBtnClickable(true);  //这里解放登录按钮，设置为可以点击
                 hideLoading();//隐藏加载框
@@ -189,121 +184,53 @@ public class PasswordRecoveryActivity extends Activity implements View.OnClickLi
 
     }
     private int registerToServer() {
-              /*   try {
-                      new OkHttpClient()
-                         HttpClient httpClient = new DefaultHttpClient();
-                         String url = "http://203.191.101.122:3222/User/search/";
-                         HttpPost httpPost = new HttpPost(url);
-                         httpPost.setHeader("Content-Type", "application/json");
 
-                         JSONObject obj = new JSONObject();
+        //开始请求
+        Request request = ItheimaHttp.newPostRequest("updatepd");//apiUrl格式："xxx/xxxxx"
+        Map<String,Object> map = new HashMap<>();
+        map.put("mobile", getAccount());
+        map.put("newpassword", getPassword());
+        request.putParamsMap(map);
+        Call call = ItheimaHttp.send(request, new HttpResponseListener<RegisterBean>() {
 
-                         obj.put("id", "36215897");
-                         obj.put("cc", "ad3256");
-                         Log.e(Constants.TAG, obj.toString());
-                         httpPost.setEntity(new StringEntity(obj.toString()));
-                         HttpResponse httpResponse;
+            @Override
+            public void onResponse(RegisterBean bean, Headers headers) {
+                System.out.println("print data");
+                System.out.println("print data -- " +bean);
+                int status = bean.getStatus();
+                //判断账号和密码
+                switch (status){
+                    case 1:
+                    {
+                        showToast("更新密码成功");
+                        hideLoading();//隐藏加载框
+                        startActivity(new Intent(PasswordRecoveryActivity.this, LoginActivity.class));
+                        finish();//关闭页面
+                    }
+                    break;
+                    default:
+                        showToast(bean.getMsg());
+                    break;
 
-                         httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 10000);
-                         httpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 10000);
-
-                         httpResponse = httpClient.execute(httpPost);
-                         int code = httpResponse.getStatusLine().getStatusCode();
-                         if ( code == 200 ){
-                                 String rev = EntityUtils.toString(httpResponse.getEntity());
-                                 Log.e(Constants.TAG, "CODE-RESULT:"+rev);
-                             }else{
-
-                                 Log.e(Constants.TAG, "CODE:"+code);
-                             }
-
-
-                     } catch (Exception e) {
-
-                         Log.e(Constants.TAG, "Exception:"+e.toString());
-                     }*/
-
-        URL url;
-        try {
-            url = new URL(urlPath);
-            /*封装子对象*/
-            JSONObject ClientKey = new JSONObject();
-            ClientKey.put("mobile", getAccount());
-            ClientKey.put("newpassword", getPassword());
-           // ClientKey.put("rand_code", appendCheckNum());
-         //   ClientKey.put("apptype", "android");
-            String urlpath = urlPath + "?mobile="+getAccount()+"&newpassword="+getPassword();
-            url = new URL(urlpath);
-            /*封装Person数组*/
-            //   JSONObject params = new JSONObject();
-            //   params.put("Person", ClientKey);
-            /*把JSON数据转换成String类型使用输出流向服务器写*/
-            String content = String.valueOf(ClientKey);
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(5000);
-//            conn.setDoOutput(true);//设置允许输出
-            conn.setDoInput(true);//设置允许输出
-//            conn.setRequestMethod("POST");
-            conn.setRequestProperty("User-Agent", "Fiddler");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.connect();
-            // conn.setRequestProperty("Charset", encoding);
-//            DataOutputStream os = new DataOutputStream(conn.getOutputStream()) ;
-//            os.writeBytes(content);
-//            os.close();
-            /*服务器返回的响应码*/
-          //  return conn.getResponseCode();
-         /*   if (code == 200) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), encoding));
-                String retData = null;
-                String responseData = "";
-                while ((retData = in.readLine()) != null) {
-                    responseData += retData;
                 }
-                JSONObject jsonObject = new JSONObject(responseData);
-                JSONObject succObject = jsonObject.getJSONObject("regsucc");
-//System.out.println(result);
-                String success = succObject.getString("id");
 
-                in.close();
-//System.out.println(success);
-                Toast.makeText(Register.this, success, Toast.LENGTH_SHORT).show();
-                Intent intentToLogin = new Intent();
-                intentToLogin.setClass(Register.this, Login.class);
-                startActivity(intentToLogin);
-                finish();
-            } else {
-                Toast.makeText(getApplicationContext(), "数据提交失败", Toast.LENGTH_SHORT).show();
-            }*/
-            if (conn.getResponseCode() == 200) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String retData = null;
-                String responseData = "";
-                while ((retData = in.readLine()) != null) {
-                    responseData += retData;
-                }
-                JSONObject jsonObject = new JSONObject(responseData);
-                int status = jsonObject.getInt("status");
-                if(status == 1)
-                    mToken = jsonObject.getString("token");
-//System.out.println(result);
-                //   String success = succObject.getString("id");
-
-                in.close();
-                return status;
-//System.out.println(success);
-                //  Toast.makeText(RegisterActivity.this, success, Toast.LENGTH_SHORT).show();
-                //   Intent intentToLogin = new Intent();
-                //   intentToLogin.setClass(Register.this, Login.class);
-                //   startActivity(intentToLogin);
-                //    finish();
-            } else {
-                Toast.makeText(getApplicationContext(), "服务器未响应", Toast.LENGTH_SHORT).show();
+                setLoginBtnClickable(true);  //这里解放登录按钮，设置为可以点击
+                hideLoading();//隐藏加载框
             }
-        } catch (Exception e) {
 
-        }
+
+            /**
+             * 可以不重写失败回调
+             * @param call
+             * @param e
+             */
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable e) {
+                System.out.println("print data fail");
+            }
+        });
+
+
         return 9;
     }
     public void hideLoading() {
