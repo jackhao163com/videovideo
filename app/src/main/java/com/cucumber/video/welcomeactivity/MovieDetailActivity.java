@@ -371,22 +371,23 @@ public class MovieDetailActivity extends AppCompatActivity {
         Intent sendIntent = new Intent();
         // 比如发送文本形式的数据内容
 // 指定发送的内容
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
 // 指定发送内容的类型
         if(detailInfo != null){
             String cover = detailInfo.getCover();
             String title = detailInfo.getName();
-            if(cover.isEmpty()){
+            if(true){
+                sendIntent.putExtra(Intent.EXTRA_TEXT, title);
                 sendIntent.setType("text/plain");
             }else{
                 sendIntent.setType("image/jpeg");
+                String imagePath = Environment.getExternalStorageDirectory() + File.separator + "share.jpg";
+                //由文件得到uri
+                Uri imageUri = Uri.fromFile(new File(imagePath));
+                Log.d("share", "uri:" + imageUri);
+                sendIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
             }
         }
-        String imagePath = Environment.getExternalStorageDirectory() + File.separator + "share.jpg";
-        //由文件得到uri
-        Uri imageUri = Uri.fromFile(new File(imagePath));
-        Log.d("share", "uri:" + imageUri);
-        sendIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+
         sendIntent.setAction(Intent.ACTION_SEND);
         startActivity(Intent.createChooser(sendIntent, "分享"));
     }
