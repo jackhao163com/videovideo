@@ -33,7 +33,7 @@ public class UserNameLoginActivity extends Activity implements View.OnClickListe
     private TextView username_Login;
     private TextView user_Register;
     MyHandler myHandler;
-    private  final String urlPath = MyToolUtils.getAppDomain() + "index.php/font/app/login";
+    private  final String urlPath = MyToolUtils.getAppDomain() + "font/app/login";
 
     private LoadingDialog mLoadingDialog; //显示正在加载的对话框
     @Override

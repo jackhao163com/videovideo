@@ -40,7 +40,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Comp
     private TextView user_Register;
     MyHandler myHandler;
     private  boolean defaultSee;
-    private  final String urlPath = MyToolUtils.getAppDomain() + "index.php/font/app/login";
+    private  final String urlPath = MyToolUtils.getAppDomain() + "font/app/login";
 
     private LoadingDialog mLoadingDialog; //显示正在加载的对话框
     private  String mToken;

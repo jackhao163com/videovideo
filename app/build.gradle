@@ -1,7 +1,4 @@
 apply plugin: 'com.android.application'
-static def releaseTime() {
-    return new Date().format("yyyyMMddHHmm")
-}
 
 android {
     compileSdkVersion 26
@@ -12,11 +9,11 @@ android {
         versionCode 1
         versionName "1.0"
     }
-    android.applicationVariants.all { variant ->
-        variant.outputs.all {
-            outputFileName = "Huanggua@" + releaseTime() + "." + buildType.name + ".apk"
-        }
-    }
+//    android.applicationVariants.all { variant ->
+//        variant.outputs.all {
+//            outputFileName = "Huanggua@" + releaseTime() + "." + buildType.name + ".apk"
+//        }
+//    }
     buildTypes {
         release {
             minifyEnabled false

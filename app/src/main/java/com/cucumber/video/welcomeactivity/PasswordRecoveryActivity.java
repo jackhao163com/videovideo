@@ -51,7 +51,7 @@ public class PasswordRecoveryActivity extends Activity implements View.OnClickLi
     MyHandler myHandler;
     private LoadingDialog mLoadingDialog;
     private String mToken;
-    private  final String urlPath = MyToolUtils.getAppDomain() + "index.php/font/app/updatepdGet";
+    private  final String urlPath = MyToolUtils.getAppDomain() + "font/app/updatepdGet";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

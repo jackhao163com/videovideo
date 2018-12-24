@@ -14,7 +14,7 @@ public class MyApplication  extends Application {
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
 //        ItheimaHttp.init(this, "https://www.oschina.net/");
-        ItheimaHttp.init(this, "http://154.8.172.16:85/index.php/Font/App/");
+        ItheimaHttp.init(this, "http://hgapi.qipaifun.co:82/Font/App/");
     }
 
 }

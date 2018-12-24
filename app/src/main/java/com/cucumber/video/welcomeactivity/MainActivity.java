@@ -421,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferencesUtils helper = new SharedPreferencesUtils(MainActivity.this, "setting");
         String mToken = helper.getString("token");
         try {
-            url = new URL(MyToolUtils.getAppDomain() + "index.php/font/app/getBannerList");
+            url = new URL(MyToolUtils.getAppDomain() + "font/app/getBannerList");
             /*封装子对象*/
             JSONObject ClientKey = new JSONObject();
 
@@ -490,7 +490,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferencesUtils helper = new SharedPreferencesUtils(MainActivity.this, "setting");
         String mToken = helper.getString("token");
         try {
-            url = new URL(MyToolUtils.getAppDomain() + "index.php/font/app/getMovieCategoryList");
+            url = new URL(MyToolUtils.getAppDomain() + "font/app/getMovieCategoryList");
             /*封装子对象*/
             JSONObject ClientKey = new JSONObject();
 
